@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.core.UIComponent;
+			import mx.graphics.codec.PNGEncoder;
+			import mx.managers.CursorManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+
+			[Bindable]
+			public var taille:int;
+			[Bindable]
+			public var prevBitmap:Bitmap = null;
+			public var w:int = 340;
+			public var h:int = 3*w/4;
+			public var f:int = 20;
+			public var timer:Timer = new Timer(1000/f, 0);
+
+			private function loadCamera () : void
+			{
+				var camera:Camera = Camera.getCamera();
+				if (camera)
+				{
+					camera.setMode(w, h, f, true);
+					//camera.
+					videoCamera.attachCamera(camera);
+					timer.addEventListener("timer", takeSnapshot);
+					timer.start();
+				}
+				else
+				{
+					Alert.show("pas de webcam.");
+				}
+			}
+
+			private function takeSnapshot(e:String) : void
+			{
+				//var snapshotHolder:UIComponent = new UIComponent();
+				var snapshotColor:BitmapData = new BitmapData(
+					videoCamera.width, 
+					videoCamera.height, 
+					true);
+				var snapshotMove:BitmapData = new BitmapData(
+					videoCamera.width, 
+					videoCamera.height, 
+					true);
+				var snapshot:BitmapData = new BitmapData(
+					videoCamera.width, 
+					videoCamera.height, 
+					true);
+				
+				//var pnWidth:int = pnSnapShot.width;
+				//var pnHeight:int = pnSnapShot.height;
+				
+				//snapshotHolder.addChild(snapshotBitmap);
+				//pnSnapShot.removeAllChildren();
+				//pnSnapShot.width = pnWidth;
+				//pnSnapShot.height = pnHeight;
+				
+				snapshot.draw(videoCamera);
+				snapshotColor.draw(snapshot);
+				snapshotMove.draw(snapshot);
+				processImage(snapshotColor);
+				//pnSnapShot.addChild(snapshotHolder);
+
+				//var snapshotBitmap2:Bitmap = new Bitmap(snapshotOrig);
+				if (prevBitmap)
+				{
+					//var snapshotBitmapData:BitmapData = new BitmapData(w, h, true);
+					/*var i:int = 0;
+					var j:int = 0;
+					for (i = 0; i < w; i++)
+					{
+						for (j = 0; j < h; j++)
+						{
+							var RGB:int = snapshotMove.getPixel(i,j); 
+							var RGB2:int = prevBitmap.bitmapData.getPixel(i,j); 
+							RGB = RGB + 16777216;
+							RGB2 = RGB2 + 16777216; 
+							var a:int = getR(RGB);
+							var b:int = getG(RGB);
+							var c:int = getB(RGB);
+							var d:int = getR(RGB2);
+							var ee:int = getG(RGB2);
+							var f:int = getB(RGB2);
+							
+							if (a-c + b-ee + c-f < 100)
+							{
+								snapshotMove.setPixel(i,j, 0);
+							}
+							else
+							{
+								snapshotMove.setPixel(i,j,255*256*256);
+							}
+								
+						}
+					}*/
+					//snapshotMove = snapshotMove.compare(prevBitmap.bitmapData) as BitmapData;
+					// CODE INTERNET
+					var rect:Rectangle = new Rectangle(0, 0, w, h);
+					var pt:Point = new Point(0, 0);
+					
+					snapshotMove.draw(prevBitmap.bitmapData, new Matrix(), new ColorTransform(), 'subtract');
+					//snapshotMove.threshold(snapshotMove, rect, pt, '>', 0xff111111, 0xffffffff);
+					
+					//END OF CODE INTERNET
+					componentMoved.addChild(new Bitmap(snapshotMove));
+				}
+				prevBitmap = new Bitmap(snapshot);
+				var snapshotBitmapColor:Bitmap = new Bitmap(snapshotColor);
+				component.addChild(snapshotBitmapColor);
+				//savePicture(snapshot);
+			}
+			//TOM
+			private function getR(RGB:int) :int {
+				return ((RGB / 256) / 256) % 256;
+			}
+			private function getG(RGB:int) : int
+			{
+				return (RGB / 256) % 256;
+				//return RGB & 0x10000000;
+			}
+			private function getB(RGB:int) : int {
+				return (RGB) % 256;
+			}
+			private function drawRectangle(img:BitmapData, x:int, y:int, xx:int, yy:int, color:int) : void {
+				var i:int = 0;
+				var j:int = 0;
+				for(i = x; i <= xx; i++)
+				{
+					img.setPixel(i, y, color);
+					img.setPixel(i, yy, color);
+				}
+				for (j = y; j < yy; j++)
+				{
+					img.setPixel(x, j, color);
+					img.setPixel(xx, j, color);
+				}
+			}			
+			private function processImage(img:BitmapData) : void
+			{
+				//searchColor((img, r_min.value, r_max.value, g_min.value, g_max.value, b_min.value, b_max.value, 255*256*256);
+				searchColorAndBinaries(img, r_min.value, r_max.value, g_min.value, g_max.value, b_min.value, b_max.value, 255*256*256);
+			}
+			private function searchColor(img:BitmapData, R_min:int, R_max:int, G_min:int, G_max:int, B_min:int, B_max:int, color:int) : void
+			{
+				var x:int = -1;
+				var y:int = -1;
+				var xx:int = -1;
+				var yy:int = -1;
+				var i:int;
+				var j:int;
+				
+				taille = 0;
+				
+				/* version basique */
+				for (i = 0; i < img.width; i++)
+				{
+					for (j = 0; j < img.height; j++)
+					{
+						var RGB:int = img.getPixel(i, j);
+						RGB = RGB + 16777216;
+						var R:int = getR(RGB);
+						var G:int = getG(RGB);
+						var B:int = getB(RGB);
+						if (R_min <= R && R <= R_max && G_min <= G && G <= G_max && B_min <= B && B <= B_max)
+						{
+							//taille++;
+							img.setPixel(i,j,255*256*256);
+							if (x == -1)
+							{
+								x = i;
+								y = j;
+								xx = i;
+								yy = j;
+							}
+							else
+							{
+								if (i < x)
+									x = i;
+								if (i> xx)
+									xx = i;
+								if (j < y)
+									y = j;
+								if (j > yy)
+									yy = j;
+							}
+						}
+					}
+				}
+				drawRectangle(img, x, y, xx, yy, color);
+			}
+			private function searchColorAndBinaries(img:BitmapData, R_min:int, R_max:int, G_min:int, G_max:int, B_min:int, B_max:int, color:int) : void
+			{
+				var x:int = -1;
+				var y:int = -1;
+				var xx:int = -1;
+				var yy:int = -1;
+				var i:int;
+				var j:int;
+				/* version basique */
+				for (i = 0; i < img.width; i++)
+				{
+					for (j = 0; j < img.height; j++)
+					{
+						var RGB:int = img.getPixel(i, j);
+						RGB = RGB + 16777216;
+						var R:int = getR(RGB);
+						var G:int = getG(RGB);
+						var B:int = getB(RGB);
+						if (R_min <= R && R <= R_max && G_min <= G && G <= G_max && B_min <= B && B <= B_max)
+						{
+							img.setPixel(i,j,255*256*256 + 255*256 + 255);
+							if (x == -1)
+							{
+								x = i;
+								y = j;
+								xx = i;
+								yy = j;
+							}
+							else
+							{
+								if (i < x)
+									x = i;
+								if (i> xx)
+									xx = i;
+								if (j < y)
+									y = j;
+								if (j > yy)
+									yy = j;
+							}
+						}
+						else
+						{
+							img.setPixel(i,j,0);
+						}
+					}
+				}
+				
+				drawRectangle(img, x, y, xx, yy, color);// 0 -> noir
+			}
+			//END OF TOM
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Placer ici les éléments non visuels (services et objets de valeur, par exemple). -->
+	</fx:Declarations>
+	<s:VGroup width="100%" horizontalAlign="center">
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:VGroup width="100%" height="100%">
+				<mx:Label text="RED"/>
+				<s:HSlider id="r_min" minimum="0" maximum="256" liveDragging="true" value="180"/>
+				<s:HSlider id="r_max" minimum="0" maximum="256" liveDragging="true" value="256"/>
+			</s:VGroup>
+			<s:VGroup width="100%" height="100%">
+				<mx:Label text="GREEN"/>
+				<s:HSlider id="g_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
+				<s:HSlider id="g_max" minimum="0" maximum="256" liveDragging="true" value="40"/>
+			</s:VGroup>
+			<s:VGroup width="100%" height="100%">
+				<mx:Label text="BLUE"/>
+				<s:HSlider id="b_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
+				<s:HSlider id="b_max" minimum="0" maximum="256" liveDragging="true" value="40"/>
+			</s:VGroup>
+		</s:HGroup>
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Panel title="Votre webcam">
+				<mx:VideoDisplay
+					id="videoCamera"
+					creationComplete="loadCamera();"
+					width="{w}"
+					height="{h}"/>
+			</s:Panel>
+		</s:HGroup>
+		<s:HGroup width="100%" horizontalAlign="center">
+			<s:Panel title="Detection de la couleur">
+				<mx:UIComponent
+					id="component"
+					width="{w}"
+					height="{h}"/>
+			</s:Panel>
+			<s:Panel title="Detection des mouvements">
+				<mx:UIComponent
+					id="componentMoved"
+					width="{w}"
+					height="{h}"/>
+			</s:Panel>
+		</s:HGroup>
+	</s:VGroup>
+		
+</s:Application>
