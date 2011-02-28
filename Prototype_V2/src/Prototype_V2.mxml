@@ -18,21 +18,25 @@
 			import mx.managers.CursorManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
-
-			[Bindable]
-			public var w:int = 340;
+			
+			public var w:int = 400;
 			public var h:int = 3*w/4;
-			public var f:int = 25;
+			public var f:int = 300;
 			public var timer:Timer = new Timer(1000/f, 0);
 			public var drawBitmap:Bitmap = null;
 			public var detectedPoint:Point = new Point(-1, -1);
 			public var algos:Array = new Array(new Algorithme.alpha(), new Algorithme.beta());
+			[Bindable]
 			public var taille:int = 10;
 			//public var tailleRef:int = -1;
 			public var prevBitmap:Bitmap = null;
-			//public var prevCenterx:int = -1;
-			//public var prevCentery:int = -1;
-
+			public var positions:ArrayCollection = new ArrayCollection();// array of Point()
+			public var tailles:ArrayCollection = new ArrayCollection();// array of int
+			public var nFrame:int = -1; 
+			public var prevCenterx:int = -1;
+			public var prevCentery:int = -1;
+			public var point:Point = new Point(-1, -1);
+			
 			private function loadCamera () : void
 			{
 				var camera:Camera = Camera.getCamera();
@@ -53,82 +57,125 @@
 				}
 				else
 				{
-					Alert.show("pas de webcam.");
+					//Alert.show("pas de webcam.");
+					var p:Point;
+					for (i = 0; i < 100; i++)
+					{
+						p = new Point(10 + 2 * i, 10 + 2 * i);
+						positions.addItem(p);
+						tailles.addItem(10);
+					}
+					nFrame = 0;
+					timer.addEventListener("timer", takeSnapshot);
+					timer.start();
 				}
 				drawBitmap = new Bitmap(new BitmapData(w, h, false, 0xFFFFFF))
-				componentMoved.addChild(drawBitmap);
+				componentDraw.addChild(drawBitmap);
 			}
 			private function takeSnapshot(e:String) : void
 			{
 				var snapshot:BitmapData = new BitmapData(w, h, true);
-				snapshot.draw(videoCamera);
-
-				//REVERSE IMAGE
-				var i:int = 0;
-				var j:int = 0;
-				var rgb:int = 0;
-				if (check_swap.selected)
+				point.x = -1;
+				point.y = -1;
+				if (nFrame == -1)
 				{
-					for (i = 0; i < w / 2; i++)
+					snapshot.draw(videoCamera);
+					
+					//REVERSE IMAGE
+					var i:int = 0;
+					var j:int = 0;
+					var rgb:int = 0;
+					if (check_swap.selected)
 					{
-						for (j = 0; j < h; j++)
-						{
-							rgb = snapshot.getPixel(i, j);
-							snapshot.setPixel(i, j, snapshot.getPixel(w - i, j));
-							snapshot.setPixel(w - i, j, rgb);
-						}
-					}
-				}
-				//END OF REVERSE IMAGE
-				
-				var snapshotSave:BitmapData = new BitmapData(w, h, true);
-				if (prevBitmap)
-				{
-					/*if (check_algo_plus.selected)
-					{
-						for (i = 0; i < w; i++)
+						for (i = 0; i < w / 2; i++)
 						{
 							for (j = 0; j < h; j++)
 							{
-								var RGB:int = snapshotColor.getPixel(i, j); 
-								var RGB2:int = prevBitmap.bitmapData.getPixel(i, j); 
-								RGB = RGB + 16777216;
-								RGB2 = RGB2 + 16777216; 
-								var a:int = ImageProcessing.getR(RGB);
-								var b:int = ImageProcessing.getG(RGB);
-								var c:int = ImageProcessing.getB(RGB);
-								var d:int = ImageProcessing.getR(RGB2);
-								var ee:int = ImageProcessing.getG(RGB2);
-								var f:int = ImageProcessing.getB(RGB2);
-								
-								if (Math.abs((a+b+c)/3 - (d+ee+f)/3) < 20)
-								{
-									snapshotColor.setPixel(i, j, 0);
-								}
+								rgb = snapshot.getPixel(i, j);
+								snapshot.setPixel(i, j, snapshot.getPixel(w - i, j));
+								snapshot.setPixel(w - i, j, rgb);
 							}
 						}
-					}*/
+					}
+					//END OF REVERSE IMAGE
+					
+					var snapshotSave:BitmapData = new BitmapData(w, h, true);
+					if (prevBitmap)
+					{
+						/*if (check_algo_plus.selected)
+						{
+						for (i = 0; i < w; i++)
+						{
+						for (j = 0; j < h; j++)
+						{
+						var RGB:int = snapshotColor.getPixel(i, j); 
+						var RGB2:int = prevBitmap.bitmapData.getPixel(i, j); 
+						RGB = RGB + 16777216;
+						RGB2 = RGB2 + 16777216; 
+						var a:int = ImageProcessing.getR(RGB);
+						var b:int = ImageProcessing.getG(RGB);
+						var c:int = ImageProcessing.getB(RGB);
+						var d:int = ImageProcessing.getR(RGB2);
+						var ee:int = ImageProcessing.getG(RGB2);
+						var f:int = ImageProcessing.getB(RGB2);
+						
+						if (Math.abs((a+b+c)/3 - (d+ee+f)/3) < 20)
+						{
+						snapshotColor.setPixel(i, j, 0);
+						}
+						}
+						}
+						}*/
+					}
+					snapshotSave.draw(snapshot);
+					prevBitmap = new Bitmap(snapshotSave);
+					if (!check_no_algo.selected)
+					{
+						processImage(snapshot);
+					}
+					
+					//snapshotMove = snapshotMove.compare(prevBitmap.bitmapData) as BitmapData;
+					// CODE INTERNET
+					//var rect:Rectangle = new Rectangle(0, 0, w, h);
+					//var pt:Point = new Point(0, 0);
+					
+					//snapshotMove.draw(prevBitmap.bitmapData, new Matrix(), new ColorTransform(), 'subtract');
+					//snapshotMove.threshold(snapshotMove, rect, pt, '>', 0xff111111, 0xffffffff);
+					
+					//END OF CODE INTERNET
+					//componentMoved.addChild(new Bitmap(snapshotMove));
+					//savePicture(snapshot);
 				}
-				snapshotSave.draw(snapshot);
-				prevBitmap = new Bitmap(snapshotSave);
-				if (!check_no_algo.selected)
+				else
 				{
-					processImage(snapshot);
+					if (nFrame < positions.length)
+					{
+						point = positions[nFrame];
+						if (nFrame == 0)
+						{
+							//emule click down
+							//var event:MouseEvent = new MouseEvent(MouseEvent.MOUSE_DOWN);
+							//event.
+						}
+						
+						if (nFrame == positions.length - 1)
+						{
+							//emule click up
+						}
+						if ((prevCenterx > 0) && (point.x > 0))
+						{
+							ImageProcessing.drawLine(drawBitmap.bitmapData, prevCenterx, prevCentery, point.x, point.y, 255*256*256);
+							myimg.x += (Math.abs(prevCenterx - point.x)/w)*v1.width; 
+							myimg.y += (Math.abs(prevCentery - point.y)/h)*v1.height; 
+						}
+						ImageProcessing.drawLines(snapshot, point.x, point.y, 255*256*256);
+						nFrame++;
+					}
 				}
-
-				//snapshotMove = snapshotMove.compare(prevBitmap.bitmapData) as BitmapData;
-				// CODE INTERNET
-				//var rect:Rectangle = new Rectangle(0, 0, w, h);
-				//var pt:Point = new Point(0, 0);
-				
-				//snapshotMove.draw(prevBitmap.bitmapData, new Matrix(), new ColorTransform(), 'subtract');
-				//snapshotMove.threshold(snapshotMove, rect, pt, '>', 0xff111111, 0xffffffff);
-				
-				//END OF CODE INTERNET
-				//componentMoved.addChild(new Bitmap(snapshotMove));
+				prevCenterx = point.x;
+				prevCentery = point.y;
 				var snapshotBitmap:Bitmap = new Bitmap(snapshot);
 				component.addChild(snapshotBitmap);
-				//savePicture(snapshot);
 			}
 			private function clickButton() : void
 			{
@@ -136,26 +183,21 @@
 			}
 			private function eraseScreen() : void
 			{
-				componentMoved.removeChild(drawBitmap);
+				componentDraw.removeChild(drawBitmap);
 				drawBitmap = new Bitmap(new BitmapData(w, h, false, 0xFFFFFF));
-				componentMoved.addChild(drawBitmap);
+				componentDraw.addChild(drawBitmap);
 			}
-
+			
 			private function processImage(img:BitmapData) : void
 			{
-				//prevCenterx = point.x;
-				//prevCentery = point.y;
-				//taille = 0;
-				//point.x = 0;
-				//point.y = 0;
 				var algo:Algorithme.algorithme;
 				if (check_algo.selected)
 				{
-					algo = (Algorithme.algorithme)(algos[0]); 
+					algo = Algorithme.algorithme(algos[0]);
 				}
 				else
 				{
-					algo = (Algorithme.algorithme)(algos[1]);
+					algo = Algorithme.algorithme(algos[1]);
 				}
 				if (algo == null)
 				{
@@ -168,7 +210,7 @@
 				algo.b_min = b_min.value;
 				algo.b_max = b_max.value;
 				detectedPoint = algo.ProcessImage(img);
-
+				
 				var v:int = 5;
 				detectedPoint.x = v * ((int)(detectedPoint.x / v)); 
 				detectedPoint.y = v * ((int)(detectedPoint.y / v));
@@ -177,21 +219,21 @@
 				
 				/*if ((tailleRef != -1) && (taille > 1.3*tailleRef))
 				{
-					if ((prevCenterx > 0) && (point.x > 0))
-					{
-						ImageProcessing.drawLine(drawBitmap.bitmapData, prevCenterx, prevCentery, point.x, point.y, 255*256*256);
-					}
-					ImageProcessing.drawLines(img, point.x, point.y, 255*256*256);
+				if ((prevCenterx > 0) && (point.x > 0))
+				{
+				ImageProcessing.drawLine(drawBitmap.bitmapData, prevCenterx, prevCentery, point.x, point.y, 255*256*256);
+				}
+				ImageProcessing.drawLines(img, point.x, point.y, 255*256*256);
 				}
 				else
 				{
-					ImageProcessing.drawLines(img, point.x, point.y, 255*256*256 + 255);
-					prevCenterx = -1;
-					prevCentery = -1;
+				ImageProcessing.drawLines(img, point.x, point.y, 255*256*256 + 255);
+				prevCenterx = -1;
+				prevCentery = -1;
 				}
 				*/
 			}
-
+			
 			
 			// ----------------------------------  DRAG N DROP PART  -----------------------------------------------------
 			
@@ -234,70 +276,75 @@
 				Image(event.dragInitiator).y = 
 					Canvas(event.currentTarget).mouseY;
 			}
-
+			
 		]]>
 	</fx:Script>
-
+	
 	<s:layout>
 		<s:VerticalLayout />
 	</s:layout>
-	
-		<s:HGroup>
-			<s:VGroup width="100%" height="100%">
-				<s:Label text="RED"/>
-				<s:HSlider id="r_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
-				<s:HSlider id="r_max" minimum="0" maximum="256" liveDragging="true" value="58"/>
-			</s:VGroup>
-			<s:VGroup width="100%" height="100%">
-				<s:Label text="GREEN"/>
-				<s:HSlider id="g_min" minimum="0" maximum="256" liveDragging="true" value="52"/>
-				<s:HSlider id="g_max" minimum="0" maximum="256" liveDragging="true" value="164"/>
-			</s:VGroup>
-			<s:VGroup width="100%" height="100%">
-				<s:Label text="BLUE"/>
-				<s:HSlider id="b_min" minimum="0" maximum="256" liveDragging="true" value="150"/>
- 				<s:HSlider id="b_max" minimum="0" maximum="256" liveDragging="true" value="256"/>
-			</s:VGroup>
-		</s:HGroup>
-		<s:HGroup width="100%">
-			<s:Panel title="Votre webcam" visible="false" width="0" height="0">
-				<mx:VideoDisplay
-					id="videoCamera"
-					creationComplete="loadCamera();"
-					width="{w}"
-					height="{h}"/>
-			</s:Panel>
-			<s:VGroup width="100%" height="100%">
-				<s:Label text="Profondeur: {taille}"/>
-				<s:Button
-					id="buttonBegin"
-					label="Commencer"
-					click="clickButton();"
-					/>
-				<s:Button
-					id="buttonErase"
-					label="Erase"
-					click="eraseScreen();"
-					/>
-				<s:CheckBox
-					id="check_swap"
-					label="swap"
-					/>
-				<s:CheckBox
-					id="check_no_algo"
-					label="pas d'algorithme"
-					/>
-				<s:CheckBox
-					id="check_algo"
-					label="algo par group"
-					/>
-				<s:CheckBox
-					id="check_algo_plus"
-					label="algo complémentaire"
-					/>
-			</s:VGroup>
-		</s:HGroup>
-		<s:HGroup width="100%">
+	<s:HGroup height="100%" width="100%">
+		<s:VGroup width="100%">
+			<s:HGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="RED"/>
+					<s:HSlider id="r_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
+					<s:HSlider id="r_max" minimum="0" maximum="256" liveDragging="true" value="58"/>
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="GREEN"/>
+					<s:HSlider id="g_min" minimum="0" maximum="256" liveDragging="true" value="52"/>
+					<s:HSlider id="g_max" minimum="0" maximum="256" liveDragging="true" value="164"/>
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="BLUE"/>
+					<s:HSlider id="b_min" minimum="0" maximum="256" liveDragging="true" value="150"/>
+					<s:HSlider id="b_max" minimum="0" maximum="256" liveDragging="true" value="256"/>
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup width="100%">
+				<s:Panel title="Votre webcam" visible="false" width="0" height="0">
+					<mx:VideoDisplay
+						id="videoCamera"
+						creationComplete="loadCamera();"
+						width="{w}"
+						height="{h}"/>
+				</s:Panel>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="Profondeur: {taille}"/>
+					<s:Button
+						id="buttonBegin"
+						label="Commencer"
+						click="clickButton();"
+						/>
+					<s:Button
+						id="buttonErase"
+						label="Erase"
+						click="eraseScreen();"
+						/>
+					<s:Button
+						id="buttonReBegin"
+						label="reCommencer"
+						click="nFrame = 0;"
+						/>
+					<s:CheckBox
+						id="check_swap"
+						label="swap"
+						/>
+					<s:CheckBox
+						id="check_no_algo"
+						label="pas d'algorithme"
+						/>
+					<s:CheckBox
+						id="check_algo"
+						label="algo par group"
+						/>
+					<s:CheckBox
+						id="check_algo_plus"
+						label="algo complémentaire"
+						/>
+				</s:VGroup>
+			</s:HGroup>
 			<s:Panel title="Detection de la couleur">
 				<mx:UIComponent
 					id="component"
@@ -306,23 +353,24 @@
 			</s:Panel>
 			<s:Panel title="Detection des mouvements">
 				<mx:UIComponent
-					id="componentMoved"
+					id="componentDraw"
 					width="{w}"
 					height="{h}"/>
 			</s:Panel>
-		</s:HGroup>
+		</s:VGroup>
+		<!-- The Canvas is the drag target --> 
+		<mx:Canvas id="v1" 
+				   width="100%" height="100%"  
+				   borderStyle="solid" 
+				   backgroundColor="#FFFE11"
+				   dragEnter="dragEnterHandler(event);" 
+				   dragDrop="dragDropHandler(event);">
+			
+			<!-- The image is the drag initiator. -->
+			<mx:Image id="myimg" 
+					  source="@Embed(source='assets/postit.png')" 
+					  mouseMove="mouseMoveHandler(event);"/> 
+		</mx:Canvas>
+	</s:HGroup>
 	
-	<!-- The Canvas is the drag target --> 
-	<mx:Canvas id="v1" 
-			   width="100%" height="500"  
-			   borderStyle="solid" 
-			   backgroundColor="#FFFE11"
-			   dragEnter="dragEnterHandler(event);" 
-			   dragDrop="dragDropHandler(event);">
-		
-		<!-- The image is the drag initiator. -->
-		<mx:Image id="myimg" 
-				  source="@Embed(source='assets/postit.png')" 
-				  mouseMove="mouseMoveHandler(event);"/> 
-	</mx:Canvas>
 </s:Application>
