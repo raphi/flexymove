@@ -23,9 +23,11 @@ package Algorithme
 			var i:int;
 			var j:int;
 			var point:Point = new Point(0, 0);
-			var taille:int = 0;
+			taille = 0;
 			
 			/* version basique */
+			//var min:int = _r_min*256*256 + _g_min*256 + _b_min;
+			//var max:int = _r_max*256*256 + _g_max*256 + _b_max;
 			for (i = 0; i < img.width; i++)
 			{
 				for (j = 0; j < img.height; j++)
@@ -42,10 +44,32 @@ package Algorithme
 						point.y += j;
 						img.setPixel(i,j,255*256*256);
 					}
+					/*var RGB:int = img.getPixel(i, j);
+					RGB = RGB + 16777216;
+					//var R:int = ImageProcessing.getR(RGB);
+					//var G:int = ImageProcessing.getG(RGB);
+					//var B:int = ImageProcessing.getB(RGB);
+					//if (_r_min <= R && R <= _r_max && _g_min <= G && G <= _g_max && _b_min <= B && B <= _b_max)
+					if (min <= RGB && RGB <= max)
+					{
+						taille++;
+						point.x += i;
+						point.y += j;
+						img.setPixel(i,j,255*256*256);
+					}*/
 				}
 			}
-			point.x /= taille;
-			point.y /= taille;
+			if (taille == 0)
+			{
+				point.x = -1;			
+				point.y = -1;			
+			}
+			else
+			{
+				point.x /= taille;
+				point.y /= taille;
+			}
+			
 			//drawRectangle(img, x, y, xx, yy, color);
 			return point;
 		}
