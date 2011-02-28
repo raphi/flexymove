@@ -59,10 +59,11 @@ package Algorithme
 					}*/
 				}
 			}
-			if (taille == 0)
+			if( (taille == 0) || (taille < 100))
 			{
-				point.x = -1;			
-				point.y = -1;			
+				point.x = -1;
+				point.y = -1;
+				taille = 0;
 			}
 			else
 			{
