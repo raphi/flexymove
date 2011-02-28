@@ -139,8 +139,8 @@
 							detectedPoint.x = prevCenterx;
 						if (Math.abs(detectedPoint.y - prevCentery) < stabilizer.value)
 							detectedPoint.y = prevCentery;
-						myviseur.x = (detectedPoint.x / w * v1.width)+ myviseur.width / 2;  
-						myviseur.y = (detectedPoint.y / h * v1.height) + myviseur.height / 2;
+						myviseur.x = (detectedPoint.x / w * v1.width)- myviseur.width / 2;  
+						myviseur.y = (detectedPoint.y / h * v1.height) - myviseur.height / 2;
 					}
 					ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 0); 
 					if ((tailleRef != -1) && (taille > (coef.value / 10) * tailleRef))
@@ -148,17 +148,22 @@
 						if ((prevCenterx >= 0) && (detectedPoint.x >= 0))
 						{
 							ImageProcessing.drawLine(drawBitmap.bitmapData, prevCenterx, prevCentery, detectedPoint.x, detectedPoint.y, 255*256*256);
-							var nx:int = ((detectedPoint.x - prevCenterx) / w) * v1.width; 
-							var ny:int = ((detectedPoint.y - prevCentery) / h) * v1.height;
-							myimgBad.x = Math.max(0, Math.min(myimgBad.x + nx, v1.width - myimgBad.width - 2));
-							myimgBad.y = Math.max(0, Math.min(myimgBad.y + ny, v1.height - myimgBad.height - 2));
-							myimgHappy.x = myimgBad.x;
-							myimgHappy.y = myimgBad.y;
-							if (handle == false)
+							var nx:int = myimgBad.x + ((detectedPoint.x - prevCenterx) / w) * v1.width; 
+							var ny:int = myimgBad.y + ((detectedPoint.y - prevCentery) / h) * v1.height;
+							var x:int = (detectedPoint.x / w) * v1.width;
+							var y:int = (detectedPoint.y / h) * v1.height;
+							if (nx < x && x < nx + myimgBad.width && ny < y && y < ny + myimgBad.height)
 							{
-								handle = true;
-								myimgBad.visible = false;
-								myimgHappy.visible = true;
+								myimgBad.x = Math.max(0, Math.min(nx, v1.width - myimgBad.width - 2));
+								myimgBad.y = Math.max(0, Math.min(ny, v1.height - myimgBad.height - 2));
+								myimgHappy.x = myimgBad.x;
+								myimgHappy.y = myimgBad.y;
+								if (handle == false)
+								{
+									handle = true;
+									myimgBad.visible = false;
+									myimgHappy.visible = true;
+								}
 							}
 							//source="@Embed(source='assets/raphiBad.png')" 
 						}
@@ -318,16 +323,19 @@
 					<s:Label text="RED"/>
 					<s:HSlider id="r_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
 					<s:HSlider id="r_max" minimum="0" maximum="256" liveDragging="true" value="58"/>
+					<!-- 0 to 58 -->
 				</s:VGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="GREEN"/>
-					<s:HSlider id="g_min" minimum="0" maximum="256" liveDragging="true" value="52"/>
+					<s:HSlider id="g_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
 					<s:HSlider id="g_max" minimum="0" maximum="256" liveDragging="true" value="164"/>
+					<!-- 52 to 164 -->
 				</s:VGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="BLUE"/>
-					<s:HSlider id="b_min" minimum="0" maximum="256" liveDragging="true" value="150"/>
+					<s:HSlider id="b_min" minimum="0" maximum="256" liveDragging="true" value="80"/>
 					<s:HSlider id="b_max" minimum="0" maximum="256" liveDragging="true" value="256"/>
+					<!-- 150 to 256 -->
 				</s:VGroup>
 			</s:HGroup>
 			<s:HGroup width="100%">
@@ -394,7 +402,7 @@
 			</s:Panel>
 		</s:VGroup>
 		<!-- The Canvas is the drag target --> 
-		<mx:Canvas id="v1" 
+		<mx:Canvas id="v1"
 				   width="700" height="600"  
 				   borderStyle="solid" 
 				   backgroundColor="#FFFE11"
