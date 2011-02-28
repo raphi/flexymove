@@ -16,6 +16,7 @@ package Algorithme
 		public var _b_max:int;
 		public var _h:int;
 		public var _w:int;
+		public var taille:int = 0;
 		public function algorithme()
 		{
 		}
