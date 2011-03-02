@@ -1,7 +1,9 @@
 package Algorithme
 {
 	import flash.display.BitmapData;
+	import flash.geom.ColorTransform;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import mx.controls.Alert;
 
@@ -28,16 +30,71 @@ package Algorithme
 			/* version basique */
 			//var min:int = _r_min*256*256 + _g_min*256 + _b_min;
 			//var max:int = _r_max*256*256 + _g_max*256 + _b_max;
-			for (i = 0; i < img.width; i++)
+			var rect:Rectangle = new Rectangle(0, 0, img.width, img.height);
+			var p:Point = new Point(0, 0);
+			/*
+			var ct:ColorTransform = new ColorTransform(1,
+				1,
+				1,
+				1,
+				-33, -124, -230, 0);
+			img.colorTransform(rect, ct);
+			ct = new ColorTransform(
+				255 / (56 - 33),
+				255 / (160 - 124),
+				255 / (255 - 230),
+				1,
+				0, 0, 0, 0);
+			img.colorTransform(rect, ct);
+			*/
+			/*
+			var ct:ColorTransform = new ColorTransform(1,
+				1,
+				1,
+				1,
+				-_r_min, -_g_min, -_b_min, 0);
+			img.colorTransform(rect, ct);
+			ct = new ColorTransform(1,
+				1,
+				1,
+				1,
+				_r_min, _g_min, _b_min, 0);
+			img.colorTransform(rect, ct);
+			ct = new ColorTransform(1,
+				1,
+				1,
+				1,
+				_r_max - 255, _g_max - 255, _b_max - 255, 0);
+			img.colorTransform(rect, ct);
+			ct = new ColorTransform(1,
+				1,
+				1,
+				1,
+				-_r_max + 255, -_g_max + 255, -_b_max + 255, 0);
+			img.colorTransform(rect, ct);
+			//*/
+			img.threshold(img, rect, p, '>=', _r_max * 256 * 256, 0x000000, 0xff0000);
+			img.threshold(img, rect, p, '>=', _g_max * 256, 0x000000, 0x00ff00);
+			img.threshold(img, rect, p, '>=', _b_max, 0x000000, 0x0000ff);
+
+			img.threshold(img, rect, p, '<=', _r_min * 256 * 256, 0x000000, 0xff0000);
+			img.threshold(img, rect, p, '<=', _g_min * 256, 0x000000, 0x00ff00);
+			img.threshold(img, rect, p, '<=', _b_min, 0x000000, 0x0000ff);
+			i = 0;
+			var width:int = img.width;
+			var height:int = img.height;
+			while (i < width)
 			{
-				for (j = 0; j < img.height; j++)
+				j = 0;
+				while (j < height)
 				{
-					var RGB:int = img.getPixel(i, j);
-					RGB = RGB + 16777216;
-					var R:int = ImageProcessing.getR(RGB);
-					var G:int = ImageProcessing.getG(RGB);
-					var B:int = ImageProcessing.getB(RGB);
-					if (_r_min <= R && R <= _r_max && _g_min <= G && G <= _g_max && _b_min <= B && B <= _b_max)
+					//var RGB:int = img.getPixel(i, j);
+					//var R:int = ImageProcessing.getR(RGB);
+					//var G:int = ImageProcessing.getG(RGB);
+					//var B:int = ImageProcessing.getB(RGB);
+					//if (_r_min <= R && R <= _r_max && _g_min <= G && G <= _g_max && _b_min <= B && B <= _b_max)
+					if (img.getPixel(i, j))
+					//if (false)
 					{
 						taille++;
 						point.x += i;
@@ -57,9 +114,11 @@ package Algorithme
 						point.y += j;
 						img.setPixel(i,j,255*256*256);
 					}*/
+					j++;
 				}
+				i++;
 			}
-			if( (taille == 0) || (taille < 100))
+			if( (taille == 0) || (taille < 00))
 			{
 				point.x = -1;
 				point.y = -1;
