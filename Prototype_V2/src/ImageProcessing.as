@@ -2,6 +2,8 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.geom.ColorTransform;
+	import flash.geom.Rectangle;
 	
 	import mx.charts.chartClasses.StackedSeries;
 	import mx.collections.ArrayCollection;

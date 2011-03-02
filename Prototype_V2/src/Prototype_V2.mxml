@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
 			   minWidth="1024" minHeight="600">
 	
 	<fx:Script>
 		<![CDATA[
 			import Algorithme.alpha;
 			import Algorithme.beta;
+			
+			import flash.sampler.getMemberNames;
 			
 			import mx.charts.chartClasses.StackedSeries;
 			import mx.collections.ArrayCollection;
@@ -19,9 +21,9 @@
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 			
-			public var w:int = 600;
+			public var w:int = 300;
 			public var h:int = 3*w/4;
-			public var f:int = 40;
+			public var f:int = 25;
 			public var timer:Timer = new Timer(1000/f, 0);
 			public var drawBitmap:Bitmap = null;
 			public var detectedPoint:Point = new Point(-1, -1);
@@ -32,7 +34,7 @@
 			public var prevBitmap:Bitmap = null;
 			public var positions:ArrayCollection = new ArrayCollection();// array of Point()
 			public var tailles:ArrayCollection = new ArrayCollection();// array of int
-			public var nFrame:int = -1; 
+			// [EMULE_MVT] public var nFrame:int = -1; 
 			public var prevCenterx:int = -1;
 			public var prevCentery:int = -1;
 			public var handle:Boolean = false;
@@ -46,15 +48,12 @@
 					((Algorithme.algorithme)(algos[0])).h = h;
 					((Algorithme.algorithme)(algos[1])).w = w;
 					((Algorithme.algorithme)(algos[1])).h = h;
-					//var i:int = 0;
-					//var j:int = 0;
-					//var rgb:int = 0;
 					camera.setMode(w, h, f, true);
 					videoCamera.attachCamera(camera);
 				}
 				else
 				{
-					//Alert.show("pas de webcam.");
+					/* [EMULE_MVT]
 					var p:Point;
 					var i:int;
 					var j:int;
@@ -65,16 +64,31 @@
 						tailles.addItem(10);
 					}
 					nFrame = 0;
+					*/
 				}
 				timer.addEventListener("timer", takeSnapshot);
 				timer.start();
 				drawBitmap = new Bitmap(new BitmapData(w, h, false, 0xFFFFFF))
-				componentDraw.addChild(drawBitmap);
+				//componentDraw.addChild(drawBitmap);
+				//bit1.canShareWithNext(drawBitmap.bitmapData);
+				bit1.mask = drawBitmap;
+
+				var img:Image = new Image();
+				img.source = "source='assets/raphiBad.png'";
+				img.x = 150;
+				img.y = 0;
+				v1.addChild(img);
+				
+				//<mx:Image id="myimgBad" 
+				//source="@Embed(source='assets/raphiBad.png')" 
+				//mouseMove="mouseMoveHandler(event);"/>
+
 			}
 			private function takeSnapshot(e:String) : void
 			{
-				var snapshot:BitmapData = new BitmapData(w, h, true);
-				if (nFrame == -1)
+				var t:int = (new Date()).getMilliseconds();
+				var snapshot:BitmapData = new BitmapData(w, h, false);
+				//[EMULE_MVT] if (nFrame == -1)
 				{
 					snapshot.draw(videoCamera);
 				}					
@@ -125,6 +139,11 @@
 				}
 				//var snapshotSave:BitmapData = new BitmapData(w, h, true);
 				//snapshotSave.draw(snapshot);
+
+
+				
+				
+				
 				prevBitmap = new Bitmap(snapshot);
 				prevCenterx = detectedPoint.x;
 				prevCentery = detectedPoint.y;
@@ -142,7 +161,7 @@
 						myviseur.x = (detectedPoint.x / w * v1.width)- myviseur.width / 2;  
 						myviseur.y = (detectedPoint.y / h * v1.height) - myviseur.height / 2;
 					}
-					ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 0); 
+					//ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 0); 
 					if ((tailleRef != -1) && (taille > (coef.value / 10) * tailleRef))
 					{
 						if ((prevCenterx >= 0) && (detectedPoint.x >= 0))
@@ -167,7 +186,7 @@
 							}
 							//source="@Embed(source='assets/raphiBad.png')" 
 						}
-						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 255*256*256);
+						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 255*256*256 + 255*256 + 255);
 					}
 					else
 					{
@@ -177,8 +196,7 @@
 							myimgBad.visible = true;
 							myimgHappy.visible = false;
 						}
-						//myimg.source = "@Embed(source='assets/raphiBad.png')";
-						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 255*256*256 + 255);
+						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 0);
 						prevCenterx = -1;
 						prevCentery = -1;
 					}
@@ -195,10 +213,12 @@
 				//snapshotMove.threshold(snapshotMove, rect, pt, '>', 0xff111111, 0xffffffff);
 				
 				//END OF CODE INTERNET
-				//componentMoved.addChild(new Bitmap(snapshotMove));
-				//savePicture(snapshot);
 				var snapshotBitmap:Bitmap = new Bitmap(snapshot);
-				component.addChild(snapshotBitmap);
+				bit1.mask = snapshotBitmap;
+				t = (new Date()).getMilliseconds() - t;
+				if (t < 0)
+					t += 1000;
+				taille = t;
 			}
 			private function clickButton() : void
 			{
@@ -206,14 +226,13 @@
 			}
 			private function eraseScreen() : void
 			{
-				componentDraw.removeChild(drawBitmap);
 				drawBitmap = new Bitmap(new BitmapData(w, h, false, 0xFFFFFF));
-				componentDraw.addChild(drawBitmap);
+				bit2.mask = drawBitmap;
 			}
 			
 			private function processImage(img:BitmapData) : Point
 			{
-				if (nFrame != -1)
+				/* [EMULE_MVT]if (nFrame != -1)
 				{
 					if (nFrame < positions.length)
 					{
@@ -239,7 +258,7 @@
 						return p;
 					}
 				}
-				else
+				else */
 				{
 					var algo:Algorithme.algorithme;
 					if (check_algo.selected)
@@ -261,7 +280,7 @@
 					algo.b_min = b_min.value;
 					algo.b_max = b_max.value;
 					var res:Point = algo.ProcessImage(img);
-					taille = algo.taille;
+					//taille = algo.taille;
 					return res;
 				}
 				return (new Point(-1, -1));
@@ -321,20 +340,20 @@
 			<s:HGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="RED"/>
-					<s:HSlider id="r_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
-					<s:HSlider id="r_max" minimum="0" maximum="256" liveDragging="true" value="58"/>
+					<s:HSlider id="r_min" minimum="0" maximum="255" liveDragging="true" value="0"/>
+					<s:HSlider id="r_max" minimum="0" maximum="255" liveDragging="true" value="58"/>
 					<!-- 0 to 58 -->
 				</s:VGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="GREEN"/>
-					<s:HSlider id="g_min" minimum="0" maximum="256" liveDragging="true" value="0"/>
-					<s:HSlider id="g_max" minimum="0" maximum="256" liveDragging="true" value="164"/>
+					<s:HSlider id="g_min" minimum="0" maximum="255" liveDragging="true" value="52"/>
+					<s:HSlider id="g_max" minimum="0" maximum="255" liveDragging="true" value="164"/>
 					<!-- 52 to 164 -->
 				</s:VGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="BLUE"/>
-					<s:HSlider id="b_min" minimum="0" maximum="256" liveDragging="true" value="80"/>
-					<s:HSlider id="b_max" minimum="0" maximum="256" liveDragging="true" value="256"/>
+					<s:HSlider id="b_min" minimum="0" maximum="255" liveDragging="true" value="150"/>
+					<s:HSlider id="b_max" minimum="0" maximum="255" liveDragging="true" value="255"/>
 					<!-- 150 to 256 -->
 				</s:VGroup>
 			</s:HGroup>
@@ -359,23 +378,22 @@
 							label="Erase"
 							click="eraseScreen();"
 							/>
-						<s:Button
-							id="buttonReBegin"
-							label="reCommencer"
-							click="nFrame = 0;"
-							/>
+						
+						<s:Label text="Coefficient de clique"/>
 						<s:HSlider id="coef" minimum="1" maximum="30" liveDragging="true" value="13"/>
 					</s:HGroup>
 					<s:HGroup>
 						<s:CheckBox
 							id="check_swap"
 							label="swap"
+							selected="true"
 							/>
 						<s:CheckBox
 							id="check_no_algo"
 							label="pas d'algorithme"
 							/>
 						<s:CheckBox
+							selected="true"
 							id="check_algo"
 							label="algo par group"
 							/>
@@ -388,16 +406,15 @@
 				</s:VGroup>
 			</s:HGroup>
 			<s:Panel title="Detection de la couleur">
-				<mx:UIComponent
-					id="component"
+				<s:BitmapImage
+					id="bit1"
 					width="{w}"
 					height="{h}"/>
 			</s:Panel>
 			<s:Panel title="Detection des mouvements">
-				<mx:UIComponent
-					id="componentDraw"
+				<s:BitmapImage
+					id="bit2"
 					width="{w}"
-					visible="false"
 					height="{h}"/>
 			</s:Panel>
 		</s:VGroup>
@@ -412,7 +429,7 @@
 			<!-- The image is the drag initiator. -->
 			<mx:Image id="myimgBad" 
 					  source="@Embed(source='assets/raphiBad.png')" 
-					  mouseMove="mouseMoveHandler(event);"/> 
+					  mouseMove="mouseMoveHandler(event);"/>
 			<mx:Image id="myimgHappy" 
 					  source="@Embed(source='assets/raphiHappy.png')" 
 					  mouseMove="mouseMoveHandler(event);"
