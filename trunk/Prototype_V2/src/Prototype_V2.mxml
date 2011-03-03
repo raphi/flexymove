@@ -25,7 +25,7 @@
 			public var w:int = 300;
 			[Bindable]
 			public var h:int = 3*w/4;
-			public var f:int = 40;
+			public var f:int = 25;
 			public var timer:Timer = new Timer(1000/f, 0);
 			public var detectedPoint:Point = new Point(-1, -1);
 			public var algos:Array = new Array(new Algorithme.alpha(), new Algorithme.beta());
@@ -42,7 +42,7 @@
 			public var prevCentery:int = -1;
 			// gestion des carré cliquable
 			public var objects:ArrayCollection = new ArrayCollection(); 
-			public var handle:int = -1;
+			public var handle:int = -1;  // ENUM pour image selectionnée
 			
 			private function loadCamera () : void
 			{
@@ -74,6 +74,7 @@
 					objects.addItem(obj);
 					i++;
 				}
+			objects.addItem(myimgBad);
 			}
 			private function takeSnapshot(e:String) : void
 			{
@@ -87,10 +88,12 @@
 				else
 				{
 					snapshot.draw(videoCamera);
+
 				}
 				
 				if (prevBitmap)
 				{
+
 					if (check_algo_plus.selected)
 					{
 						/*for (i = 0; i < w; i++)
@@ -115,14 +118,8 @@
 						}
 						}*/
 					}
+
 				}
-				//var snapshotSave:BitmapData = new BitmapData(w, h, true);
-				//snapshotSave.draw(snapshot);
-				
-				
-				
-				
-				
 				prevBitmap = new Bitmap(snapshot);
 				prevCenterx = detectedPoint.x;
 				prevCentery = detectedPoint.y;
@@ -131,27 +128,20 @@
 				if (!check_no_algo.selected)
 				{
 					detectedPoint = processImage(snapshot);
-					if ((prevCenterx >= 0) && (detectedPoint.x >= 0))
+					if ((prevCenterx >= 0) && (detectedPoint.x >= 0)) // si detection sur fram precedente et actuel
 					{
-						if (Math.abs(detectedPoint.x - prevCenterx) < stabilizer.value)
+						if (Math.abs(detectedPoint.x - prevCenterx) < stabilizer.value) // stabilisation
 							detectedPoint.x = prevCenterx;
-						if (Math.abs(detectedPoint.y - prevCentery) < stabilizer.value)
+						if (Math.abs(detectedPoint.y - prevCentery) < stabilizer.value) // stabilisation
 							detectedPoint.y = prevCentery;
-						myviseur.x = (detectedPoint.x / w * v1.width)- myviseur.width / 2;  
+						myviseur.x = (detectedPoint.x / w * v1.width)- myviseur.width / 2;  // deplacement viseur
 						myviseur.y = (detectedPoint.y / h * v1.height) - myviseur.height / 2;
 					}
-					//ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 0); 
-					if ((prevCenterx >= 0) && (detectedPoint.x >= 0))
-					{
-						//ImageProcessing.drawLine(drawBitmap.bitmapData, prevCenterx, prevCentery, detectedPoint.x, detectedPoint.y, 255*256*256);
-					}
-					
-					if ((tailleRef != -1) && (taille > (coef.value / 10) * tailleRef))
+					if ((tailleRef != -1) && (taille > (coef.value / 10) * tailleRef)) // si click (proche)
 					{
 						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 255*256*256);
-						if (handle == -1)
+						if (handle == -1) //si rien est selectioné 	//begin drag and drop
 						{
-							//begin drag and drop
 							var i:int = 0;
 							while (i < objects.length)
 							{
@@ -251,17 +241,11 @@
 			{
 				var algo:Algorithme.algorithme;
 				if (check_algo.selected)
-				{
 					algo = Algorithme.algorithme(algos[1]);
-				}
 				else
-				{
 					algo = Algorithme.algorithme(algos[0]);
-				}
 				if (algo == null)
-				{
 					Alert.show("null valu algo");
-				}
 				algo.r_min = r_min.value;
 				algo.r_max = r_max.value;
 				algo.g_min = g_min.value;
@@ -391,7 +375,6 @@
 			<s:Panel title="Detection de la couleur" visible="true" >
 				<s:BitmapImage
 					id="bit1"
-					width="{w}"
 					height="{h}"/>
 			</s:Panel>
 		</s:VGroup>
