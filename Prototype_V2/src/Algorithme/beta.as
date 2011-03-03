@@ -2,41 +2,41 @@ package Algorithme
 {
 	import flash.display.BitmapData;
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	import mx.core.BitmapAsset;
-
+	
 	
 	public class beta extends algorithme
 	{
+		public var _max_found:int = -1;
+		public var _point_found:Point = new Point(-1, -1);
 		public var tab:BitmapData = null;
 		public function beta()
 		{
 		}
 		override public function ProcessImage(img:BitmapData) : Point
 		{
-			return new Point(-1, -1);
+			findGroups(img);
+			taille = _max_found;
+			return _point_found;
 		}
 		override public function prepare() : void
 		{
 			tab = new BitmapData(w, h, false, 0);
 		}
-		/*
+		
 		private function checkPoint(img:BitmapData, x:int, y:int) : Boolean
 		{
-		if (x >= 0 && y >= 0 && x < w && y < h)
-		{
-		if (tab.getPixel(x, y) != 0)
-		return false;
-		var RGB:int = img.getPixel(x, y);
-		RGB = RGB + 16777216;
-		var R:int = ImageProcessing.getR(RGB);
-		var G:int = ImageProcessing.getG(RGB);
-		var B:int = ImageProcessing.getB(RGB);
-		return (r_min.value <= R && R <= r_max.value && g_min.value <= G && G <= g_max.value && b_min.value <= B && B <= b_max.value);
-		}
-		return false;
+			if (x >= 0 && y >= 0 && x < w && y < h)
+			{
+				if (tab.getPixel(x, y) != 0)
+					return false;
+				return img.getPixel(x, y) != 0;
+			}
+			return false;
 		}
 		
 		private function interpolGroup(img:BitmapData, x:int, y:int, n:int) : void
@@ -60,7 +60,6 @@ package Algorithme
 				case 4 : color = 255 + 255*256; break;
 				case 5 : color = 255 + 255*256*256; break;
 			}
-			color = 255*256;
 			var topleft:Point = new Point(x, y);
 			var bottomright:Point = new Point(x, y);
 			p.x = x;
@@ -83,51 +82,73 @@ package Algorithme
 					bottomright.x = p.x;
 				if (bottomright.y < p.y)
 					bottomright.y = p.y;
-				
-				for (varI = -r; varI < r; varI++)
+				varI = -r;
+				while (varI < r)
 				{
-					for (varJ = -r; varJ < r; varJ++)
+					varJ = -r;
+					while (varJ < r)
 					{
 						if (varI == 0 && varJ == 0)
+						{
+							varJ++;
 							continue;
+						}
 						if (checkPoint(img, p.x + varI, p.y + varJ))
 						{
 							arround = new Point(p.x + varI, p.y + varJ);
 							f.addItem(arround);
 						}
 						tab.setPixel(p.x + varI, p.y + varJ, 2000);
+						varJ++;
 					}
+					varI++;
 				}
 			}
-			//le groupe numero 'n' contient 'taille' pixels.
-			//if (size > taille)// si on a trouver plus grand
-			//{
-				//taille = size;
-				//point.x = center.x / size;
-				//point.y = center.y / size;
-			//	point.x = (topleft.x + bottomright.x) / 2
-			//	point.y = (topleft.y + bottomright.y) / 2
-			//}
+			//le groupe numero 'n' contient 'size' pixels.
+			if (size > 10 && size > _max_found)// si on a trouver plus grand
+			{
+				_max_found = size;
+				_point_found.x = (topleft.x + bottomright.x) / 2;
+				_point_found.y = (topleft.y + bottomright.y) / 2;
+				_point_found.x = center.x / size;
+				_point_found.y = center.y / size;
+			}
 		}
+		
 		private function findGroups (img:BitmapData) : void
 		{
 			var i:int;
 			var j:int;
 			var n:int = 1;
-			var r:Rectangle = new Rectangle(0, 0, w, h);
-			tab.fillRect(r, 0);
-			for (i = 0; i < w; i++)
+			_max_found = -1;
+			_point_found.x = -1;
+			_point_found.y = -1;
+			var rect:Rectangle = new Rectangle(0, 0, _w, _h);
+			var p:Point = new Point(0, 0);
+			tab.fillRect(rect, 0);
+			img.threshold(img, rect, p, '>=', _r_max * 256 * 256, 0x000000, 0xff0000);
+			img.threshold(img, rect, p, '>=', _g_max * 256, 0x000000, 0x00ff00);
+			img.threshold(img, rect, p, '>=', _b_max, 0x000000, 0x0000ff);
+			
+			img.threshold(img, rect, p, '<=', _r_min * 256 * 256, 0x000000, 0xff0000);
+			img.threshold(img, rect, p, '<=', _g_min * 256, 0x000000, 0x00ff00);
+			img.threshold(img, rect, p, '<=', _b_min, 0x000000, 0x0000ff);
+			i=0;
+			while (i < _w)
 			{
-				for (j = 0; j < h; j++)
+				j=0;
+				while (j < _h)
 				{
 					if (checkPoint(img, i, j))
 					{
+						tab.setPixel(i, j, n);
 						interpolGroup(img, i, j , n);
 						n++;
 					}
+					j++;
 				}
+				i++;
 			}
 		}
-		//*/
 	}
 }
