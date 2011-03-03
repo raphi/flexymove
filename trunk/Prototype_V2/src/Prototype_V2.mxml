@@ -60,21 +60,13 @@
 				}
 				timer.addEventListener("timer", takeSnapshot);
 				timer.start();
-				
-				var i:int = 0;
-				while (i < 5)
-				{
-					var obj:Canvas = new Canvas();
-					obj.x = i*80;
-					obj.y = 200;
-					obj.width = 70;
-					obj.height = 70;
-					obj.setStyle("backgroundColor", 0xff0000);
-					v1.addChild(obj);
-					objects.addItem(obj);
-					i++;
-				}
-			objects.addItem(myimgBad);
+
+				objects.addItem(raphiBad);
+				objects.addItem(raphiHappy);
+				objects.addItem(tomBad);
+				objects.addItem(tomHappy);
+				objects.addItem(nicolasBad);
+				objects.addItem(nicolasHappy);
 			}
 			private function takeSnapshot(e:String) : void
 			{
@@ -145,22 +137,26 @@
 							var i:int = 0;
 							while (i < objects.length)
 							{
-								var o:Canvas = objects[i] as Canvas;
+								var o:Image = objects[i] as Image;
 								if (o.x < myviseur.x && myviseur.x < o.x + o.width && o.y < myviseur.y && myviseur.y < o.y + o.height)
 								{
 									handle = i;
+									o.visible = false;
+									(objects[i+1] as Image).visible = true;
 									break;
 								}								
-								i++;
+								i += 2;
 							}
 						}
 						else
 						{
 							if ((prevCenterx >= 0) && (detectedPoint.x >= 0))
 							{
-								var oo:Canvas = objects[handle] as Canvas;
+								var oo:Image = objects[handle] as Image;
 								oo.x = oo.x + ((detectedPoint.x - prevCenterx) / w) * v1.width; 
 								oo.y = oo.y + ((detectedPoint.y - prevCentery) / h) * v1.height;
+								(objects[handle+1] as Image).x = oo.x;
+								(objects[handle+1] as Image).y = oo.y;
 							}
 						}
 						
@@ -170,6 +166,9 @@
 						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 255*256*256 + 255*256 + 255);
 						if (handle != -1)
 						{
+							var oo:Image = objects[handle] as Image;
+							oo.visible = true;
+							(objects[handle+1] as Image).visible = false;
 							//release drag and drop
 							handle = -1;
 						}
@@ -387,11 +386,37 @@
 				   dragDrop="dragDropHandler(event);">
 			
 			<!-- The image is the drag initiator. -->
-			<mx:Image id="myimgBad" 
-					  source="@Embed(source='assets/raphiBad.png')" 
+			<mx:Image id="raphiBad"
+					  x="0"
+					  y="0"
+					  source="@Embed(source='assets/raphiBad_.png')" 
 					  mouseMove="mouseMoveHandler(event);"/>
-			<mx:Image id="myimgHappy" 
-					  source="@Embed(source='assets/raphiHappy.png')" 
+			<mx:Image id="raphiHappy" 
+					  x="0"
+					  y="0"
+					  source="@Embed(source='assets/raphiHappy__.png')" 
+					  mouseMove="mouseMoveHandler(event);"
+					  visible="false" /> 
+			<mx:Image id="tomBad" 
+					  x="200"
+					  y="0"
+					  source="@Embed(source='assets/tomBad.png')" 
+					  mouseMove="mouseMoveHandler(event);"/>
+			<mx:Image id="tomHappy" 
+					  x="200"
+					  y="0"
+					  source="@Embed(source='assets/tomHappy.png')" 
+					  mouseMove="mouseMoveHandler(event);"
+					  visible="false" /> 
+			<mx:Image id="nicolasBad" 
+					  x="400"
+					  y="0"
+					  source="@Embed(source='assets/nicolasBad.png')" 
+					  mouseMove="mouseMoveHandler(event);"/>
+			<mx:Image id="nicolasHappy" 
+					  x="400"
+					  y="0"
+					  source="@Embed(source='assets/nicolasHappy.png')" 
 					  mouseMove="mouseMoveHandler(event);"
 					  visible="false" /> 
 			<mx:Image id="myviseur" 
