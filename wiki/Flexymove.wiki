@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Flexymove is a project developped three students.
+Flexymove is a project developped by three students.
 
 = Details =
 

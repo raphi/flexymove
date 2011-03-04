@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="1024" minHeight="600">
+	
+	<fx:Script>
+		<![CDATA[
+			import Algorithme.alpha;
+			import Algorithme.beta;
+			
+			import DesignPatern.Points;
+			
+			import flash.sampler.getMemberNames;
+			
+			import mx.charts.chartClasses.StackedSeries;
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.core.UIComponent;
+			import mx.graphics.codec.PNGEncoder;
+			import mx.managers.CursorManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var w:int = 300;
+			[Bindable]
+			public var h:int = 3*w/4;
+			public var f:int = 25;
+			public var timer:Timer = new Timer(100, 0);
+			public var algos:Array = new Array(new Algorithme.alpha(), new Algorithme.beta());
+			[Bindable]
+			public var time:int = 0;
+			[Bindable]
+			public var taille:int = 0;
+			public var positions:ArrayCollection = new ArrayCollection();// array of Point()
+			public var tailles:ArrayCollection = new ArrayCollection();// array of int
+			// [EMULE_MVT] public var nFrame:int = -1;
+			// gestion des carré cliquable
+			public var objects:ArrayCollection = new ArrayCollection(); 
+			public var handle:int = -1;  // ENUM pour image selectionnée
+			
+			//POINTs
+			public var detectedPoint:Point;
+			public var prevPoint:Point;
+			public var blue_p:Point;
+			public var red_p:Point;
+			
+			//BITAMPs
+			public var snapshot:BitmapData = new BitmapData(w, h, false, 0);
+			public var blue:BitmapData = new BitmapData(w, h, false, 0);
+			public var red:BitmapData = new BitmapData(w, h, false, 0);
+			public var prevBitmap:BitmapData = new BitmapData(w, h, false, 0); 
+			public var origin:BitmapData = new BitmapData(w, h, false, 0);
+			public var snapshotBitmap:Bitmap = new Bitmap(snapshot);
+			
+			//MATRIX d'inversion
+			public var matInv:Matrix = new Matrix(-1, 0, 0, 1, w, 0);
+			
+			
+			private function loadCamera () : void
+			{
+				DesignPatern.Points.initializeAllPoint(w, h);
+				var camera:Camera = Camera.getCamera();
+				detectedPoint = DesignPatern.Points.nul;
+				prevPoint = DesignPatern.Points.nul;
+				blue_p = DesignPatern.Points.nul;
+				red_p = DesignPatern.Points.nul;
+				if (camera)
+				{
+					Algorithme.algorithme(algos[0]).w = w;
+					Algorithme.algorithme(algos[0]).h = h;
+					Algorithme.algorithme(algos[0]).prepare();
+					Algorithme.algorithme(algos[1]).w = w;
+					Algorithme.algorithme(algos[1]).h = h;
+					Algorithme.algorithme(algos[1]).prepare();
+					camera.setMode(w, h, f, true);
+					videoCamera.attachCamera(camera);
+				}
+				timer.addEventListener("timer", takeSnapshot);
+				timer.start();
+				
+				objects.addItem(raphiBad);
+				objects.addItem(raphiHappy);
+				objects.addItem(tomBad);
+				objects.addItem(tomHappy);
+				objects.addItem(nicolasBad);
+				objects.addItem(nicolasHappy);
+			}
+			private function takeSnapshot(e:String) : void
+			{
+				var t:int = (new Date()).getMilliseconds();
+				if (check_swap.selected)
+				{
+					origin.draw(videoCamera, matInv);
+				}
+				else
+				{
+					origin.draw(videoCamera);
+					
+				}
+				snapshot.draw(origin);
+				if (check_algo_plus.selected)
+				{
+					var i:int;
+					var j:int;
+					for (i = 0; i < w; i++)
+					{
+						for (j = 0; j < h; j++)
+						{
+							var RGB:int = origin.getPixel(i, j); 
+							var RGB2:int = prevBitmap.getPixel(i, j); 
+							var a:int = ImageProcessing.getR(RGB);
+							var b:int = ImageProcessing.getG(RGB);
+							var c:int = ImageProcessing.getB(RGB);
+							var d:int = ImageProcessing.getR(RGB2);
+							var ee:int = ImageProcessing.getG(RGB2);
+							var f:int = ImageProcessing.getB(RGB2);
+							
+							if (Math.abs((a+b+c)/3 - (d+ee+f)/3) < 20)
+							{
+								snapshot.setPixel(i, j, 0);
+							}
+						}
+					}
+					//*/
+				}
+				red.draw(snapshot);
+				blue.draw(snapshot);
+				prevBitmap.draw(origin);
+				prevPoint = detectedPoint;
+				detectedPoint = DesignPatern.Points.nul;
+				if (!check_no_algo.selected)
+				{
+					blue_p = processImage(blue, 1);//25~30ms
+					red_p = processImage(red, 0);//30ms
+					//snapshot.merge(red, new Rectangle(0,0,w,h), new Point(0, 0), 1, 1, 1, 1); 
+					//snapshot.merge(blue, new Rectangle(0,0,w,h), new Point(0, 0), 1, 1, 1, 1); 
+					
+					detectedPoint = red_p
+					//detectedPoint = processImage(snapshot);
+					if ((prevPoint.x >= 0) && (detectedPoint.x >= 0)) // si detection sur fram precedente et actuel
+					{
+						if (Math.abs(detectedPoint.x - prevPoint.x) < stabilizer.value) // stabilisation
+							//detectedPoint.x = prevPoint.x;
+							detectedPoint = DesignPatern.Points.tab(prevPoint.x, detectedPoint.y);
+						if (Math.abs(detectedPoint.y - prevPoint.y) < stabilizer.value) // stabilisation
+							//detectedPoint.y = prevPoint.y;
+							detectedPoint = DesignPatern.Points.tab(detectedPoint.x, prevPoint.y);
+						myviseur.x = (detectedPoint.x / w * v1.width)- myviseur.width / 2;  // deplacement viseur
+						myviseur.y = (detectedPoint.y / h * v1.height) - myviseur.height / 2;
+					}
+					
+					if (Math.abs(red_p.x - blue_p.x) < proxymity.value && Math.abs(red_p.y -  blue_p.y) < proxymity.value)
+					{
+						//ImageProcessing.drawLines(snapshot, blue_p.x, blue_p.y, 0);
+						//ImageProcessing.drawLines(snapshot, red_p.x, red_p.y, 0);
+						ImageProcessing.drawLines(snapshot, detectedPoint.x, detectedPoint.y, 0);
+						if (handle == -1) //si rien est selectioné 	//begin drag and drop
+						{
+							i = 0;
+							while (i < objects.length)
+							{
+								var o:Image = objects[i] as Image;
+								if (o.x < myviseur.x && myviseur.x < o.x + o.width && o.y < myviseur.y && myviseur.y < o.y + o.height)
+								{
+									handle = i;
+									o.visible = false;
+									(objects[i+1] as Image).visible = true;
+									break;
+								}								
+								i += 2;
+							}
+						}
+						else
+						{
+							if ((prevPoint.x >= 0) && (detectedPoint.x >= 0))
+							{
+								var oo:Image = objects[handle] as Image;
+								oo.x = oo.x + ((detectedPoint.x - prevPoint.x) / w) * v1.width; 
+								oo.y = oo.y + ((detectedPoint.y - prevPoint.y) / h) * v1.height;
+								(objects[handle+1] as Image).x = oo.x;
+								(objects[handle+1] as Image).y = oo.y;
+							}
+						}
+						//*/
+					}
+					else
+					{
+						ImageProcessing.drawLines(snapshot, blue_p.x, blue_p.y, 255);
+						ImageProcessing.drawLines(snapshot, red_p.x, red_p.y, 255*256*256);
+						
+						if (handle != -1)
+						{
+							var oo:Image = objects[handle] as Image;
+							oo.visible = true;
+							(objects[handle+1] as Image).visible = false;
+							//release drag and drop
+							handle = -1;
+						}
+						//*/
+					}
+					
+					
+					
+				}
+				//pas réussi a deleter
+				bit1.mask = new Bitmap(snapshot);
+
+				t = (new Date()).getMilliseconds() - t;
+				if (t < 0)
+					t += 1000;
+				time = t;
+			}
+			
+			private function processImage(img:BitmapData, color:int) : Point//color is en enum
+			{
+				var algo:Algorithme.algorithme;
+				if (check_algo.selected)
+					algo = Algorithme.algorithme(algos[1]);
+				else
+					algo = Algorithme.algorithme(algos[0]);
+				if (algo == null)
+					Alert.show("null valu algo");
+				if (color == 0)
+				{
+					algo.r_min = r_r_min.value;
+					algo.r_max = r_r_max.value;
+					algo.g_min = r_g_min.value;
+					algo.g_max = r_g_max.value;
+					algo.b_min = r_b_min.value;
+					algo.b_max = r_b_max.value;
+				}
+				else
+				{
+					algo.r_min = b_r_min.value;
+					algo.r_max = b_r_max.value;
+					algo.g_min = b_g_min.value;
+					algo.g_max = b_g_max.value;
+					algo.b_min = b_b_min.value;
+					algo.b_max = b_b_max.value;
+				}
+				var res:Point = algo.ProcessImage(img);
+				taille = algo.taille;
+				return res;
+			}
+			
+			
+			// ----------------------------------  DRAG N DROP PART  -----------------------------------------------------
+			
+			//Import classes so you don't have to use full names.
+			import mx.managers.DragManager;
+			import mx.core.DragSource;
+			import mx.events.DragEvent;
+			import flash.events.MouseEvent;
+			
+			// Embed icon image.
+			[Embed(source='assets/postit.png')]
+			public var postItImage:Class;
+			
+			// The mouseMove event handler for the Image control
+			// initiates the drag-and-drop operation.
+			private function mouseMoveHandler(event:MouseEvent):void 
+			{                
+				var dragInitiator:Image = Image(event.currentTarget);
+				var ds:DragSource = new DragSource();
+				ds.addData(dragInitiator, "img");               
+				
+				DragManager.doDrag(dragInitiator, ds, event);
+			}
+			
+			// The dragEnter event handler for the Canvas container
+			// enables dropping.
+			private function dragEnterHandler(event:DragEvent):void {
+				if (event.dragSource.hasFormat("img"))
+				{
+					DragManager.acceptDragDrop(Canvas(event.currentTarget));
+				}
+			}
+			
+			// The dragDrop event handler for the Canvas container
+			// sets the Image control's position by 
+			// "dropping" it in its new location.
+			private function dragDropHandler(event:DragEvent):void {
+				Image(event.dragInitiator).x = 
+					Canvas(event.currentTarget).mouseX;
+				Image(event.dragInitiator).y = 
+					Canvas(event.currentTarget).mouseY;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout />
+	</s:layout>
+	<s:HGroup height="100%" width="100%">
+		<s:VGroup width="100%">
+			<s:HGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="RED"/>
+					<s:HSlider id="b_r_min" minimum="0" maximum="255" liveDragging="true" value="0"/>
+					<s:HSlider id="b_r_max" minimum="0" maximum="255" liveDragging="true" value="58"/>
+					<!-- 0 to 58 -->
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="GREEN"/>
+					<s:HSlider id="b_g_min" minimum="0" maximum="255" liveDragging="true" value="52"/>
+					<s:HSlider id="b_g_max" minimum="0" maximum="255" liveDragging="true" value="164"/>
+					<!-- 52 to 164 -->
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="BLUE"/>
+					<s:HSlider id="b_b_min" minimum="0" maximum="255" liveDragging="true" value="150"/>
+					<s:HSlider id="b_b_max" minimum="0" maximum="255" liveDragging="true" value="255"/>
+					<!-- 150 to 256 -->
+				</s:VGroup>
+			</s:HGroup>
+			<s:HGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="RED"/>
+					<s:HSlider id="r_r_min" minimum="0" maximum="255" liveDragging="true" value="160"/>
+					<s:HSlider id="r_r_max" minimum="0" maximum="255" liveDragging="true" value="255"/>
+					<!-- 0 to 58 -->
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="GREEN"/>
+					<s:HSlider id="r_g_min" minimum="0" maximum="255" liveDragging="true" value="11"/>
+					<s:HSlider id="r_g_max" minimum="0" maximum="255" liveDragging="true" value="107"/>
+					<!-- 52 to 164 -->
+				</s:VGroup>
+				<s:VGroup width="100%" height="100%">
+					<s:Label text="BLUE"/>
+					<s:HSlider id="r_b_min" minimum="0" maximum="255" liveDragging="true" value="0"/>
+					<s:HSlider id="r_b_max" minimum="0" maximum="255" liveDragging="true" value="255"/>
+					<!-- 150 to 256 -->
+				</s:VGroup>
+			</s:HGroup>
+			<s:Panel title="Detection de la couleur" visible="true" >
+				<s:BitmapImage
+					id="bit1"
+					width="{w}"
+					height="{h}"/>
+			</s:Panel>
+			<mx:VideoDisplay
+				id="videoCamera"
+				visible="true"
+				creationComplete="loadCamera();"
+				width="{w}"
+				height="{h}"/>
+			<s:HGroup width="100%">
+				<s:VGroup>
+					<s:HGroup width="100%" height="100%">
+						<s:Label text="Profondeur: {taille}"/>
+						<s:Label text="Temps: {time}"/>
+					</s:HGroup>
+					<s:CheckBox
+						id="check_swap"
+						label="swap"
+						selected="true"
+						/>
+					<s:CheckBox
+						id="check_no_algo"
+						label="pas d'algorithme"
+						/>
+					<s:CheckBox
+						selected="true"
+						id="check_algo"
+						label="algo par group"
+						/>
+					<s:CheckBox
+						id="check_algo_plus"
+						label="algo complémentaire"
+						/>
+					<s:HSlider id="stabilizer" minimum="1" maximum="20" liveDragging="true" value="4"/>
+					<s:HSlider id="proxymity" minimum="5" maximum="200" liveDragging="true" value="40"/>
+				</s:VGroup>
+			</s:HGroup>
+		</s:VGroup>
+		<!-- The Canvas is the drag target --> 
+		<mx:Canvas id="v1"
+				   width="900" height="600"  
+				   borderStyle="solid" 
+				   backgroundColor="#FFFE11"
+				   dragEnter="dragEnterHandler(event);" 
+				   dragDrop="dragDropHandler(event);">
+			
+			<!-- The image is the drag initiator. -->
+			<mx:Image id="raphiBad"
+					  x="0"
+					  y="0"
+					  source="@Embed(source='assets/raphiBad_.png')" 
+					  mouseMove="mouseMoveHandler(event);"/>
+			<mx:Image id="raphiHappy" 
+					  x="0"
+					  y="0"
+					  source="@Embed(source='assets/raphiHappy__.png')" 
+					  mouseMove="mouseMoveHandler(event);"
+					  visible="false" /> 
+			<mx:Image id="tomBad" 
+					  x="200"
+					  y="0"
+					  source="@Embed(source='assets/tomBad.png')" 
+					  mouseMove="mouseMoveHandler(event);"/>
+			<mx:Image id="tomHappy" 
+					  x="200"
+					  y="0"
+					  source="@Embed(source='assets/tomHappy.png')" 
+					  mouseMove="mouseMoveHandler(event);"
+					  visible="false" /> 
+			<mx:Image id="nicolasBad" 
+					  x="400"
+					  y="0"
+					  source="@Embed(source='assets/nicolasBad.png')" 
+					  mouseMove="mouseMoveHandler(event);"/>
+			<mx:Image id="nicolasHappy" 
+					  x="400"
+					  y="0"
+					  source="@Embed(source='assets/nicolasHappy.png')" 
+					  mouseMove="mouseMoveHandler(event);"
+					  visible="false" /> 
+			<mx:Image id="myviseur" 
+					  source="@Embed(source='assets/viseur.png')" 
+					  mouseMove="mouseMoveHandler(event);"/> 
+		</mx:Canvas>
+	</s:HGroup>
+	
+</s:Application>
