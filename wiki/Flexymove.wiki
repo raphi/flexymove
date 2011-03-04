@@ -4,10 +4,3 @@
 
 Flexymove is a hand motion capture AS3 library developped by three EPITA students.
 This will allow developpers to handle their RIA / RDA application with hand gesture like swipping pages !
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
