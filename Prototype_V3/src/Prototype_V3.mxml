@@ -6,6 +6,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import Algorithme.MyTimerEvent;
 			import Algorithme.alpha;
 			import Algorithme.beta;
 			
@@ -15,6 +16,7 @@
 			
 			import mx.charts.chartClasses.StackedSeries;
 			import mx.collections.ArrayCollection;
+			
 			import mx.collections.ArrayList;
 			import mx.controls.Alert;
 			import mx.core.UIComponent;
@@ -27,8 +29,8 @@
 			public var w:int = 300;
 			[Bindable]
 			public var h:int = 3*w/4;
-			public var f:int = 25;
-			public var timer:Timer = new Timer(100, 0);
+			public var f:int = 20;
+			public var timer:Timer = new Timer(1000 / f, 0);
 			public var algos:Array = new Array(new Algorithme.alpha(), new Algorithme.beta());
 			[Bindable]
 			public var time:int = 0;
@@ -58,6 +60,8 @@
 			//MATRIX d'inversion
 			public var matInv:Matrix = new Matrix(-1, 0, 0, 1, w, 0);
 			
+			//public var cpt:int = 1;
+			
 			
 			private function loadCamera () : void
 			{
@@ -78,8 +82,7 @@
 					camera.setMode(w, h, f, true);
 					videoCamera.attachCamera(camera);
 				}
-				timer.addEventListener("timer", takeSnapshot);
-				timer.start();
+				//addEventListener(MyTimerEvent.END_PROCESSING_FRAME, takeSnapshot);
 				
 				objects.addItem(raphiBad);
 				objects.addItem(raphiHappy);
@@ -87,10 +90,15 @@
 				objects.addItem(tomHappy);
 				objects.addItem(nicolasBad);
 				objects.addItem(nicolasHappy);
+				timer.addEventListener("timer", takeSnapshot);
+				timer.start();
 			}
-			private function takeSnapshot(e:String) : void
+			private function takeSnapshot(s:String) : void
 			{
-				var t:int = (new Date()).getMilliseconds();
+				//cpt++;
+				//if (cpt > 500)
+				//	return;
+				//var t:int = (new Date()).getMilliseconds();
 				if (check_swap.selected)
 				{
 					origin.draw(videoCamera, matInv);
@@ -138,7 +146,7 @@
 					//snapshot.merge(red, new Rectangle(0,0,w,h), new Point(0, 0), 1, 1, 1, 1); 
 					//snapshot.merge(blue, new Rectangle(0,0,w,h), new Point(0, 0), 1, 1, 1, 1); 
 					
-					detectedPoint = red_p
+					detectedPoint = blue_p;
 					//detectedPoint = processImage(snapshot);
 					if ((prevPoint.x >= 0) && (detectedPoint.x >= 0)) // si detection sur fram precedente et actuel
 					{
@@ -193,8 +201,8 @@
 						
 						if (handle != -1)
 						{
-							var oo:Image = objects[handle] as Image;
-							oo.visible = true;
+							var ooo:Image = objects[handle] as Image;
+							ooo.visible = true;
 							(objects[handle+1] as Image).visible = false;
 							//release drag and drop
 							handle = -1;
@@ -206,12 +214,22 @@
 					
 				}
 				//pas réussi a deleter
-				bit1.mask = new Bitmap(snapshot);
+				if (r_snapshot.selected)
+					bit1.mask = new Bitmap(snapshot);
+				if (r_red.selected)
+					bit1.mask = new Bitmap(red);
+				if (r_blue.selected)
+					bit1.mask = new Bitmap(blue);
+				
 
-				t = (new Date()).getMilliseconds() - t;
-				if (t < 0)
-					t += 1000;
-				time = t;
+				//t = (new Date()).getMilliseconds() - t;
+				//if (t < 0)
+				//	t += 1000;
+				//time = t;
+				
+				//EVENT
+				//var eeee:MyTimerEvent = new MyTimerEvent(MyTimerEvent.END_PROCESSING_FRAME);
+				//dispatchEvent(eeee);
 			}
 			
 			private function processImage(img:BitmapData, color:int) : Point//color is en enum
@@ -320,20 +338,20 @@
 			<s:HGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="RED"/>
-					<s:HSlider id="r_r_min" minimum="0" maximum="255" liveDragging="true" value="160"/>
+					<s:HSlider id="r_r_min" minimum="0" maximum="255" liveDragging="true" value="143"/>
 					<s:HSlider id="r_r_max" minimum="0" maximum="255" liveDragging="true" value="255"/>
 					<!-- 0 to 58 -->
 				</s:VGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="GREEN"/>
-					<s:HSlider id="r_g_min" minimum="0" maximum="255" liveDragging="true" value="11"/>
+					<s:HSlider id="r_g_min" minimum="0" maximum="255" liveDragging="true" value="0"/>
 					<s:HSlider id="r_g_max" minimum="0" maximum="255" liveDragging="true" value="107"/>
 					<!-- 52 to 164 -->
 				</s:VGroup>
 				<s:VGroup width="100%" height="100%">
 					<s:Label text="BLUE"/>
 					<s:HSlider id="r_b_min" minimum="0" maximum="255" liveDragging="true" value="0"/>
-					<s:HSlider id="r_b_max" minimum="0" maximum="255" liveDragging="true" value="255"/>
+					<s:HSlider id="r_b_max" minimum="0" maximum="255" liveDragging="true" value="57"/>
 					<!-- 150 to 256 -->
 				</s:VGroup>
 			</s:HGroup>
@@ -343,12 +361,6 @@
 					width="{w}"
 					height="{h}"/>
 			</s:Panel>
-			<mx:VideoDisplay
-				id="videoCamera"
-				visible="true"
-				creationComplete="loadCamera();"
-				width="{w}"
-				height="{h}"/>
 			<s:HGroup width="100%">
 				<s:VGroup>
 					<s:HGroup width="100%" height="100%">
@@ -375,8 +387,17 @@
 						/>
 					<s:HSlider id="stabilizer" minimum="1" maximum="20" liveDragging="true" value="4"/>
 					<s:HSlider id="proxymity" minimum="5" maximum="200" liveDragging="true" value="40"/>
+					<s:RadioButton groupName="radio_bitmap" id="r_snapshot" label="normal" selected="true" />
+					<s:RadioButton groupName="radio_bitmap" id="r_red" label="red"/>
+					<s:RadioButton groupName="radio_bitmap" id="r_blue" label="blue"/>
 				</s:VGroup>
 			</s:HGroup>
+			<mx:VideoDisplay
+				id="videoCamera"
+				visible="false"
+				creationComplete="loadCamera();"
+				width="{w}"
+				height="{h}"/>
 		</s:VGroup>
 		<!-- The Canvas is the drag target --> 
 		<mx:Canvas id="v1"
@@ -390,12 +411,12 @@
 			<mx:Image id="raphiBad"
 					  x="0"
 					  y="0"
-					  source="@Embed(source='assets/raphiBad_.png')" 
+					  source="@Embed(source='assets/raphiBad.png')" 
 					  mouseMove="mouseMoveHandler(event);"/>
 			<mx:Image id="raphiHappy" 
 					  x="0"
 					  y="0"
-					  source="@Embed(source='assets/raphiHappy__.png')" 
+					  source="@Embed(source='assets/raphiHappy.png')" 
 					  mouseMove="mouseMoveHandler(event);"
 					  visible="false" /> 
 			<mx:Image id="tomBad" 

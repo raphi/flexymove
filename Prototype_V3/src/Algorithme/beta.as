@@ -14,6 +14,7 @@ package Algorithme
 	
 	public class beta extends algorithme
 	{
+		public var f:ArrayCollection = new ArrayCollection();
 		public var _max_found:int = -1;
 		public var _point_found:Point;
 		public var tab:BitmapData = null;
@@ -52,8 +53,7 @@ package Algorithme
 		{
 			var varI:int;
 			var varJ:int;
-			var f:ArrayCollection = new ArrayCollection();
-			var r:int = 4; // interpolation a 'r' pixels
+			var r:int = 2; // interpolation a 'r' pixels
 			var size:int = 0;
 			var p:Point = DesignPatern.Points.nul;
 			var arround:Point;

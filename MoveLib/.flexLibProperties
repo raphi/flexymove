@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="Movelib.MoveLib"/>
+    <classEntry path="Movelib.imageAcquisition.ImageAcquisition"/>
+    <classEntry path="Movelib.preProcessing.PreProcessing"/>
+    <classEntry path="Movelib.preProcessing.GrayScale"/>
+    <classEntry path="Movelib.preProcessing.Difference"/>
+    <classEntry path="Movelib.colorsDetection.ColorsDetection"/>
+    <classEntry path="Movelib.colorsDetection.ColorCalibration"/>
+    <classEntry path="Movelib.colorsDetection.ColorRange"/>
+    <classEntry path="Movelib.Pointsdetection.PointsDetection"/>
+    <classEntry path="Movelib.Pointsdetection.DetectionStrategy"/>
+    <classEntry path="Movelib.Pointsdetection.Average"/>
+    <classEntry path="Movelib.Pointsdetection.Groupe"/>
+    <classEntry path="Movelib.movemenRecognition.Recognition"/>
+    <classEntry path="Movelib.movemenRecognition.PointsManager"/>
+    <classEntry path="Movelib.movemenRecognition.MovementRecognition"/>
+    <classEntry path="Movelib.movemenRecognition.ActionRecognition"/>
+    <classEntry path="Movelib.log.Logs"/>
+    <classEntry path="Movelib.configuration.SaveConfiguration"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
