@@ -2,11 +2,13 @@ package Movelib.colorsDetection
 {
 	public class ColorRange
 	{
-		private var r_min:int = 0;
-		private var r_max:int = 255;
+		private var _minValue:int = 0;
+		private var _maxValue:int = 0;
 		
-		public function ColorRange()
+		public function ColorRange(minValue:int, maxValue:int)
 		{
+			_minValue = minValue;
+			_maxValue = maxValue; 
 		}
 	}
 }

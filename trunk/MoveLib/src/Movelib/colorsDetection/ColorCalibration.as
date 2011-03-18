@@ -8,7 +8,7 @@ package Movelib.colorsDetection
 		
 		public function ColorCalibration()
 		{
-			 range = new ColorRange();
+			 range = new ColorRange(0, 0);
 		}
 		
 		//Calibrates the rangeColor using a BitmapData
