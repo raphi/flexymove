@@ -1,4 +1,4 @@
-package Movelib.movemenRecognition
+package Movelib.recognition
 {
 	public class ActionRecognition
 	{

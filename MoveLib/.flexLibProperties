@@ -13,12 +13,14 @@
     <classEntry path="Movelib.Pointsdetection.DetectionStrategy"/>
     <classEntry path="Movelib.Pointsdetection.Average"/>
     <classEntry path="Movelib.Pointsdetection.Groupe"/>
-    <classEntry path="Movelib.movemenRecognition.Recognition"/>
-    <classEntry path="Movelib.movemenRecognition.PointsManager"/>
-    <classEntry path="Movelib.movemenRecognition.MovementRecognition"/>
-    <classEntry path="Movelib.movemenRecognition.ActionRecognition"/>
+    <classEntry path="Movelib.recognition.Recognition"/>
+    <classEntry path="Movelib.recognition.PointsManager"/>
+    <classEntry path="Movelib.recognition.MovementRecognition"/>
+    <classEntry path="Movelib.recognition.ActionRecognition"/>
     <classEntry path="Movelib.log.Logs"/>
     <classEntry path="Movelib.configuration.SaveConfiguration"/>
+    <classEntry path="Movelib.LandmarkColor"/>
+    <classEntry path="Movelib.Landmark"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
