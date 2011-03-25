@@ -106,7 +106,6 @@
 				else
 				{
 					origin.draw(videoCamera);
-					
 				}
 				snapshot.draw(origin);
 				if (check_algo_plus.selected)
