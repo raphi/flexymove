@@ -12,11 +12,6 @@ package Movelib.Pointsdetection
 			return _points;
 		}
 		
-		public function set points(value:Array):void
-		{
-			_points = value;
-		}
-
 		public function PointsDetection()
 		{
 			_points = new Array();
@@ -26,6 +21,9 @@ package Movelib.Pointsdetection
 
 		public function detect(img:BitmapData) : void
 		{
+			for(var i:int = 0; i < 50; i++) 
+				for(var j:int = 10; j < 15; j++) 
+					img.setPixel(i,j,255*256*256);
 			
 		}
 	}
