@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:ai="http://ns.adobe.com/ai/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+    xmlns:flm="http://ns.adobe.com/flame/2008" xmlns:fx="http://ns.adobe.com/mxml/2009"
+    xmlns:s="library://ns.adobe.com/flex/spark"
+	autoDrawBackground="false">
+
+    <!-- Generate with Adobe Catalyst CS5 -->
+
+    <s:states>
+        <s:State name="up"/>
+        <s:State name="overed"/>
+    </s:states>
+
+    <s:Group id="group2" x="0" blendMode="normal" x.overed="18" y.overed="0" y.up="10">
+        <s:Group id="group1" x="0" y="132" blendMode="normal" d:userLabel="shadowAndReflect" y.overed="142">
+            <s:Group id="group3" x="32" y="8" ai:spare="1" d:userLabel="reflectGroup" luminosityClip="true" maskType="luminosity"
+                x.overed="14">
+                <s:mask>
+                    <s:Group x="-9.761" y="-2.774">
+                        <s:Rect width="159.361" height="149.932">
+                            <s:fill>
+                                <s:LinearGradient scaleX="149.932" x="79.6807" y="0" rotation="90">
+                                    <s:GradientEntry color="#FFFFFF" ratio="0"/>
+                                    <s:GradientEntry ratio="1"/>
+                                </s:LinearGradient>
+                            </s:fill>
+                        </s:Rect>
+                    </s:Group>
+                </s:mask>
+                <s:Rect width="140" height="140" x="0" y="0" alpha="0.77" d:id="6" d:userLabel="reflect" flm:variant="5"
+                    height.up="72">
+                    <s:fill>
+                        <s:LinearGradient scaleX="140.03" x="0" y="70.0146">
+                            <s:GradientEntry color="#F5F7F9" ratio="0"/>
+                            <s:GradientEntry color="#E0E2E4" ratio="0.026793"/>
+                            <s:GradientEntry color="#D2D5D7" ratio="0.0560065"/>
+                            <s:GradientEntry color="#CCCFD1" ratio="0.0882261"/>
+                            <s:GradientEntry color="#CACDCF" ratio="0.131868"/>
+                            <s:GradientEntry color="#D7D9DB" ratio="0.895604"/>
+                            <s:GradientEntry color="#E0E2E4" ratio="0.940392"/>
+                            <s:GradientEntry color="#F5F7F9" ratio="1"/>
+                        </s:LinearGradient>
+                    </s:fill>
+                </s:Rect>
+            </s:Group>
+            <s:BitmapImage id="bitmapimage1" source="@Embed('../itemShadow.png')" x="0" y="0" alpha="0.49" d:id="7"
+                d:userLabel="shadow" flm:variant="7" height.overed="17" smooth="true" width.overed="165"/>
+        </s:Group>
+        <s:Group id="group4" x="32" y="0" d:userLabel="Item"  
+            x.overed="14">
+            <s:Rect width="140" height="140" x="0" y="0" d:id="8" d:userLabel="background" flm:variant="8">
+                <s:fill>
+                    <s:LinearGradient scaleX="140.03" x="0" y="70.0142">
+                        <s:GradientEntry color="#F5F7F9" ratio="0"/>
+                        <s:GradientEntry color="#E0E2E4" ratio="0.026793"/>
+                        <s:GradientEntry color="#D2D5D7" ratio="0.0560065"/>
+                        <s:GradientEntry color="#CCCFD1" ratio="0.0882261"/>
+                        <s:GradientEntry color="#CACDCF" ratio="0.131868"/>
+                        <s:GradientEntry color="#D7D9DB" ratio="0.895604"/>
+                        <s:GradientEntry color="#E0E2E4" ratio="0.940392"/>
+                        <s:GradientEntry color="#F5F7F9" ratio="1"/>
+                    </s:LinearGradient>
+                </s:fill>
+            </s:Rect>
+            <s:Path 
+                data="M 102.053 0 L 9.976 0 C 4.475 0 0 4.537 0 10.112 L 0 11.319 C 0 16.898 4.475 21.438 9.976 21.438 L 102.053 21.438 C 107.551 21.438 112.025 16.898 112.025 11.319 L 112.025 10.112 C 112.025 4.537 107.551 0 102.053 0 L 102.053 0 Z"
+                x="13.661" y="110.022" alpha="0.55" d:id="10" d:userLabel="backgroundAmount" flm:variant="10" winding="nonZero" includeIn="overed">
+                <s:fill>
+                    <s:LinearGradient scaleX="21.438" x="56.013" y="0" rotation="90">
+                        <s:GradientEntry color="#929EA1" ratio="0"/>
+                        <s:GradientEntry color="#A8B1B3" ratio="0.11423"/>
+                        <s:GradientEntry color="#B7BEBF" ratio="0.229583"/>
+                        <s:GradientEntry color="#C0C6C7" ratio="0.346308"/>
+                        <s:GradientEntry color="#C3C8C9" ratio="0.467033"/>
+                        <s:GradientEntry color="#C4C9CA" ratio="0.704834"/>
+                        <s:GradientEntry color="#CBCFD0" ratio="0.823039"/>
+                        <s:GradientEntry color="#DEE0E1" ratio="0.920046"/>
+                        <s:GradientEntry color="#FFFFFF" ratio="1"/>
+                    </s:LinearGradient>
+                </s:fill>
+            </s:Path>
+            
+            <s:Rect width="140" height="34" x="0" y="0" d:id="12" d:userLabel="backgroundHeader" flm:variant="12">
+                <s:fill>
+                    <s:LinearGradient scaleX="139.94" x="0" y="16.8472">
+                        <s:GradientEntry color="#FF00FF" ratio="0"/>
+
+                    </s:LinearGradient>
+                </s:fill>
+            </s:Rect>
+            <s:Rect width="140" height="1" x="0" y="0" d:userLabel="headerPath">
+                <s:fill>
+                    <s:SolidColor color="#008F96"/>
+                </s:fill>
+            </s:Rect>
+			<s:Label includeIn="up" x="30" y="70" width="100" height="35" fontSize="21" text="PICTURE"/>
+			<s:Image includeIn="up" x="20" y="42" width="110" height="88" 
+					 source="xxx"/>
+        </s:Group>
+    </s:Group>
+</s:ItemRenderer>
