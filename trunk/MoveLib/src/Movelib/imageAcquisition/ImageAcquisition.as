@@ -16,7 +16,7 @@ package Movelib.imageAcquisition
 			camera = Camera.getCamera();
 			if (camera)
 			{
-				camera.setMode(400, 300, 25, true);
+				camera.setMode(400, 300, 50, true);
 				video = new Video(400,300);
 				video.attachCamera(camera);
 			}
