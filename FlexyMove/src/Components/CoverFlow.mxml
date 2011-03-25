@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:Components="Components.*"
+		 width="400" height="300" 
+		 creationComplete="init()">
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.itemsRenders.FolderRenderer;
+			import Components.itemsRenders.MovieRenderer;
+			import Components.itemsRenders.MusicRenderer;
+			import Components.itemsRenders.PictureRenderer;
+			import Components.itemsRenders.PodRenderer;
+			
+			import mx.collections.ArrayList;
+			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
+			public const SELECTEDITEMPROXIMITY:Number = 30;		// 0 TO 200	
+			public const DEPTHDISTANCE:Number = 68; 			// 1 TO 200
+			public const ELEMENTROTATION:Number = -35; 			// -90 TO 0
+			public const FOCALLENGTH:Number = 1000;				// 1 TO 1000
+			public const PERSPECTIVEPROJECTIONX:Number = 250;	// -1000 TO 1000
+			public const PERSPECTIVEPROJECTIONY:Number = 124;	// -1000 TO 1000
+			
+			
+			public var fileList:ArrayList = new ArrayList();
+			
+			/** init coverflow component 
+			 **/ 
+			public function init (): void
+			{
+				for (var i:int = 0; i < 5; i++) 
+				{
+					fileList.addItem("OTHER");
+				}
+				for (i = 0; i < 5; i++) 
+				{
+					fileList.addItem("Music");
+				}
+				for (i = 0; i < 5; i++) 
+				{
+					fileList.addItem("Folder");
+				}
+				for (i = 0; i < 5; i++) 
+				{
+					fileList.addItem("Movie");
+				}
+				for (i = 0; i < 5; i++) 
+				{
+					fileList.addItem("Picture");
+				}
+
+			}
+			
+			/** Return a Class Factory adapted to the item :
+			 *  - Movie
+			 * 	- Picture
+			 *  - Folder
+			 *  - Music */
+			private function itemRender(item:Object):ClassFactory {
+				var cla:Class = PodRenderer;
+				switch (item) {
+					case "Movie":
+						cla = MovieRenderer;
+						break;
+ 					case "Picture":
+						cla = PictureRenderer
+						break;
+					case "Music":
+						cla = MusicRenderer;
+						break;
+					case "Folder":
+						cla = FolderRenderer;
+						break; 
+					default:
+						break;
+				}
+				return new ClassFactory(cla);
+			}
+					
+		]]>
+	</fx:Script>
+
+	<s:List dataProvider="{fileList}" width="750" height="375" id="list"
+			selectedIndex="0"  itemRendererFunction="itemRender" >
+		<s:layout>
+			<Components:CoverflowLayout id="coverflow" 
+										selectedIndex="{ list.selectedIndex }"
+										horizontalDistance="{HORIZONTALDISTANCE}"
+										selectedItemProximity="{SELECTEDITEMPROXIMITY}"
+										depthDistance="{DEPTHDISTANCE}" 
+										elementRotation="{ELEMENTROTATION}" 
+										focalLength="{FOCALLENGTH}"
+										perspectiveProjectionX="{PERSPECTIVEPROJECTIONX}" 
+										perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
+		</s:layout>
+	</s:List>
+	<s:Label id="l1" text="{list.selectedItem}"/>
+	
+	
+</s:Group>

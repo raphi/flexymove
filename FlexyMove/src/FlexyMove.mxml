@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
-					   xmlns:mx="library://ns.adobe.com/flex/mx">
+					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:Components="Components.*"
+					   width="100%" height="100%">
 	<fx:Script>
 		<![CDATA[
 			import Movelib.MoveLib;
@@ -11,11 +12,11 @@
 			
 			public function init():void
 			{
-				MoveLib.registerObject(button);
-				Movelib.MoveLib.start();
+/* 				MoveLib.registerObject(button);
+				Movelib.MoveLib.start(); */
 			}
-
-
+			
+			
 			protected function button_clickHandler(event:MouseEvent):void
 			{
 				if (event.type == "click")
@@ -23,18 +24,17 @@
 					bit1.mask = new Bitmap(MoveLib.ImgAcq.snapshot);
 				}
 			}
-
+			
 		]]>
 	</fx:Script>
-
 	
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	
-	</fx:Declarations>
 	<s:Button id="button" click="button_clickHandler(event)" creationComplete="init();" />
-		<s:BitmapImage
-			id="bit1"
-			width="400"
-			height="300"/>
+	<s:BitmapImage
+		id="bit1"
+		width="400"
+		height="300"/>
+	
+	<Components:CoverFlow id="coverflowID"/>
+	
+	
 </s:WindowedApplication>
