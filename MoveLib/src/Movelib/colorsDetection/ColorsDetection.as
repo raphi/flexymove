@@ -20,6 +20,14 @@ package Movelib.colorsDetection
 
 		public function detect(img:BitmapData) : void
 		{
+			var calib:ColorCalibration;
+			for each(calib in colorsCalibrations)
+			{
+				calib.calibrate(img);
+			}
+			for(var i:int = 0; i < 50; i++) 
+				for(var j:int = 5; j < 10; j++) 
+					img.setPixel(i,j,255*256);
 		}
 	}
 }
