@@ -9,19 +9,40 @@ package Movelib.colorsDetection
 		{
 			_minValue = minValue;
 			_maxValue = maxValue;
-			
+			_moyValue = ((((_maxValue & 0xFF0000) + (_minValue & 0xFF0000)) / 2) & 0xFF0000) +
+				((((_maxValue & 0x00FF00) + (_minValue & 0x00FF00)) / 2) & 0x00FF00)  +
+				((((_maxValue & 0x0000F) + (_minValue & 0x0000FF)) / 2)  & 0x0000FF);
 		}
-		public function isIn(color:int) : Boolean
+
+		public function get moyValue():int
 		{
-			if (((_minValue & 0xFF0000) < (color & 0xFF0000)) && 
-				((_minValue & 0x00FF00) < (color & 0x00FF00)) && 
-				((_minValue & 0x0000FF) < (color & 0x0000FF)) &&
-				((_maxValue & 0xFF0000) > (color & 0xFF0000)) && 
-				((_maxValue & 0x00FF00) > (color & 0x00FF00)) && 
-				((_maxValue & 0x0000FF) > (color & 0x0000FF)))
-				return true;
-			else
-				return false;
+			return _moyValue;
 		}
+
+		public function set moyValue(value:int):void
+		{
+			_moyValue = value;
+		}
+
+		public function get maxValue():int
+		{
+			return _maxValue;
+		}
+
+		public function set maxValue(value:int):void
+		{
+			_maxValue = value;
+		}
+
+		public function get minValue():int
+		{
+			return _minValue;
+		}
+
+		public function set minValue(value:int):void
+		{
+			_minValue = value;
+		}
+
 	}
 }
