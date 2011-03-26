@@ -1,4 +1,4 @@
-package Components  {
+package Components.coverflow  {
     import flash.events.TimerEvent;
     import flash.geom.Matrix3D;
     import flash.geom.PerspectiveProjection;
