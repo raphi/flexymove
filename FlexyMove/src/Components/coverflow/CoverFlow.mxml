@@ -3,17 +3,17 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:Components="Components.*"
-		 width="400" height="300" 
-		 creationComplete="init()">
+		 width="100%" height="100%" 
+		 creationComplete="init()" xmlns:coverflow="Components.coverflow.*">
 	
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.itemsRenders.FolderRenderer;
-			import Components.itemsRenders.MovieRenderer;
-			import Components.itemsRenders.MusicRenderer;
-			import Components.itemsRenders.PictureRenderer;
-			import Components.itemsRenders.PodRenderer;
+			import Components.coverflow.itemRenderers.FolderRenderer;
+			import Components.coverflow.itemRenderers.MovieRenderer;
+			import Components.coverflow.itemRenderers.MusicRenderer;
+			import Components.coverflow.itemRenderers.PictureRenderer;
+			import Components.coverflow.itemRenderers.PodRenderer;
 			
 			import mx.collections.ArrayList;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
@@ -83,10 +83,10 @@
 		]]>
 	</fx:Script>
 
-	<s:List dataProvider="{fileList}" width="750" height="375" id="list"
-			selectedIndex="0"  itemRendererFunction="itemRender" >
+	<s:List id="list" dataProvider="{fileList}" width="100%" height="100%" 
+			selectedIndex="0"  itemRendererFunction="itemRender">
 		<s:layout>
-			<Components:CoverflowLayout id="coverflow" 
+			<coverflow:CoverflowLayout id="coverflow" 
 										selectedIndex="{ list.selectedIndex }"
 										horizontalDistance="{HORIZONTALDISTANCE}"
 										selectedItemProximity="{SELECTEDITEMPROXIMITY}"
