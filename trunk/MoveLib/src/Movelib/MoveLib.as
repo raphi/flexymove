@@ -59,7 +59,7 @@ package Movelib
 			//Apply the pre-traitement
 			PreProc.apply(img);
 			//Detect colors
-			//ColDetect.detect(img);
+			ColDetect.detect(img);
 			//Transform the detected colors to points
 			//PointsDetect.detect(img);
 			//Give the deteced points to the Recognition object
