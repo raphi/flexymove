@@ -9,9 +9,15 @@ package Movelib.colorsDetection
 		{
 			_minValue = minValue;
 			_maxValue = maxValue;
+			calculMoy();
+		}
+		
+		public function calculMoy() : void
+		{
 			_moyValue = ((((_maxValue & 0xFF0000) + (_minValue & 0xFF0000)) / 2) & 0xFF0000) +
 				((((_maxValue & 0x00FF00) + (_minValue & 0x00FF00)) / 2) & 0x00FF00)  +
 				((((_maxValue & 0x0000F) + (_minValue & 0x0000FF)) / 2)  & 0x0000FF);
+			_moyValue = 0xFF0000;
 		}
 
 		public function get moyValue():int
