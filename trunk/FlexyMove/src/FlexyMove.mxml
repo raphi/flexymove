@@ -12,8 +12,8 @@
 			
 			public function init():void
 			{
-/* 				MoveLib.registerObject(button);
-				Movelib.MoveLib.start(); */
+ 				MoveLib.registerObject(button);
+				Movelib.MoveLib.start();
 			}
 			
 			
@@ -29,12 +29,11 @@
 	</fx:Script>
 	
 	<s:Button id="button" click="button_clickHandler(event)" creationComplete="init();" />
+	<coverflow:CoverFlow id="coverflowID"/>
 	<s:BitmapImage
 		id="bit1"
 		width="400"
 		height="300"/>
-	
-	<coverflow:CoverFlow id="coverflowID"/>
 	
 	
 </s:WindowedApplication>
