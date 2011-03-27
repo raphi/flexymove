@@ -9,11 +9,11 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.coverflow.itemRenderers.FolderRenderer;
+			/*import Components.coverflow.itemRenderers.FolderRenderer;
 			import Components.coverflow.itemRenderers.MovieRenderer;
 			import Components.coverflow.itemRenderers.MusicRenderer;
 			import Components.coverflow.itemRenderers.PictureRenderer;
-			import Components.coverflow.itemRenderers.PodRenderer;
+			import Components.coverflow.itemRenderers.PodRenderer;*/
 			
 			import mx.collections.ArrayList;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
@@ -60,7 +60,7 @@
 			 *  - Folder
 			 *  - Music */
 			private function itemRender(item:Object):ClassFactory {
-				var cla:Class = PodRenderer;
+				/*var cla:Class = PodRenderer;
 				switch (item) {
 					case "Movie":
 						cla = MovieRenderer;
@@ -77,14 +77,15 @@
 					default:
 						break;
 				}
-				return new ClassFactory(cla);
+				return new ClassFactory(cla);*/
+				return null;
 			}
 					
 		]]>
 	</fx:Script>
 
 	<s:List id="list" dataProvider="{fileList}" width="100%" height="100%" 
-			selectedIndex="0"  itemRendererFunction="itemRender">
+			selectedIndex="0"  itemRendererFunction="itemRender" >
 		<s:layout>
 			<coverflow:CoverflowLayout id="coverflow" 
 										selectedIndex="{ list.selectedIndex }"
