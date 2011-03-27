@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:local="*"
+					   xmlns:mxeffects="com.adobe.ac.mxeffects.*"
+					   xmlns:player="Components.player.*"
+					   currentState="MusicPlayer">
+	
+	<s:states>
+		<s:State name="MusicPlayer"/>
+		<s:State name="VideoPlayer"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:Transition fromState="MusicPlayer" toState="VideoPlayer" effect="{leftRotation}" />
+		
+		<s:Sequence>
+			<mxeffects:CubeRotate id="leftRotation" 
+								  target="{videoPlayer}"
+								  siblings="{ [ musicPlayer ] }"
+								  direction="LEFT"
+								  duration="1000" />
+			<mx:RemoveChildAction target="{musicPlayer}"/>
+			<mx:AddChildAction target="{videoPlayer}" />
+		</s:Sequence>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<s:Button click.MusicPlayer="currentState='VideoPlayer'"/>
+	<player:videoPlayer id="videoPlayer"/>
+	<player:musicPlayer id="musicPlayer"/>
+	
+</s:WindowedApplication>
