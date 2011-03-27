@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="init()" xmlns:player="Components.player.*">
+	
+	<fx:Script>
+		<![CDATA[
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.elements.ImageElement;
+			import org.osmf.elements.VideoElement;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.media.MediaResourceBase;
+			import org.osmf.media.URLResource;
+			
+			private function init():void
+			{
+				// Create the container class that displays the media.
+				var container:MediaContainer = new MediaContainer();
+				myPlayer.addChild( container );
+				
+				// Create the resource to play.
+				var resource:URLResource = new URLResource( "file:///C:/Users/metalikange/Desktop/pubrenault.avi" );
+				var resource2:URLResource = new URLResource( "file:///C:/Users/metalikange/Desktop/blackCase.jpg" );
+				
+				// Create the MediaElement and add it to our container class.
+				//var videoElement:VideoElement = new VideoElement( resource );
+				//container.addMediaElement( videoElement );
+
+				var videoElement:ImageElement = new ImageElement( resource );
+				container.addMediaElement( videoElement );
+				
+				// Set the MediaElement on a MediaPlayer.  Because autoPlay
+				// defaults to true, playback begins immediately.
+				var mediaPlayer:MediaPlayer = new MediaPlayer();
+				mediaPlayer.media = videoElement;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<mx:UIComponent id="myPlayer"/>
+	
+</s:WindowedApplication>

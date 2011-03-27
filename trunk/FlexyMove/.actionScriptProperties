@@ -17,6 +17,12 @@
     <application path="FlexyMove.mxml">
       <airExcludes/>
     </application>
+    <application path="PlayerTest.mxml">
+      <airExcludes/>
+    </application>
+    <application path="CubeTest.mxml">
+      <airExcludes/>
+    </application>
   </applications>
   <modules/>
   <buildCSSFiles/>
