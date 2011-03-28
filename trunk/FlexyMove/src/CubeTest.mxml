@@ -5,42 +5,36 @@
 					   xmlns:local="*"
 					   xmlns:mxeffects="com.adobe.ac.mxeffects.*"
 					   xmlns:player="Components.player.*"
-					   currentState="musicPlayer">
+					   currentState="MusicPlayerState">
 	
 	<s:states>
-		<s:State name="musicPlayer"/>
-		<s:State name="videoPlayer"/>
+		<s:State name="MusicPlayerState"/>
+		<s:State name="VideoPlayerState"/>
 	</s:states>
 	
+	<s:transitions>
+		<s:Transition fromState="MusicPlayerState" toState="VideoPlayerState" effect="{topRotation}" />
+		<s:Transition fromState="VideoPlayerState" toState="MusicPlayerState" effect="{leftRotation}" />	
+	</s:transitions>
+	
 	<fx:Declarations>
-		<s:Transition fromState="musicPlayer" 
-					  toState="videoPlayer" 
-					  effect="{leftRotation}" />
-		<s:Transition fromState="videoPlayer" 
-					  toState="musicPlayer" 
-					  effect="{flipBack}" />
-		
 		<s:Sequence>
 			<mxeffects:CubeRotate id="leftRotation" 
 								  target="{videoPlayer}"
 								  siblings="{ [ musicPlayer ] }"
 								  direction="LEFT"
 								  duration="1000" />
+			<s:RemoveAction target="{videoPlayer}"/>
+			<s:AddAction target="{musicPlayer}" />
+		</s:Sequence>
+		<s:Sequence>
+			<mxeffects:CubeRotate id="topRotation" 
+								  target="{musicPlayer}"
+								  siblings="{ [ videoPlayer ] }"
+								  direction="TOP"
+								  duration="1000" />
 			<s:RemoveAction target="{musicPlayer}"/>
 			<s:AddAction target="{videoPlayer}" />
-		</s:Sequence>
-		
-		<s:Sequence id="flipBack">		
-			
-			<mxeffects:CubeRotate 
-				target="{ musicPlayer }" 		
-				siblings="{ [ videoPlayer ] }" 
-				direction="LEFT" 
-				horizontalLightingLocation="LEFT" 
-				duration="1000"/>
-			
-			<s:RemoveAction target="{ videoPlayer }"/>
-			<s:AddAction target="{ musicPlayer }"/>				
 		</s:Sequence>
 	</fx:Declarations>
 	
@@ -48,9 +42,12 @@
 		<s:VerticalLayout/>
 	</s:layout>
 	
-	<s:Button click.musicPlayer="currentState='videoPlayer'" 
-			  click.videoPlayer="currentState='musicPlayer'"/>
-	<player:videoPlayer id="videoPlayer" includeIn="videoPlayer" showEffect="{flipBack}"/>
-	<player:musicPlayer id="musicPlayer" includeIn="musicPlayer"/>
+	<player:videoPlayer id="videoPlayer" 
+						change="currentState='MusicPlayerState'"
+						includeInLayout.MusicPlayerState="false"/>
+	
+	<player:musicPlayer id="musicPlayer"
+						change="currentState='VideoPlayerState'"
+						includeInLayout.VideoPlayerState="false"/>
 	
 </s:WindowedApplication>
