@@ -5,15 +5,20 @@
 					   xmlns:local="*"
 					   xmlns:mxeffects="com.adobe.ac.mxeffects.*"
 					   xmlns:player="Components.player.*"
-					   currentState="MusicPlayer">
+					   currentState="musicPlayer">
 	
 	<s:states>
-		<s:State name="MusicPlayer"/>
-		<s:State name="VideoPlayer"/>
+		<s:State name="musicPlayer"/>
+		<s:State name="videoPlayer"/>
 	</s:states>
 	
 	<fx:Declarations>
-		<s:Transition fromState="MusicPlayer" toState="VideoPlayer" effect="{leftRotation}" />
+		<s:Transition fromState="musicPlayer" 
+					  toState="videoPlayer" 
+					  effect="{leftRotation}" />
+		<s:Transition fromState="videoPlayer" 
+					  toState="musicPlayer" 
+					  effect="{flipBack}" />
 		
 		<s:Sequence>
 			<mxeffects:CubeRotate id="leftRotation" 
@@ -21,8 +26,21 @@
 								  siblings="{ [ musicPlayer ] }"
 								  direction="LEFT"
 								  duration="1000" />
-			<mx:RemoveChildAction target="{musicPlayer}"/>
-			<mx:AddChildAction target="{videoPlayer}" />
+			<s:RemoveAction target="{musicPlayer}"/>
+			<s:AddAction target="{videoPlayer}" />
+		</s:Sequence>
+		
+		<s:Sequence id="flipBack">		
+			
+			<mxeffects:CubeRotate 
+				target="{ musicPlayer }" 		
+				siblings="{ [ videoPlayer ] }" 
+				direction="LEFT" 
+				horizontalLightingLocation="LEFT" 
+				duration="1000"/>
+			
+			<s:RemoveAction target="{ videoPlayer }"/>
+			<s:AddAction target="{ musicPlayer }"/>				
 		</s:Sequence>
 	</fx:Declarations>
 	
@@ -30,8 +48,9 @@
 		<s:VerticalLayout/>
 	</s:layout>
 	
-	<s:Button click.MusicPlayer="currentState='VideoPlayer'"/>
-	<player:videoPlayer id="videoPlayer"/>
-	<player:musicPlayer id="musicPlayer"/>
+	<s:Button click.musicPlayer="currentState='videoPlayer'" 
+			  click.videoPlayer="currentState='musicPlayer'"/>
+	<player:videoPlayer id="videoPlayer" includeIn="videoPlayer" showEffect="{flipBack}"/>
+	<player:musicPlayer id="musicPlayer" includeIn="musicPlayer"/>
 	
 </s:WindowedApplication>

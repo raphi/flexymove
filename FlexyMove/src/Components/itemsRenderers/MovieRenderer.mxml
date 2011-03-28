@@ -2,9 +2,41 @@
 <s:ItemRenderer xmlns:ai="http://ns.adobe.com/ai/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt"
     xmlns:flm="http://ns.adobe.com/flame/2008" xmlns:fx="http://ns.adobe.com/mxml/2009"
     xmlns:s="library://ns.adobe.com/flex/spark"
-	autoDrawBackground="false">
+	creationComplete="init()"
+	autoDrawBackground="false" xmlns:mx="library://ns.adobe.com/flex/mx">
 
     <!-- Generate with Adobe Catalyst CS5 -->
+<fx:Script>
+		<![CDATA[
+			import org.osmf.containers.MediaContainer;
+			import org.osmf.elements.VideoElement;
+			import org.osmf.media.MediaPlayer;
+			import org.osmf.media.URLResource;
+			
+			private function init():void
+			{
+				// Create the container class that displays the media.
+				var container:MediaContainer = new MediaContainer();
+				myPlayer.addChild( container );
+				
+				// Create the resource to play.
+				var resource:URLResource = new URLResource( "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv" );
+				
+				var videoElement:VideoElement = new VideoElement( resource );
+				container.addMediaElement( videoElement );
+				
+				container.width = 120;
+				container.height = 89;
+				
+				// Set the MediaElement on a MediaPlayer.  Because autoPlay
+				// defaults to true, playback begins immediately.
+				var mediaPlayer:MediaPlayer = new MediaPlayer();
+				mediaPlayer.media = videoElement;
+				mediaPlayer.autoPlay = false;
+			}
+	
+		]]>
+	</fx:Script>
 
     <s:states>
         <s:State name="up"/>
@@ -61,6 +93,7 @@
                         <s:GradientEntry color="#F5F7F9" ratio="1"/>
                     </s:LinearGradient>
                 </s:fill>
+				
             </s:Rect>
             <s:Path 
                 data="M 102.053 0 L 9.976 0 C 4.475 0 0 4.537 0 10.112 L 0 11.319 C 0 16.898 4.475 21.438 9.976 21.438 L 102.053 21.438 C 107.551 21.438 112.025 16.898 112.025 11.319 L 112.025 10.112 C 112.025 4.537 107.551 0 102.053 0 L 102.053 0 Z"
@@ -93,6 +126,8 @@
                 </s:fill>
             </s:Rect>
 			<s:Label includeIn="up" x="30" y="70" width="88" height="35" fontSize="21" text="MOVIE"/>
+			<mx:UIComponent id="myPlayer"
+							x="10" y="42" width="120" height="89"/>
         </s:Group>
     </s:Group>
 </s:ItemRenderer>
