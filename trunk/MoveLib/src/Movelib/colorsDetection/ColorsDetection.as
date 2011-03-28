@@ -20,7 +20,7 @@ package Movelib.colorsDetection
 			//red
 			colorsCalibrations.push(new ColorCalibration(new ColorRange(0xA00000, 0xFF8090), new Rectangle(100,80,50,50)));
 			//green
-			colorsCalibrations.push(new ColorCalibration(new ColorRange(0x00A000, 0x80FF80), new Rectangle(150,80,50,50)));
+			//colorsCalibrations.push(new ColorCalibration(new ColorRange(0x00A000, 0x80FF80), new Rectangle(150,80,50,50)));
 			//blue
 			//colorsCalibrations.push(new ColorCalibration(new ColorRange(0x003496, 0x3AA4FF), new Rectangle(200,80,50,50)));
 			//white
