@@ -1,6 +1,7 @@
 package Movelib.imageAcquisition
 {
 	import flash.display.BitmapData;
+	import flash.geom.Matrix;
 	import flash.media.Camera;
 	import flash.media.Video;
 	import flash.utils.Timer;
@@ -8,7 +9,7 @@ package Movelib.imageAcquisition
 	public class ImageAcquisition
 	{
 		private var camera:Camera = null;
-		public var snapshot:BitmapData = new BitmapData(400, 300, false, 0);
+		public var snapshot:BitmapData = new BitmapData(400, 300, false, 0xFFFFFF);
 		public var video:Video = null;
 		
 		public function ImageAcquisition()
@@ -16,8 +17,8 @@ package Movelib.imageAcquisition
 			camera = Camera.getCamera();
 			if (camera)
 			{
-				camera.setMode(400, 300, 50, true);
-				video = new Video(400,300);
+ 				camera.setMode(400, 300, 20, true);
+				video = new Video(400, 300);
 				video.attachCamera(camera);
 			}
 		}
@@ -31,7 +32,9 @@ package Movelib.imageAcquisition
 		//get an image from the camera
 		public function capturePicture() : BitmapData
 		{
-			snapshot.draw(video);
+			//Matrix to swap the video
+			//new Matrix(-1, 0, 0, 1, 400, 0)
+			snapshot.draw(video, new Matrix(-1, 0, 0, 1, 400, 0));
 			return snapshot; 
 		}
 	}

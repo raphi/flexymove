@@ -14,10 +14,13 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="FlexyMove.mxml">
+    <application path="Test_coverFlow.mxml">
       <airExcludes/>
     </application>
     <application path="PlayerTest.mxml">
+      <airExcludes/>
+    </application>
+    <application path="FlexyMove.mxml">
       <airExcludes/>
     </application>
     <application path="CubeTest.mxml">

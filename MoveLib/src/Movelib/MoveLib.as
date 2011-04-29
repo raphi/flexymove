@@ -26,10 +26,6 @@ package Movelib
 		public function MoveLib()
 		{
 		}
-		public static function getString() : String
-		{
-			return "You've succeeded to accessed to the library";
-		}
 		/** initialisation of the MoveLib */
 		public static function start() : void
 		{
@@ -39,7 +35,7 @@ package Movelib
 			_PointsDetect = new PointsDetection();
 			_Reco = new Recognition();
 			//init the timer and start it
-			_timer = new Timer(1000/30, 0);
+			_timer = new Timer(1000/25, 0);
 			_timer.addEventListener("timer", frame);
 			_timer.start();
 		}
@@ -60,8 +56,16 @@ package Movelib
 			PreProc.apply(img);
 			//Detect colors
 			ColDetect.detect(img);
+			//get the detected colors to the PointsDetect object
+			PointsDetect.colors = ColDetect.colors;
 			//Transform the detected colors to points
-			//PointsDetect.detect(img);
+			PointsDetect.detect(img);
+			if (PointsDetect.askForRecalibration)
+			{
+				ColDetect.reset();
+				PointsDetect.askForRecalibration = false;
+				return;
+			}
 			//Give the deteced points to the Recognition object
 			//Reco.addAll(PointsDetect.points);
 			//Reco.recognize();
