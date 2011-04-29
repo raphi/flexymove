@@ -1,32 +1,73 @@
 package Movelib.colorsDetection
 {
 	import flash.display.BitmapData;
+	import flash.display.BitmapDataChannel;
 	import flash.filters.ColorMatrixFilter;
 	import flash.filters.ConvolutionFilter;
+	import flash.filters.DisplacementMapFilter;
+	import flash.filters.DisplacementMapFilterMode;
 	import flash.geom.ColorTransform;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import mx.collections.ArrayCollection;
+	import mx.messaging.AbstractConsumer;
+	
 	public class ColorsDetection
 	{
-		private var colorsCalibrations:Array;//array of ColorCalibration
-		private var _state:int = 0;/* 0 => in calibration, 1 => calibrated */
-		private var _n:int = 0;
+		private var colorsCalibrations:ArrayCollection = null;//array of ColorCalibration
+		private var _state:int;/* 0 => in calibration, 1 => calibrated */
+		private var _colors:ArrayCollection = null;
+		public var _error:String = "no error";
 
 		public function ColorsDetection()
 		{
-			colorsCalibrations = new Array();
-			//reperes detection, five finger and the center of the hand
-			//red
-			colorsCalibrations.push(new ColorCalibration(new ColorRange(0xA00000, 0xFF8090), new Rectangle(100,80,50,50)));
-			//green
-			//colorsCalibrations.push(new ColorCalibration(new ColorRange(0x00A000, 0x80FF80), new Rectangle(150,80,50,50)));
-			//blue
-			//colorsCalibrations.push(new ColorCalibration(new ColorRange(0x003496, 0x3AA4FF), new Rectangle(200,80,50,50)));
-			//white
-			//colorsCalibrations.push(new ColorCalibration(new ColorRange(0x0000A0, 0x8080FF), new Rectangle(200,80,50,50)));
+			reset();
 		}
 		
+		public function get colors():ArrayCollection
+		{
+			return _colors;
+		}
+
+		public function set colors(value:ArrayCollection):void
+		{
+			_colors = value;
+		}
+		public function reset():void
+		{
+			_state = 0;
+			if (colorsCalibrations != null)
+				colorsCalibrations.removeAll();
+			else
+				colorsCalibrations = new ArrayCollection();
+			if (_colors != null)
+				_colors.removeAll();
+			else
+				_colors = new ArrayCollection();
+
+			//blue
+			var min:int = 0x003098;
+			var max:int = 0x36A4FF;
+			min = 0x000050;
+			max = 0x36A4FF;
+			colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(100,100,40,40)));
+			_colors.addItem(-1);
+			
+			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(150,100,40,40)));
+			//_colors[1] = -1;
+			
+			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(200,100,40,40)));
+			
+			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(250,100,40,40)));
+			
+			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(300,100,40,40)));
+			var calib:ColorCalibration;
+			for each(calib in colorsCalibrations)
+			{
+				calib.reset();
+			}
+		}
 		public function detect(img:BitmapData) : void
 		{
 			var calib:ColorCalibration;
@@ -36,28 +77,29 @@ package Movelib.colorsDetection
 				
 				/////////// APPLYFILTER
 				
-				/*
 				
-				var p:Point = new Point(img.width / 2,0);
-				var r:Rectangle = new Rectangle(0, 0, img.width, img.height);
+				var p:Point;
+				var r:Rectangle;
+				var n:int = 0;
+				
 				// red matrix
 				
-				var m:Array = [
+				/*var m:Array = [
 					12,-12,-12,0,0,
 					0,0,0,0,0,
 					0,0,0,0,0,
-					0,0,0,1,0];
+					0,0,0,1,0];*/
 				// bleu clair
-				var m:Array = [
+				/*var m:Array = [
 					-4,-4,+12,0,0,
 					0,0,0,0,0,
 					0,0,0,0,0,
-					0,0,0,1,0];
+					0,0,0,1,0];*/
 				//img.applyFilter(img,r,p,new ColorMatrixFilter(m));
 				
 				
 				///////// CONVOLUTION FILTER
-				
+				/*
 				var clamp:Boolean = false;
 				var clampColor:Number = 0xFF0000;
 				var clampAlpha:Number = 1;
@@ -81,44 +123,47 @@ package Movelib.colorsDetection
 				
 				*/
 				
-				
-				
+				//return;
 				
 				_state = 1;
 				for each(calib in colorsCalibrations)
 				{
+					calib.calibrate(img);
 					if (calib.state == 0)
 					{
-						calib.calibrate(img);
 						_state = 0;
 					}
+					else
+					{
+						//calibration of color describe by calib suceed
+						_colors[n] = calib.range.moyValue;
+					}
+					_error = calib._error;
+					n++;
 				}
 			}
 			else
 			{
-				var res:BitmapData = new BitmapData(img.width, img.height, true, 0x00000000);
+				r = new Rectangle(0, 0, img.width, img.height);
+				p = new Point(0, 0);
 				for each(calib in colorsCalibrations)
 				{
-					if (calib.state == 0)
-					{
-						calib.calibrate(res);
-					}
-					else
-					{
-						var _img:BitmapData = new BitmapData(img.width, img.height, true, 0xFFFFFFFF);
-						_img.draw(img);
-						var r:Rectangle = new Rectangle(0, 0, _img.width, _img.height);
-						var p:Point = new Point(0, 0);
-						_img.paletteMap(_img, r, p, calib.redArray, calib.greenArray, calib.blueArray);
-						_img.threshold(_img, r, p, '!=', calib.range.moyValue, 0x000000, 0x00FFFFFF);
-						res.draw(_img);
-						_img.dispose();
-					}
+					img.paletteMap(img, r, p, calib.redArray, calib.greenArray, calib.blueArray);
+					img.threshold(img, r, p, '!=', calib.range.moyValue, 0x000000, 0x00FFFFFF);
+					break;
 				}
-				img.fillRect(r, 0xFFFFFFFF);
-				img.draw(res);
-				res.dispose();
 			}
 		}
+
+		public function get state():int
+		{
+			return _state;
+		}
+
+		public function set state(value:int):void
+		{
+			_state = value;
+		}
+
 	}
 }
