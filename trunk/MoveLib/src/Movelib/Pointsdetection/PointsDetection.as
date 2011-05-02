@@ -15,12 +15,22 @@ package Movelib.Pointsdetection
 		public function PointsDetection()
 		{
 			_points = new Array();
+			//test for Nicolas
+			_points.push(new Point(10,20));
+			_points.push(new Point(30,30));
+			_points.push(new Point(51,43));
+			_points.push(new Point(85,64));
+			_points.push(new Point(119,102));
+			_points.push(new Point(166,126));
+			_points.push(new Point(181,155));
+			//end of test for  Nicolas
 		}
 		
 		//virtual function : assign to a color or color groups a point 
 
-		public function detect(img:BitmapData) : void
+		public function detect(img:BitmapData):void
 		{
+			return;//test for Nicolas
 			if (_colors[0] == -1)
 			{
 				return;
@@ -31,7 +41,6 @@ package Movelib.Pointsdetection
 				//_points = [];
 				//_askForRecalibration = true;
 			}
-			///*
 			var i:int;
 			var j:int;
 			for (i = 0; i < img.width - 1; i++)
@@ -59,7 +68,6 @@ package Movelib.Pointsdetection
 					}
 				}
 			}
-			//*/
 			var r:Rectangle = img.getColorBoundsRect(0xFFFFFF, _colors[0], true);
 			if (r.width < 200 && r.height < 200 && r.width > 10 && r.height > 10)
 			{
@@ -78,12 +86,10 @@ package Movelib.Pointsdetection
 			for each(var p:Point in _points)
 			{
 				img.setPixel(p.x, p.y, 0xFF0000);
-				///*
 				img.setPixel(p.x - 1, p.y, 0xFF0000);
 				img.setPixel(p.x, p.y - 1, 0xFF0000);
 				img.setPixel(p.x + 1, p.y, 0xFF0000);
 				img.setPixel(p.x, p.y + 1, 0xFF0000);
-				//*/
 			}
 		}
 		public function get colors():ArrayCollection
