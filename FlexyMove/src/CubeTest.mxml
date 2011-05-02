@@ -4,16 +4,55 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
 					   xmlns:profile="Components.profile.*"
 					   xmlns:maps="Components.maps.*"
-					   xmlns:local="*"
 					   xmlns:mxeffects="com.adobe.ac.mxeffects.*"
-					   currentState="MapState" xmlns:youtube="Components.player.youtube.*">
+					   xmlns:youtube="Components.player.youtube.*"
+					   xmlns:local="*"
+					   creationComplete="init()"
+					   currentState="MapState">
 	
 	<fx:Script>
 		<![CDATA[
+			
+			import Movelib.MoveLib;
+			
 			[Bindable]
 			private var oldView:Object = mapView;
 			[Bindable]
 			private var newView:Object = profileView;
+			
+			private function init():void
+			{
+				addEventListener(TransformGestureEvent.GESTURE_SWIPE, rotateCube);
+				
+				MoveLib.registerObject(this);
+				Movelib.MoveLib.start();
+			}
+			
+			private function rotateCube(e:TransformGestureEvent):void
+			{
+				if (e.localX - e.offsetX > 0)
+				{
+					rotationEffect.direction = "RIGHT";
+					
+					switch (currentState)
+					{
+						case "MapState":
+							currentState = "YouTubeState";
+							break;
+						case "ProfileState":
+							currentState = "MapState";
+							break;
+						case "YouTubeState":
+							currentState = "ProfileState";
+							break;
+					}
+					
+				}
+				else
+					rotationEffect.direction = "LEFT";
+				
+				
+			}
 			
 		]]>
 	</fx:Script>

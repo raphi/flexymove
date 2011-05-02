@@ -7,15 +7,12 @@
 		<![CDATA[
 			import Movelib.MoveLib;
 			
-			import spark.components.VideoDisplay;
-			
 			public function init():void
 			{
  				MoveLib.registerObject(button);
 				Movelib.MoveLib.start();
 				textarea.x = 400;
 			}
-			
 			
 			protected function button_clickHandler(event:MouseEvent):void
 			{
@@ -35,8 +32,6 @@
 		id="bit1"
 		width="400"
 		height="300"/>
-	<s:TextArea id="textarea">
-	</s:TextArea>
-	
+	<s:TextArea id="textarea"/>
 	
 </s:WindowedApplication>

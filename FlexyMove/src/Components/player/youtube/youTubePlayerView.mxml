@@ -5,6 +5,10 @@
 		 width="1000" height="800" 
 		 xmlns:components="Components.player.youtube.components.*">
 
+	<fx:Metadata>
+		[Event("change", type="mx.events.Event")]
+	</fx:Metadata>
+	
 	<fx:Script>
 		<![CDATA[
 			import Components.player.youtube.components.YouTubeError;
@@ -221,6 +225,7 @@
 		
 		
 		<!--<mx:List id="listAction" dataProvider="{trackingActions}" width="600" height="100" />-->
+		<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />
 	</mx:VBox>
 </s:Group>
 
