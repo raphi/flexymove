@@ -6,39 +6,42 @@
 					   xmlns:maps="Components.maps.*"
 					   xmlns:local="*"
 					   xmlns:mxeffects="com.adobe.ac.mxeffects.*"
-					   currentState="MapState">
+					   currentState="MapState" xmlns:youtube="Components.player.youtube.*">
+	
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			private var oldView:Object = mapView;
+			[Bindable]
+			private var newView:Object = profileView;
+			
+		]]>
+	</fx:Script>
 	
 	<s:states>
 		<s:State name="MapState"/>
 		<s:State name="ProfileState"/>
-		<s:State name="VideosView"/>
+		<s:State name="YouTubeState"/>
 	</s:states>
 	
 	<s:transitions>
-		<s:Transition fromState="ProfileState" toState="MapState" 
-					  effect="{leftRotation}" />
-		<s:Transition fromState="" toState="ProfileState" 
-					  effect="{leftRotation}" />	
+		<s:Transition toState="MapState" 
+					  effect="{rotationEffect}" />
+		<s:Transition toState="ProfileState" 
+					  effect="{rotationEffect}" />	
+		<s:Transition toState="YouTubeState" 
+					  effect="{rotationEffect}" />	
 	</s:transitions>
 	
 	<fx:Declarations>
 		<s:Sequence>
-			<mxeffects:CubeRotate id="leftRotation" 
-								  target="{maps}"
-								  siblings="{ [ profileView ] }"
+			<mxeffects:CubeRotate id="rotationEffect" 
+								  target="{oldView}"
+								  siblings="{ [ newView ] }"
 								  direction="LEFT"
 								  duration="1000" />
-			<s:RemoveAction target="{maps}"/>
-			<s:AddAction target="{profileView}" />
-		</s:Sequence>
-		<s:Sequence>
-			<mxeffects:CubeRotate id="topRotation" 
-								  target="{profileView}"
-								  siblings="{ [ maps ] }"
-								  direction="TOP"
-								  duration="1000" />
-			<s:RemoveAction target="{profileView}"/>
-			<s:AddAction target="{maps}" />
+			<s:RemoveAction target="{oldView}"/>
+			<s:AddAction target="{newView}" />
 		</s:Sequence>
 	</fx:Declarations>
 	
@@ -46,15 +49,23 @@
 		<s:VerticalLayout/>
 	</s:layout>
 	
-	<maps:argisAir id="maps"
-						change="currentState='ProfileState'"
-						includeInLayout.ProfileState="false"/>
+	<maps:argisAir id="mapView"
+				   change="oldView=mapView; newView=profileView; currentState='ProfileState'"
+				   includeInLayout.ProfileState="false" includeInLayout.YouTubeState="false"/>
 	
 	<profile:ProfileView id="profileView"
-						 change="currentState='MapState'"
-						 includeInLayout.MapState="false"/>
+						 visible="false"
+						 change="oldView=profileView; newView=youtubeView;currentState='YouTubeState'"
+						 includeInLayout.MapState="false" includeInLayout.YouTubeState="false"/>
 	
-<!--	<local:CoverFlow id="coverFlow"
-						 includeInLayout.MapState="false"/>-->
+	<youtube:youTubePlayerView id="youtubeView"
+							   visible="false"
+							   change="oldView=youtubeView; newView=mapView;currentState='MapState'"
+							   includeInLayout.MapState="false" includeInLayout.ProfileState="false"/>
+	
+	<!--	<local:CoverFlow id="coverFlowView"
+	visible="false"
+	change="oldView=coverFlowView; newView=mapView;currentState='MapState'"
+	includeInLayout.MapState="false" includeInLayout.ProfileState="false"/>-->
 	
 </s:WindowedApplication>

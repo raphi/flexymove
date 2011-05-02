@@ -4,6 +4,16 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 					   xmlns:coverflow="Components.coverflow.*">
 	
+	<fx:Metadata>
+		[Event("change", type="mx.events.Event")]
+	</fx:Metadata>
+	
+	<s:layout>
+		<s:VerticalLayout />
+	</s:layout>
+	
 	<coverflow:CoverFlow id="coverflowID"/>
+	
+	<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />
 	
 </s:WindowedApplication>
