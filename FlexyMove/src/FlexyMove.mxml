@@ -8,12 +8,12 @@
 			import Movelib.MoveLib;
 			
 			import spark.components.VideoDisplay;
-			public var s:String = Movelib.MoveLib.getString();
 			
 			public function init():void
 			{
  				MoveLib.registerObject(button);
 				Movelib.MoveLib.start();
+				textarea.x = 400;
 			}
 			
 			
@@ -21,7 +21,9 @@
 			{
 				if (event.type == "click")
 				{
-					bit1.mask = new Bitmap(MoveLib.ImgAcq.snapshot);
+					var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
+					bit1.mask = b;
+					textarea.text =  MoveLib.Reco._error;
 				}
 			}
 			
@@ -29,11 +31,12 @@
 	</fx:Script>
 	
 	<s:Button id="button" click="button_clickHandler(event)" creationComplete="init();" />
-
 	<s:BitmapImage
 		id="bit1"
 		width="400"
 		height="300"/>
+	<s:TextArea id="textarea">
+	</s:TextArea>
 	
 	
 </s:WindowedApplication>

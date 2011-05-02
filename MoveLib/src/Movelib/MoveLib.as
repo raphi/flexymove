@@ -67,8 +67,8 @@ package Movelib
 				return;
 			}
 			//Give the deteced points to the Recognition object
-			//Reco.addAll(PointsDetect.points);
-			//Reco.recognize();
+			Reco.addAll(PointsDetect.points);
+			Reco.recognize(img);
 			var e:MouseEvent = new MouseEvent("click");
 			_obj.dispatchEvent(e);
 			//end frame
