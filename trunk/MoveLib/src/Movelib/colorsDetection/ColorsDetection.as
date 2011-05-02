@@ -2,6 +2,8 @@ package Movelib.colorsDetection
 {
 	import flash.display.BitmapData;
 	import flash.display.BitmapDataChannel;
+	import flash.filters.BitmapFilter;
+	import flash.filters.BlurFilter;
 	import flash.filters.ColorMatrixFilter;
 	import flash.filters.ConvolutionFilter;
 	import flash.filters.DisplacementMapFilter;
@@ -19,7 +21,7 @@ package Movelib.colorsDetection
 		private var _state:int;/* 0 => in calibration, 1 => calibrated */
 		private var _colors:ArrayCollection = null;
 		public var _error:String = "no error";
-
+		
 		public function ColorsDetection()
 		{
 			reset();
@@ -73,59 +75,8 @@ package Movelib.colorsDetection
 			var calib:ColorCalibration;
 			if (_state == 0)
 			{
-				//tets
-				
-				/////////// APPLYFILTER
-				
-				
-				var p:Point;
-				var r:Rectangle;
-				var n:int = 0;
-				
-				// red matrix
-				
-				/*var m:Array = [
-					12,-12,-12,0,0,
-					0,0,0,0,0,
-					0,0,0,0,0,
-					0,0,0,1,0];*/
-				// bleu clair
-				/*var m:Array = [
-					-4,-4,+12,0,0,
-					0,0,0,0,0,
-					0,0,0,0,0,
-					0,0,0,1,0];*/
-				//img.applyFilter(img,r,p,new ColorMatrixFilter(m));
-				
-				
-				///////// CONVOLUTION FILTER
-				/*
-				var clamp:Boolean = false;
-				var clampColor:Number = 0xFF0000;
-				var clampAlpha:Number = 1;
-				
-				var bias:Number = 0;
-				var preserveAlpha:Boolean = false;
-				var matrixCols:Number = 3;
-				var matrixRows:Number = 3;
-				var matrix:Array = [ -1,0,-1,
-					-1,5,-1,
-					0,-1,0 ];
-				
-				var filter:ConvolutionFilter = new ConvolutionFilter(matrixCols, matrixRows, matrix, matrix.length, bias, preserveAlpha, clamp, clampColor, clampAlpha);
-				img.applyFilter(img, r, p, filter);
-				matrix = [ -2,-1,0,
-					-1,1,1,
-					0,1,2 ];
-
-				filter = new ConvolutionFilter(matrixCols, matrixRows, matrix, matrix.length, bias, preserveAlpha, clamp, clampColor, clampAlpha);
-				img.applyFilter(img, r, p, filter);
-				
-				*/
-				
-				//return;
-				
 				_state = 1;
+				var n:int = 0;
 				for each(calib in colorsCalibrations)
 				{
 					calib.calibrate(img);
@@ -144,8 +95,8 @@ package Movelib.colorsDetection
 			}
 			else
 			{
-				r = new Rectangle(0, 0, img.width, img.height);
-				p = new Point(0, 0);
+				var p:Point = new Point(0, 0);
+				var r:Rectangle = new Rectangle(0, 0, img.width, img.height);
 				for each(calib in colorsCalibrations)
 				{
 					img.paletteMap(img, r, p, calib.redArray, calib.greenArray, calib.blueArray);

@@ -1,6 +1,9 @@
 package Movelib.Pointsdetection
 {
 	import flash.display.BitmapData;
+	import flash.filters.BitmapFilter;
+	import flash.filters.BlurFilter;
+	import flash.filters.ConvolutionFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -10,86 +13,60 @@ package Movelib.Pointsdetection
 	{
 		private var _points:Array;
 		private var _colors:ArrayCollection = null;
-		private var _askForRecalibration:Boolean = false
+		private var _askForRecalibration:Boolean = false;
+		private var _oldRectangleWidth:int = -1;
+		private var _oldRectangleHeight:int = -1;
 		
 		public function PointsDetection()
 		{
 			_points = new Array();
-			//test for Nicolas
-			_points.push(new Point(10,20));
-			_points.push(new Point(30,30));
-			_points.push(new Point(51,43));
-			_points.push(new Point(85,64));
-			_points.push(new Point(119,102));
-			_points.push(new Point(166,126));
-			_points.push(new Point(181,155));
-			//end of test for  Nicolas
 		}
 		
 		//virtual function : assign to a color or color groups a point 
 
 		public function detect(img:BitmapData):void
 		{
-			return;//test for Nicolas
-			if (_colors[0] == -1)
+			if (_colors == null || _colors[0] == -1)
 			{
 				return;
 			}
-			if (_points.length > 20)
-			{
-				_points.shift();
-				//_points = [];
-				//_askForRecalibration = true;
-			}
+			_points = [];
 			var i:int;
 			var j:int;
-			for (i = 0; i < img.width - 1; i++)
-			{
-				for (j = 0; j < img.height - 1; j++)
-				{
-					if (img.getPixel(i, j) == 0)
-					{
-						continue;
-					}
-					if (img.getPixel(i + 1, j) == 0)
-					{
-						img.setPixel(i, j, 0);
-						continue;
-					}
-					if (img.getPixel(i, j + 1) == 0)
-					{
-						img.setPixel(i, j, 0);
-						continue;
-					}
-					if (img.getPixel(i + 1, j + 1) == 0)
-					{
-						img.setPixel(i, j, 0);
-						continue;
-					}
-				}
-			}
+			img.applyFilter(img, new Rectangle(0, 0, img.width, img.height), new Point(0, 0), new BlurFilter(2, 2));
 			var r:Rectangle = img.getColorBoundsRect(0xFFFFFF, _colors[0], true);
-			if (r.width < 200 && r.height < 200 && r.width > 10 && r.height > 10)
+			if (_oldRectangleWidth == -1 || (r.width < 4 * _oldRectangleWidth && r.width > 0.2 * _oldRectangleWidth))
 			{
-				_points.push(new Point(r.x + r.width / 2, r.y + r.height / 2));
-				img.setPixel(r.left, r.top, 0x00FF00);
-				img.setPixel(r.left + 1, r.top + 1, 0x00FF00);
-
-				img.setPixel(r.left, r.bottom, 0x00FF00);
-				img.setPixel(r.left + 1, r.bottom - 1, 0x00FF00);
-				
-				img.setPixel(r.right, r.top, 0x00FF00);
-				img.setPixel(r.right - 1, r.top + 1, 0x00FF00);
-				img.setPixel(r.right, r.bottom, 0x00FF00);
-				img.setPixel(r.right - 1, r.bottom - 1, 0x00FF00);
-			}
-			for each(var p:Point in _points)
-			{
-				img.setPixel(p.x, p.y, 0xFF0000);
-				img.setPixel(p.x - 1, p.y, 0xFF0000);
-				img.setPixel(p.x, p.y - 1, 0xFF0000);
-				img.setPixel(p.x + 1, p.y, 0xFF0000);
-				img.setPixel(p.x, p.y + 1, 0xFF0000);
+				if (r.width > 0 && r.height > 0)
+ 				{
+					_oldRectangleWidth = r.width;
+					_oldRectangleHeight = r.height;
+					
+					_points.push(new Point(r.x + r.width / 2, r.y + r.height / 2));
+					img.setPixel(r.left, r.top, 0x00FF00);
+					img.setPixel(r.left + 1, r.top, 0x00FF00);
+					img.setPixel(r.left, r.top + 1, 0x00FF00);
+					img.setPixel(r.left + 2, r.top, 0x00FF00);
+					img.setPixel(r.left, r.top + 2, 0x00FF00);
+					
+					img.setPixel(r.left, r.bottom, 0x00FF00);
+					img.setPixel(r.left + 1, r.bottom, 0x00FF00);
+					img.setPixel(r.left, r.bottom - 1, 0x00FF00);
+					img.setPixel(r.left + 2, r.bottom, 0x00FF00);
+					img.setPixel(r.left, r.bottom - 2, 0x00FF00);
+					
+					img.setPixel(r.right, r.top, 0x00FF00);
+					img.setPixel(r.right - 1, r.top, 0x00FF00);
+					img.setPixel(r.right, r.top + 1, 0x00FF00);
+					img.setPixel(r.right - 2, r.top, 0x00FF00);
+					img.setPixel(r.right, r.top + 2, 0x00FF00);
+					
+					img.setPixel(r.right, r.bottom, 0x00FF00);
+					img.setPixel(r.right - 1, r.bottom, 0x00FF00);
+					img.setPixel(r.right, r.bottom - 1, 0x00FF00);
+					img.setPixel(r.right - 2, r.bottom, 0x00FF00);
+					img.setPixel(r.right, r.bottom - 2, 0x00FF00);
+				}
 			}
 		}
 		public function get colors():ArrayCollection

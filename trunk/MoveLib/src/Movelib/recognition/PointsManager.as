@@ -17,7 +17,9 @@ package Movelib.recognition
 		}
 		public function addAll(points:Array):void 
 		{
-			_points = _points.concat(points);	
+			_points = _points.concat(points);
+			if (_points.length > 20)
+				_points.shift();
 		}
 		public function getPoint():Array
 		{

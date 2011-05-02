@@ -12,12 +12,17 @@ package Movelib.colorsDetection
 		private var _greenArray:Array = new Array(256);
 		private var _blueArray:Array = new Array(256);
 		private var _areaDetection:Rectangle;
+		private var _realAreaDetection:Rectangle;
 		private var _state:int/* 0 => in calibration, 1 => calibrated*/
 		public var _error:String = "no error";
 		
 		public function ColorCalibration(cr:ColorRange, areaDetection:Rectangle)
 		{
 			_areaDetection = areaDetection;
+			_realAreaDetection = new Rectangle(_areaDetection.x + _areaDetection.width / 4,
+				_areaDetection.y + _areaDetection.height / 4,
+				_areaDetection.width / 2,
+				_areaDetection.height / 2);
 			_initialRange = cr;
 			reset();
 			//_range = new ColorRange(_initialRange.minValue, _initialRange.maxValue);
@@ -65,7 +70,7 @@ package Movelib.colorsDetection
 		{
 			var i:int;
 			var j:int;
-			for (i = _areaDetection.left; i < _areaDetection.right; i++)
+			for (i = _areaDetection.left - 2; i < _areaDetection.right + 2; i++)
 			{
 				img.setPixel(i, _areaDetection.top - 1, c);
 				img.setPixel(i, _areaDetection.top - 2, c);
@@ -90,7 +95,6 @@ package Movelib.colorsDetection
 				return;
 			}
 			drawRectangleBorder(img, 0xFFFFFF);
-			//test
 			var n:int = 0;
 			var j:int = 0;
 			var i:int = 0;
@@ -101,9 +105,9 @@ package Movelib.colorsDetection
 			img.paletteMap(img, _areaDetection, p, _redArray, _greenArray, _blueArray);
 			img.threshold(img, _areaDetection, p, '!=', _range.moyValue, 0x000000, 0xFFFFFF);
 			
-			for (i = _areaDetection.x + _areaDetection.width / 4; i < _areaDetection.right - _areaDetection.width / 4; i++)
+			for (i = _realAreaDetection.x; i < _realAreaDetection.right; i++)
 			{
-				for (j = _areaDetection.y + _areaDetection.height / 4; j < _areaDetection.bottom - _areaDetection.height / 4; j++)
+				for (j = _realAreaDetection.y; j < _realAreaDetection.bottom; j++)
 				{
 					if (img.getPixel(i,j) == _range.moyValue)
 					{
@@ -114,7 +118,7 @@ package Movelib.colorsDetection
 			
 			//_error = n + " pixels détectés";
 			//if (n > 20*20 && n < 50*30)
-			if (n > 160)
+			if (n > 0.8 * _realAreaDetection.width * _realAreaDetection.height)
 			{
 				_state = 1;
 				var pixel:int = 0;
