@@ -13,7 +13,6 @@ package Movelib.recognition
 			_points = new PointsManager();
 		}
 
-		//
 		public function addAll(points:Array) : void
 		{
 			_points.addAll(points);
