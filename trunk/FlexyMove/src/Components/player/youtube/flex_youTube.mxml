@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="1000" height="800" 
+		 xmlns:components="Components.player.youtube.components.*">
+
+	<fx:Script>
+		<![CDATA[
+			import Components.player.youtube.components.YouTubeError;
+			import Components.player.youtube.components.YouTubeEvent;
+			import Components.player.youtube.components.YouTubePlayingState;
+			import Components.player.youtube.components.YouTubeVideoQuality;
+			
+			import flash.utils.getDefinitionByName;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			
+			[Bindable]
+			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());
+			
+			//----------------------------------
+			//  YouTube Event Handling
+			//----------------------------------
+			private function handlePlayerLoaded(event:YouTubeEvent):void
+	        {
+	        	trackingActions.addItem({label:"YouTube Playinger API loaded"});
+	        	youTubePlayer.cueVideoById("jAHYJX4-glU",0,YouTubeVideoQuality.DEFAULT);
+	        }
+	        
+	        private function handlePlayingState(event:YouTubeEvent):void
+	        {
+	        	var message:String = "";
+	        	switch(event.playerState)
+				{
+				    case YouTubePlayingState.BUFFERING:
+				        message = "Video is Buffering";
+				        break;
+				    case YouTubePlayingState.UNSTARTED:
+				        message = "Player is unstarted";
+				        break;
+				    case YouTubePlayingState.PLAYING:
+				        message = "Video is playing";
+				        break;
+				    case YouTubePlayingState.PAUSE:
+				        message = "Video pause is active";
+				        break;
+				    case YouTubePlayingState.VIDEO_CUED:
+				        message = "Video is cued - Playing new Video?!"
+				        break;
+				    case YouTubePlayingState.VIDEO_ENDED:
+				        message = "Video is finished";
+				        break;
+				 
+				    default:
+				        message = "uh what happens?? " + event.playerState;
+				        break;
+				}
+
+	        	trackingActions.addItem({label:"YouTube PlayingState: " + message});
+	        }
+	        
+	        private function handleVideoQuality(event:YouTubeEvent):void
+	        {
+	        	var message:String = "";
+	        	switch(event.playbackQuality)
+				{
+				    case YouTubeVideoQuality.DEFAULT:
+				        message = "default - YouTube choose";
+				        break;
+				    case YouTubeVideoQuality.SMALL:
+				        message = "SMALL - less than 640px by 360px";
+				        break;
+				    case YouTubeVideoQuality.MEDIUM:
+				        message = "MEDIUM - 640px by 360px";
+				        break;
+				    case YouTubeVideoQuality.LARGE:
+				        message = "LARGE - 854px by 480px";
+				        break;
+				    case YouTubeVideoQuality.HD720:
+				        message = "HD - 1280px by 720px"
+				        break;
+				 
+				    default:
+				        message = "uh what happens?? " + event.playbackQuality;
+				        break;
+				}
+	        	trackingActions.addItem({label:"Video Quality changed: " + message});
+	        }
+	        
+	        
+	        
+	        private function handleYouTubeError(event:YouTubeEvent):void
+	        {
+	        	var message:String = "";
+	        	switch(event.errorCode)
+				{
+				    case YouTubeError.VIDEO_NOT_FOUND:
+				        message = "Video not found: " + event.errorCode;
+				        break;
+				    case YouTubeError.VIDEO_NOT_ALLOWED:
+				        message = "Video not allowed: " + event.errorCode;
+				        break;
+				    case YouTubeError.EMBEDDING_NOT_ALLOWED:
+				        message = "Embedding not allowed: " + event.errorCode;
+				        break;
+				 
+				    default:
+				        message = "undefined Error:" + event.errorCode;
+				        break;
+				}
+				Alert.show(message,"YouTube Error",Alert.OK);
+	        	trackingActions.addItem({label:"Video Error: " + message});
+	        }
+	        
+			
+			
+			public function getIDFromUrl(url:String):String
+			{
+				//Manque la gestion des erreur
+				return url.split("?v=")[1].split("&")[0];
+			}
+	        //----------------------------------
+			//  YouTube Player Control
+			//----------------------------------
+			private function handlePlay(event:MouseEvent):void
+			{
+				youTubePlayer.playVideo();
+				this.addEventListener(Event.ENTER_FRAME,handlePlayingTime);
+			}
+			
+			private function handlePause(event:MouseEvent):void
+			{
+				youTubePlayer.pauseVideo();
+				this.removeEventListener(Event.ENTER_FRAME,handlePlayingTime);
+			}
+			
+			private function handleStop(event:MouseEvent):void
+			{
+				youTubePlayer.stopVideo();
+				this.removeEventListener(Event.ENTER_FRAME,handlePlayingTime);
+				
+			}
+			
+/* 			private function handleComboQuality(event:Event):void
+			{
+				youTubePlayer.playbackQuality =  String(ComboBox(event.target).selectedItem);
+			} */
+			
+			private function handlePlayingTime(e:Event):void
+			{
+				labelTime.text = youTubePlayer.getCurrentTime() + " / " + youTubePlayer.getDuration();
+				
+				progresPlayingVideo.minimum = 0;
+				progresPlayingVideo.maximum = youTubePlayer.getDuration();
+				progresPlayingVideo.setProgress(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
+				
+				progressLoadVideo.minimum = 0;
+				progressLoadVideo.maximum = youTubePlayer.getVideoBytesTotal();
+				progressLoadVideo.setProgress(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
+			}
+			
+		]]>
+	</fx:Script>
+	<mx:VBox>
+		<components:AirYouTube id="youTubePlayer" 
+			x="0" y="0" 
+			width="500" height="500"
+			volume="{sliderVolume.value}"
+			youtubePlayerLoaded="{handlePlayerLoaded(event);}"
+			youtubeStatus="{handlePlayingState(event);}"
+			youtubeVideoQuality="{handleVideoQuality(event);}"
+			youtubeError="{handleYouTubeError(event);}" />
+	</mx:VBox>
+	
+	<mx:VBox>
+		<mx:VBox id="conPlayControls">
+			<mx:HBox>
+				<mx:Button label="Stop" click="{handleStop(event);}"/>
+				<mx:Button label="Play" click="{handlePlay(event);}" />
+				<mx:Button label="Pause" click="{handlePause(event);}" />
+				<mx:Label id="labelTime"  width="150"/>
+			</mx:HBox>
+				
+			<mx:HBox>
+					<mx:ProgressBar id="progresPlayingVideo" label="playbar" mode="manual" labelPlacement="center" />
+					<mx:ProgressBar id="progressLoadVideo" label="loading bar" mode="manual" labelPlacement="center" />
+					<mx:HSlider id="sliderVolume" minimum="0" maximum="100" value="100" liveDragging="true" />
+			</mx:HBox>	
+<!--			<mx:HBox>
+				<mx:Button label="destroy" click="{youTubePlayer.destroy();}" />
+				<mx:Button label="show Embed Code" click="{Alert.show(youTubePlayer.getVideoEmbedCode(),'YouTube Embed Code',Alert.OK);}" />
+				<mx:Button label="show Video URL" click="{Alert.show(youTubePlayer.getVideoUrl(),'YouTube Video URL',Alert.OK);}" />
+			</mx:HBox>-->
+		</mx:VBox>
+		
+		<!--<mx:Form>-->
+			<mx:FormItem label="Video ClipID">
+				<mx:TextInput id="inputClipID" text="Video Link" />
+				<mx:Button label="changeVideo" click="{youTubePlayer.cueVideoById(getIDFromUrl(inputClipID.text),0,YouTubeVideoQuality.DEFAULT);}" />
+			</mx:FormItem>
+			<!--		
+			<mx:FormItem label="Video Seek to">
+				<mx:TextInput id="inputSeek" width="60" />
+				<mx:Button label="jumpTo" click="{youTubePlayer.seekTo(Number(inputSeek.text));}" />
+			</mx:FormItem>
+			
+			<mx:FormItem label="Video Size">
+				<mx:TextInput id="inputWidth" text="320" />
+				<mx:TextInput id="inputHeight" text="240" />
+			</mx:FormItem>
+			
+			<mx:FormItem label="Video QUALITY">
+				<mx:ComboBox id="comboVideoQuality" 
+					dataProvider="{YouTubeVideoQuality.ALL}" 
+					close="handleComboQuality(event)" />
+			</mx:FormItem>
+			
+		</mx:Form>-->
+		
+		
+		<!--<mx:List id="listAction" dataProvider="{trackingActions}" width="600" height="100" />-->
+	</mx:VBox>
+</s:Group>
+
