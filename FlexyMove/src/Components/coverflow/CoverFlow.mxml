@@ -6,6 +6,9 @@
 		 width="100%" height="100%" 
 		 creationComplete="init()" xmlns:coverflow="Components.coverflow.*">
 	
+	<fx:Metadata>
+		[Event("change", type="mx.events.Event")]
+	</fx:Metadata>
 	
 	<fx:Script>
 		<![CDATA[
@@ -25,7 +28,7 @@
 			public const PERSPECTIVEPROJECTIONX:Number = 250;	// -1000 TO 1000
 			public const PERSPECTIVEPROJECTIONY:Number = 124;	// -1000 TO 1000
 			
-			
+			[Bindable]
 			public var fileList:ArrayList = new ArrayList();
 			
 			/** init coverflow component 
@@ -86,7 +89,7 @@
 	</fx:Script>
 
 	<s:List id="list" dataProvider="{fileList}" width="100%" height="100%" 
-			selectedIndex="0"  itemRendererFunction="itemRender" >
+			selectedIndex="0" itemRendererFunction="itemRender" >
 		<s:layout>
 			<coverflow:CoverflowLayout id="coverflow" 
 										selectedIndex="{ list.selectedIndex }"
