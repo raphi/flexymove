@@ -22,6 +22,7 @@ package Movelib
 		private static var _Reco:Recognition;
 		private static var _timer:Timer
 		private static var _obj:UIComponent;
+		private static var _error:String;
 		
 		public function MoveLib()
 		{
