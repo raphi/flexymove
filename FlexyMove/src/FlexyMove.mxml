@@ -20,7 +20,7 @@
 				{
 					var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
 					bit1.mask = b;
-					textarea.text =  MoveLib.Reco._error;
+					textarea.text =  MoveLib._str;
 				}
 			}
 			
