@@ -5,8 +5,8 @@ package Movelib.recognition
 	
 	public class PointsManager
 	{
-		private var _points:Array;
-		public var _error:String = "recon";
+		private var _points:Array;//array of array of points
+		public var _error:String = "PointsManager";
 		public var _detectionInfo:String = "";
 		private const nbMinPointsToAnalyse:int = 3;
 		private const uncertaintyA:Number = 0.5;
@@ -32,7 +32,7 @@ package Movelib.recognition
 				
 				_detectionInfo += i + " x " + _points[i].x +"y " + _points[i].y + "\n";
 				_detectionInfo += "First \n";
-				for(var i:int = 1;i<_points.length;i++)
+				for(var i:int = 1; i < _points.length; i++)
 				{
 					if (hasdel == 1)
 						hasdel++;
@@ -85,7 +85,6 @@ package Movelib.recognition
 						currentB = b;
 						_detectionInfo += "Second \n"
 					}
-					
 				}
 			}
 		}
@@ -100,11 +99,8 @@ package Movelib.recognition
 		public function addAll(points:Array):void 
 		{
 
-		/*	_points = points;
-			
-			prunning();
-*/
-			_points = _points.concat(points);
+			if (points[0] != null)
+				_points.push(points[0]);
 		}
 		public function getPoint():Array
 		{
