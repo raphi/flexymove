@@ -22,7 +22,8 @@ package Movelib
 		private static var _Reco:Recognition;
 		private static var _timer:Timer
 		private static var _obj:UIComponent;
-		private static var _error:String;
+
+		public static var _error:String = "MoveLib Error";
 		
 		public function MoveLib()
 		{
@@ -36,9 +37,9 @@ package Movelib
 			_PointsDetect = new PointsDetection();
 			_Reco = new Recognition();
 			//init the timer and start it
-			_timer = new Timer(1000/25, 0);
+			_timer = new Timer(1000/20, 0);
 			_timer.addEventListener("timer", frame);
-			_timer.start();
+			//_timer.start();
 		}
 
 		/** records an object to accept move events */
@@ -50,6 +51,7 @@ package Movelib
 		/** The function called by the timer */
 		public static function frame(s:String) : void
 		{
+			var m:Number = (new Date()).getMilliseconds();
 			//begin frame
 			//Capture the picture
 			var img:BitmapData = _ImgAcq.capturePicture();
@@ -70,6 +72,8 @@ package Movelib
 			//Give the deteced points to the Recognition object
 			Reco.addAll(PointsDetect.points);
 			Reco.recognize(img);
+			m = (new Date()).getMilliseconds() - m;
+			_error = m + " millisecondes"
 			var e:MouseEvent = new MouseEvent("click");
 			_obj.dispatchEvent(e);
 			//end frame

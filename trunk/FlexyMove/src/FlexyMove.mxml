@@ -12,6 +12,7 @@
  				MoveLib.registerObject(button);
 				Movelib.MoveLib.start();
 				textarea.x = 400;
+				//Movelib.MoveLib.frame("");
 			}
 			
 			protected function button_clickHandler(event:MouseEvent):void
@@ -20,7 +21,8 @@
 				{
 					var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
 					bit1.mask = b;
-					textarea.text =  MoveLib._str;
+					textarea.text =  MoveLib._error;
+					Movelib.MoveLib.frame("");
 				}
 			}
 			
