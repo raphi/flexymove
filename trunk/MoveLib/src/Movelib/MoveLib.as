@@ -2,13 +2,13 @@ package Movelib
 {
 	import Movelib.Pointsdetection.PointsDetection;
 	import Movelib.colorsDetection.ColorsDetection;
+	import Movelib.events.MoveLibEvent;
 	import Movelib.imageAcquisition.ImageAcquisition;
 	import Movelib.preProcessing.PreProcessing;
 	import Movelib.recognition.Recognition;
 	
 	import flash.display.BitmapData;
-	import flash.events.Event;
-	import flash.events.MouseEvent;
+	import flash.events.TransformGestureEvent;
 	import flash.utils.Timer;
 	
 	import mx.core.UIComponent;
@@ -20,14 +20,15 @@ package Movelib
 		private static var _ColDetect:ColorsDetection;
 		private static var _PointsDetect:PointsDetection;
 		private static var _Reco:Recognition;
+		private static var _registeredObjects:Array = new Array();
 		private static var _timer:Timer
-		private static var _obj:UIComponent;
-
-		public static var _error:String = "MoveLib Error";
+		private static var e:MoveLibEvent;
+		private static var i:int = 0;
 		
 		public function MoveLib()
 		{
 		}
+		
 		/** initialisation of the MoveLib */
 		public static function start() : void
 		{
@@ -36,22 +37,34 @@ package Movelib
 			_ColDetect = new ColorsDetection();
 			_PointsDetect = new PointsDetection();
 			_Reco = new Recognition();
+			e = new MoveLibEvent(MoveLibEvent.FRAME_ANALYSED);
+			
 			//init the timer and start it
-			_timer = new Timer(1000/20, 0);
+			_timer = new Timer(1000/25, 0);
 			_timer.addEventListener("timer", frame);
-			//_timer.start();
+			_timer.start();
 		}
 
 		/** records an object to accept move events */
-		public static function registerObject(o:UIComponent) : void
+		public static function registerObject(...UIobject) : void
 		{
-			_obj = o;
+			for each (var object:Object in UIobject)
+			{
+				if (object is UIComponent)
+					_registeredObjects.push(object);
+			}
+
+		}
+		
+		private static function eventManager() : void
+		{
+			for each (var obj:UIComponent in _registeredObjects)
+				obj.dispatchEvent(new TransformGestureEvent(TransformGestureEvent.GESTURE_SWIPE));
 		}
 		
 		/** The function called by the timer */
 		public static function frame(s:String) : void
 		{
-			var m:Number = (new Date()).getMilliseconds();
 			//begin frame
 			//Capture the picture
 			var img:BitmapData = _ImgAcq.capturePicture();
@@ -69,15 +82,17 @@ package Movelib
 				PointsDetect.askForRecalibration = false;
 				return;
 			}
-			//Give the deteced points to the Recognition object
+			//Give the detected points to the Recognition object
 			Reco.addAll(PointsDetect.points);
 			Reco.recognize(img);
-			m = (new Date()).getMilliseconds() - m;
-			_error = m + " millisecondes"
-			var e:MouseEvent = new MouseEvent("click");
-			_obj.dispatchEvent(e);
+			
+			if (i % 60 == 0)
+				eventManager();
+			i++;
+			//_obj.dispatchEvent(e);
 			//end frame
 		}
+		
 		public static function get PointsDetect():PointsDetection
 		{
 			return _PointsDetect;

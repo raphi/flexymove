@@ -30,28 +30,18 @@
 			
 			private function rotateCube(e:TransformGestureEvent):void
 			{
-				if (e.localX - e.offsetX > 0)
+				switch (currentState)
 				{
-					rotationEffect.direction = "RIGHT";
-					
-					switch (currentState)
-					{
-						case "MapState":
-							currentState = "YouTubeState";
-							break;
-						case "ProfileState":
-							currentState = "MapState";
-							break;
-						case "YouTubeState":
-							currentState = "ProfileState";
-							break;
-					}
-					
+					case "MapState":
+						currentState = "YouTubeState";
+						break;
+					case "ProfileState":
+						currentState = "MapState";
+						break;
+					case "YouTubeState":
+						currentState = "ProfileState";
+						break;
 				}
-				else
-					rotationEffect.direction = "LEFT";
-				
-				
 			}
 			
 		]]>

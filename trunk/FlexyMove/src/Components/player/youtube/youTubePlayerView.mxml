@@ -16,8 +16,6 @@
 			import Components.player.youtube.components.YouTubePlayingState;
 			import Components.player.youtube.components.YouTubeVideoQuality;
 			
-			import flash.utils.getDefinitionByName;
-			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			
@@ -30,7 +28,7 @@
 			private function handlePlayerLoaded(event:YouTubeEvent):void
 	        {
 	        	trackingActions.addItem({label:"YouTube Playinger API loaded"});
-	        	youTubePlayer.cueVideoById("jAHYJX4-glU",0,YouTubeVideoQuality.DEFAULT);
+	        	youTubePlayer.cueVideoById("b9UwYajzliU",0,YouTubeVideoQuality.DEFAULT);
 	        }
 	        
 	        private function handlePlayingState(event:YouTubeEvent):void
@@ -167,6 +165,11 @@
 			
 		]]>
 	</fx:Script>
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
 	<mx:VBox>
 		<components:AirYouTube id="youTubePlayer" 
 			x="0" y="0" 

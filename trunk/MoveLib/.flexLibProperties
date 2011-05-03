@@ -21,6 +21,7 @@
     <classEntry path="Movelib.configuration.SaveConfiguration"/>
     <classEntry path="Movelib.LandmarkColor"/>
     <classEntry path="Movelib.Landmark"/>
+    <classEntry path="Movelib.events.MoveLibEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
