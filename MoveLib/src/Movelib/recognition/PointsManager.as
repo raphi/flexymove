@@ -108,9 +108,12 @@ package Movelib.recognition
 		}
 		public function addAll(points:Array):void 
 		{
-
 			if (points[0] != null)
 				_points[0].push(points[0]);
+			if (_points[0].length > 20)
+			{
+				delete(_points[0].shift());
+			}
 		}
 		public function getPoint():Array
 		{

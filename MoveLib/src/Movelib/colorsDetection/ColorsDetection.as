@@ -49,9 +49,9 @@ package Movelib.colorsDetection
 				_colors = new ArrayCollection();
 
 			//blue
-			var min:int = 0x003098;
+			var min:int = 0x000050;
 			var max:int = 0x36A4FF;
-			min = 0x000050;
+			min = 0x000040;
 			max = 0x36A4FF;
 			colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(100,100,40,40)));
 			_colors.addItem(-1);
