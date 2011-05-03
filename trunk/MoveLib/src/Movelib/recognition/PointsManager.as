@@ -105,9 +105,6 @@ package Movelib.recognition
 			prunning();
 */
 			_points = _points.concat(points);
-			if (_points.length > 20)
-				_points.shift();
-
 		}
 		public function getPoint():Array
 		{

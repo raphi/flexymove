@@ -20,7 +20,8 @@ package Movelib.Pointsdetection
 		public function PointsDetection()
 		{
 			_points = new Array();
-
+			
+			/*
 			//test for Nicolas
 			_points.push(new Point(10,20));
 			_points.push(new Point(30,30));
@@ -32,7 +33,7 @@ package Movelib.Pointsdetection
 			
 			_points.push(new Point(230,102));
 			//end of test for  Nicolas
-
+			//*/
 		}
 		
 		//virtual function : assign to a color or color groups a point 
