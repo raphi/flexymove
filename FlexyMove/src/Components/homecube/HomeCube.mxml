@@ -18,6 +18,8 @@
 			import Movelib.MoveLib;
 			import Movelib.events.MovementEvent;
 			
+			import mx.controls.Alert;
+			
 			[Bindable]
 			private var oldView:Object = mapView;
 			[Bindable]
@@ -25,8 +27,10 @@
 			
 			private function init():void
 			{
+
 				addEventListener(MovementEvent.SWIPE_LEFT, leftCubeRotation);
 				addEventListener(MovementEvent.SWIPE_RIGHT, rightCubeRotation);
+
 				
 				MoveLib.registerObject(this);
 				Movelib.MoveLib.start();
@@ -34,7 +38,9 @@
 			
 			private function leftCubeRotation(e:MovementEvent):void
 			{
+
 				rotationEffect.direction = 'LEFT';
+
 				switch (currentState)
 				{
 					case "MapState":	currentState = "ProfileState";	break;

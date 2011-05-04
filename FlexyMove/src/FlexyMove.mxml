@@ -3,7 +3,7 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:Components="Components.*"
 					   width="800" height="300" xmlns:coverflow="Components.coverflow.*"
-					   creationComplete="init();" >
+					   creationComplete="init();" xmlns:homecube="Components.homecube.*" >
 	<fx:Script>
 		<![CDATA[
 			import Movelib.MoveLib;
@@ -30,11 +30,16 @@
 		]]>
 	</fx:Script>
 	
+		<s:layout>
+			<s:HorizontalLayout />
+		</s:layout>
+
 	<s:BitmapImage
 		id="bit1"
 		width="400"
 		height="300"/>
-	<s:TextArea id="textarea" x="400" width="100" />
-	<s:TextArea id="textarea2" x="500" width="100"/>
+	<homecube:HomeCube/>
+	<s:TextArea id="textarea" x="400" height="200" width="100" />
+	<s:TextArea id="textarea2" x="500" height="200" width="100"/>
 	<s:Button click="Movelib.MoveLib.reset();" x="600" label="reset" />
 </s:WindowedApplication>
