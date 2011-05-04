@@ -44,9 +44,9 @@ package Movelib.recognition
 					img.setPixel(p.x, p.y + 1, 0xFF0000);
 				}
 			}
-			_detectionInfo = " ";
+			/*_detectionInfo = " ";
 			_error  = _points._error;
-			_detectionInfo = _points._detectionInfo;
+			_detectionInfo = _points._detectionInfo;*/
 			
 			if(_points.mvtDetected)
 			{

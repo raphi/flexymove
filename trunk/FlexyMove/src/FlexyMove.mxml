@@ -24,8 +24,10 @@
 			{
 				var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
 				bit1.mask = b;
-				//textarea.text = Movelib.MoveLib.Reco._error;
-				//textarea2.text = Movelib.MoveLib.Reco._detectionInfo;
+
+				/* textarea.text = Movelib.MoveLib.Reco._error;
+				textarea2.text = Movelib.MoveLib.Reco._detectionInfo; */
+
 			}
 			
 			public function reset():void
@@ -45,8 +47,8 @@
 			id="bit1"
 			width="400"
 			height="300"/>
-		<s:TextArea id="textarea" height="200" width="100" />
-		<s:TextArea id="textarea2" height="200" width="100"/>
+		<!--<s:TextArea id="textarea" height="200" width="100" />
+		<s:TextArea id="textarea2" height="200" width="100"/>-->
 		<s:Button click="Movelib.MoveLib.reset();" label="reset" />
 	</s:VGroup>
 	<homecube:HomeCube />
