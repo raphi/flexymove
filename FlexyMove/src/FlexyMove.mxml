@@ -36,5 +36,5 @@
 		height="300"/>
 	<s:TextArea id="textarea" x="400" width="100" />
 	<s:TextArea id="textarea2" x="500" width="100"/>
-	
+	<s:Button click="Movelib.MoveLib.reset();" x="600" label="reset" />
 </s:WindowedApplication>
