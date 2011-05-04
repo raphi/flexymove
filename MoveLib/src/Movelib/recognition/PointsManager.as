@@ -58,8 +58,7 @@ package Movelib.recognition
 			
 			currentdirection = directionArray[0];
 			directionArray = [];
-			_error += "direction" + currentdirection+ "\n";
-			//var newArray:Array = new Array();
+			//_error += "direction" + currentdirection+ "\n";
 			newArray.push(_points[0][ _points[0].length - 1]);
 			
 			_points[0] = newArray;
@@ -87,8 +86,8 @@ package Movelib.recognition
 					
 				var direction:int = 0;
 				var coef:Number = (noriginPoint.y - nendPoint.y) / (noriginPoint.x -  nendPoint.x);
-				_detectionInfo += "pt1 " + noriginPoint.x + " " + noriginPoint.y + "\n";
-				_detectionInfo += "pt2 " + nendPoint.x + " " + nendPoint.y + "\n";
+				//_detectionInfo += "pt1 " + noriginPoint.x + " " + noriginPoint.y + "\n";
+				//_detectionInfo += "pt2 " + nendPoint.x + " " + nendPoint.y + "\n";
 				
 				//Get direction from Coef
 				/*Good VERSION*/
@@ -124,7 +123,7 @@ package Movelib.recognition
 					}
 				//Add direction in Array
 				directionArray.push(direction);
-				_detectionInfo += "direction " + direction +" "+coef +"\n";
+				//_detectionInfo += "direction " + direction +" "+coef +"\n";
 				
 				
 				const directionArrayLength:int = directionArray.length;
