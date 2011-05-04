@@ -56,6 +56,9 @@ package Movelib.colorsDetection
 			colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(100,100,40,40)));
 			_colors.addItem(-1);
 			
+			colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(200,100,40,40)));
+			_colors.addItem(-1);
+
 			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(150,100,40,40)));
 			//_colors[1] = -1;
 			
