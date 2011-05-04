@@ -116,9 +116,7 @@ package Movelib.colorsDetection
 				}
 			}
 			
-			//_error = n + " pixels détectés";
-			//if (n > 20*20 && n < 50*30)
-			if (n > 0.8 * _realAreaDetection.width * _realAreaDetection.height)
+			if (n > 0.4 * _realAreaDetection.width * _realAreaDetection.height)
 			{
 				_state = 1;
 				var pixel:int = 0;
@@ -132,18 +130,10 @@ package Movelib.colorsDetection
 				var rmax:int = 0; 
 				var gmax:int = 0; 
 				var bmax:int = 0; 
-				/*
-				for (i = _areaDetection.x; i < _areaDetection.right; i++)
+				for (i = _realAreaDetection.x; i < _realAreaDetection.right; i++)
 				{
-					for (j = _areaDetection.y; j < _areaDetection.bottom; j++)
+					for (j = _realAreaDetection.y; j < _realAreaDetection.bottom; j++)
 					{
-				*/
-				//just to test
-				for (i = _areaDetection.x + _areaDetection.width / 4; i < _areaDetection.right - _areaDetection.width / 4; i++)
-				{
-					for (j = _areaDetection.y + _areaDetection.height / 4; j < _areaDetection.bottom - _areaDetection.height / 4; j++)
-					{
-				//end of just to test
 						if (img.getPixel(i, j) == _range.moyValue)
 						{
 							pixel = area.getPixel(i, j);
