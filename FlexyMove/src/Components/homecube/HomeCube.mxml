@@ -34,6 +34,7 @@
 			
 			private function leftCubeRotation(e:MovementEvent):void
 			{
+				rotationEffect.direction = 'LEFT';
 				switch (currentState)
 				{
 					case "MapState":	currentState = "ProfileState";	break;
@@ -45,6 +46,7 @@
 			
 			private function rightCubeRotation(e:MovementEvent):void
 			{
+				rotationEffect.direction = 'RIGHT';
 				switch (currentState)
 				{
 					case "MapState":	currentState = "YouTubeState";	break;

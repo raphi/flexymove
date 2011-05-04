@@ -28,7 +28,7 @@
 			private function handlePlayerLoaded(event:YouTubeEvent):void
 	        {
 	        	trackingActions.addItem({label:"YouTube Playinger API loaded"});
-	        	youTubePlayer.cueVideoById("b9UwYajzliU",0,YouTubeVideoQuality.DEFAULT);
+	        	youTubePlayer.cueVideoById("8RHAEwQAZlA",0,YouTubeVideoQuality.DEFAULT);
 	        }
 	        
 	        private function handlePlayingState(event:YouTubeEvent):void
