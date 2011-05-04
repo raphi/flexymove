@@ -21,7 +21,7 @@ package Movelib
 		private static var _PointsDetect:PointsDetection;
 		
 		/*public just for debug*/
-		public static var _Reco:Recognition;
+		private static var _Reco:Recognition;
 		private static var _registeredObjects:Array = new Array();
 		private static var _timer:Timer
 		private static var frameAnalysedEvent:MoveLibEvent;
@@ -87,6 +87,7 @@ package Movelib
 			Reco.addAll(PointsDetect.points);
 			Reco.recognize(img);
 			
+			dispatchEventToMovelibObjects(frameAnalysedEvent);
 			//end frame
 		}
 		

@@ -2,45 +2,39 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:Components="Components.*"
-					   width="100%" height="100%" xmlns:coverflow="Components.coverflow.*" xmlns:local="*" xmlns:homecube="Components.homecube.*">
+					   width="800" height="300" xmlns:coverflow="Components.coverflow.*"
+					   creationComplete="init();" >
 	<fx:Script>
 		<![CDATA[
 			import Movelib.MoveLib;
+			import Movelib.events.MoveLibEvent;
+			
+			import mx.controls.Alert;
+			import mx.events.MoveEvent;
 			
 			public function init():void
 			{
-				MoveLib.registerObject(button);
+				addEventListener(MoveLibEvent.FRAME_ANALYSED, onEndOfFrame);
+				MoveLib.registerObject(this);
 				Movelib.MoveLib.start();
 			}
 			
-			protected function button_clickHandler(event:MouseEvent):void
+			protected function onEndOfFrame(event:Event):void
 			{
-				if (event.type == "click")
-				{
-					var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
-					bit1.mask = b;
-					//textarea.text = Movelib.MoveLib._Reco._error;
-				}
-				
+				var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
+				bit1.mask = b;
+				textarea.text = Movelib.MoveLib.Reco._error;
+				textarea2.text = Movelib.MoveLib.Reco._detectionInfo;
 			}
-			
 			
 		]]>
 	</fx:Script>
 	
-	<s:layout>
-		<s:HorizontalLayout/>
-	</s:layout>
-	
-	<s:VGroup horizontalAlign="center">
-		<s:Button id="button" label="Start Camera" click="button_clickHandler(event)" creationComplete="init();" />
 	<s:BitmapImage
 		id="bit1"
 		width="400"
 		height="300"/>
-	</s:VGroup>
-	<!--	<s:TextArea id="textarea"/>
-	<s:TextArea id="infodetection"/>-->
+	<s:TextArea id="textarea" x="400" width="100" />
+	<s:TextArea id="textarea2" x="500" width="100"/>
 	
-	<homecube:HomeCube />
 </s:WindowedApplication>
