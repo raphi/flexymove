@@ -1,6 +1,10 @@
 package Movelib.recognition
 {
+	import Movelib.MoveLib;
+	import Movelib.events.MovementEvent;
+	
 	import flash.display.BitmapData;
+	import flash.events.TransformGestureEvent;
 	import flash.geom.Point;
 	
 	public class Recognition
@@ -8,6 +12,7 @@ package Movelib.recognition
 		private var _points:PointsManager = null;
 		public var _error:String = "pas d'erreur";
 		public var _detectionInfo:String = "pas d'erreur";
+		
 		public function Recognition()
 		{
 			_points = new PointsManager();
@@ -15,7 +20,8 @@ package Movelib.recognition
 		
 		public function addAll(points:Array) : void
 		{
-			_points.addAll(points);
+			_points.addDetectedPoints(points);
+			
 		}
 		
 		/** recognize a mouvement from a point list */
@@ -35,6 +41,21 @@ package Movelib.recognition
 			_detectionInfo = " ";
 			_error  = _points._error;
 			_detectionInfo = _points._detectionInfo;
+			
+			if(_points.mvtDetected)
+			{
+				
+				switch(_points.currentdirection)
+				{
+					case 0:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_RIGHT)); break;}
+					case 4:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_RIGHT)); break;}
+					case 2:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_LEFT)); break;}
+					case 6:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_LEFT)); break;}	
+					default:{break;}
+				}
+				
+				_points.mvtProcess();
+			}
 		}
 	}
 }
