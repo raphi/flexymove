@@ -30,16 +30,19 @@
 		]]>
 	</fx:Script>
 	
-		<s:layout>
-			<s:HorizontalLayout />
-		</s:layout>
+	<s:layout>
+		<s:HorizontalLayout />
+	</s:layout>
+	
+	<s:VGroup>
+		<s:BitmapImage
+			id="bit1"
+			width="400"
+			height="300"/>
+		<s:TextArea id="textarea" height="200" width="100" />
+		<s:TextArea id="textarea2" height="200" width="100"/>
+		<s:Button click="Movelib.MoveLib.reset();" label="reset" />
+	</s:VGroup>
 
-	<s:BitmapImage
-		id="bit1"
-		width="400"
-		height="300"/>
-	<homecube:HomeCube/>
-	<s:TextArea id="textarea" x="400" height="200" width="100" />
-	<s:TextArea id="textarea2" x="500" height="200" width="100"/>
-	<s:Button click="Movelib.MoveLib.reset();" x="600" label="reset" />
+	<homecube:HomeCube />
 </s:WindowedApplication>

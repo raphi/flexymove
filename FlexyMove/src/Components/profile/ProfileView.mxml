@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
 		 width="100%" height="100%">
@@ -12,7 +12,7 @@
 		<s:VerticalLayout/>
 	</s:layout>
 	
-	<s:VGroup width="100%" verticalAlign="middle">
+	<s:VGroup width="100%" horizontalAlign="center" verticalAlign="middle">
 		
 		<s:Form>
 			
@@ -36,8 +36,8 @@
 			
 		</s:Form>
 		
-		<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />
+		<s:Button label="View YouTube" click="dispatchEvent( new Event( Event.CHANGE ) );" />
 		
 	</s:VGroup>
 	
-</s:Group>
+</s:Panel>
