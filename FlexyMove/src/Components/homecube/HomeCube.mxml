@@ -33,26 +33,11 @@
 			
 			private function rotateCube(e:MovementEvent):void
 			{
-				switch(e.type)
+				switch (currentState)
 				{
-					case "SwipeLeft":
-						switch (currentState)
-						{
-							case "MapState":	currentState = "YouTubeState";	break;
-							case "ProfileState":currentState = "MapState"; break;
-							case "YouTubeState":currentState = "ProfileState"; break;
-							default: break;
-						}
-						break;
-					case "SwipeRight":
-						switch (currentState)
-						{
-							case "MapState":	currentState = "ProfileState";	break;
-							case "ProfileState":currentState = "YouTubeState"; break;
-							case "YouTubeState":currentState = "MapState"; break;
-							default: break;
-						}
-						break;
+					case "MapState":	currentState = "YouTubeState";	break;
+					case "ProfileState":currentState = "MapState"; break;
+					case "YouTubeState":currentState = "ProfileState"; break;
 					default: break;
 				}
 				
