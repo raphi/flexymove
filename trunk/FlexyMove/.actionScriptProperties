@@ -24,10 +24,10 @@
     <application path="FlexyMove.mxml">
       <airExcludes/>
     </application>
-    <application path="CubeTest.mxml">
+    <application path="CoverFlow.mxml">
       <airExcludes/>
     </application>
-    <application path="CoverFlow.mxml">
+    <application path="CubeTest.mxml">
       <airExcludes/>
     </application>
   </applications>

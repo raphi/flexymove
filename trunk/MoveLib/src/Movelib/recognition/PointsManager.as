@@ -3,114 +3,151 @@ package Movelib.recognition
 {
 	import flash.geom.Point;
 	
+	
 	public class PointsManager
 	{
 		private var _points:Array;//array of array of points
-		public var _error:String = "PointsManager";
+		private var directionArray:Array;
+		
+		
+		public var _error:String = "";
 		public var _detectionInfo:String = "";
-		private const nbMinPointsToAnalyse:int = 3;
-		private const uncertaintyA:Number = 0.5;
-		private const uncertaintyB:Number = 3;
+			
+		public var mvtDetected:Boolean = false;
+		public var velocity:Number = -1;
+		public var currentdirection:int = 0;
+		
 		public function PointsManager()
 		{
-			
 			_points = new Array();
 			_points[0] = new Array();
+			directionArray = new Array();
+		}
+		
+		public function mvtProcess():void
+		{
+			mvtDetected = false;
+			velocity = -1;
+			currentdirection = 0;
 		}
 		
 		/** "élagage" in French : prune the point array */ 
 		public function prunning():void
 		{
-			_error = "recon\n";
-			_detectionInfo = "recon\n";
-			var n:int = 0;
-			var index:int;
-			var hasdel:int;
-			var currentPoint:Point;
-			var currentA:Number;
-			var currentB:Number;
-			for (n = 0; n < _points.length; n++)
+			mvtDetected = true;
+			var sequenceLength:int = _points[0].length - 1;
+			
+			//Velocity Cal Find a goo equation
+		//	var origineX:int = _points[0][0].x;
+		//	var endX:int = _points[0][_points.length - 2].x;
+			velocity = 0;
+			
+			currentdirection = directionArray[0];
+			_error += "direction" + currentdirection+ "\n";
+			var newArray:Array = new Array();
+			newArray.push(_points[0][ _points[0].length - 1]);
+			
+			_points[0] = newArray;
+		}
+
+		/**Analyse Direction with old Point and Add it in Array*/
+		public function createVector():void
+		{
+			if (_points[0].length > 1)
 			{
-				index = -1;
-				hasdel = 0;
-				if(_points[0].length > nbMinPointsToAnalyse)
+				
+				//Change it to check all finger
+				var originPoint:Point = _points[0][_points[0].length - 2];
+				var endPoint:Point =  _points[0][_points[0].length - 1];
+				
+				
+				var noriginPoint:Point = originPoint;
+				var nendPoint:Point =  endPoint;
+				if (originPoint.x > endPoint.x)
 				{
-					currentPoint = _points[n][0];
-					currentA = 0;
-					currentB = 0;
+					var tmp:Point = originPoint;
+					noriginPoint = endPoint;
+					nendPoint = tmp;
+				}
 					
-					_detectionInfo += i + " x " + _points[n][i].x +"y " + _points[i].y + "\n";
-					_detectionInfo += "First \n";
-					for(var i:int = 1; i < _points[n].length; i++)
+				var direction:int = 0;
+				var coef:Number = (noriginPoint.y - nendPoint.y) / (noriginPoint.x -  nendPoint.x);
+				_detectionInfo += "pt1 " + noriginPoint.x + " " + noriginPoint.y + "\n";
+				_detectionInfo += "pt2 " + nendPoint.x + " " + nendPoint.y + "\n";
+				
+				//Get direction from Coef
+				if (coef > 1.5)
+					direction = 4;
+				else if (coef > 0.5)
+					direction = 3;
+				else if (coef > -0.5)
+					direction = 2;
+				else if (coef > -1.5)
+					direction = 1;
+				else 
+					direction = 0;
+				
+				if(endPoint.x < originPoint.x)
+					switch(direction)
 					{
-						if (hasdel == 1)
-							hasdel++;
-						else if (hasdel == 2)
-						{
-							hasdel =0;
-							index++;
-						}
-						index++;
-						var goodPoint:Boolean = false;
-						_detectionInfo += i + " x " + _points[n][i].x +"y " + _points[i].y + "\n";
-						/*cacul  a and b ob y=ax+b*/
-						var a:Number = (currentPoint.y -  _points[n][i].y) / ((currentPoint.x -  _points[i].x));
-						var b:Number = currentPoint.y - a*currentPoint.x;
-						_error +=i+ " y="+a+"x+"+b+"\n" ;
-						if(currentA != 0 && currentA != 0)
-						{
-							if(between(a,currentA-uncertaintyA,currentA+uncertaintyA) &&
-								between(b,currentB-uncertaintyB,currentB+uncertaintyB))
-							{
-								var aPrev:Number = (_points[n][index].y -  _points[n][i].y) / ((_points[n][index].x -  _points[n][i].x));
-								var bPrev:Number = currentPoint.y - aPrev*currentPoint.x;
-								if ((aPrev >= 0 && a >=0)|| (aPrev <= 0 && a <=0)){
-									/**Point GOOD supprimé de la liste*/
-									_detectionInfo += "pass "+ index +" "+ aPrev + " "+ bPrev+" GOOD \n";
-									goodPoint = true;
-								}
-								else
-								{
-									_detectionInfo += "pass "+ index +" "+ aPrev + " "+ bPrev+" BAD\n";
-								}
-							}
-							/*Last point maybe  is a change direction*/
-							if(!goodPoint)
-								if (i == _points[n].length - 1)
-								{
-									_detectionInfo += "Last (Change Direction??) \n" 	
-									break;
-								}
-								else
-								{
-									index--;
-									hasdel++;
-									_detectionInfo += " del \n" 
-								}
-						}
-						else
-						{
-							currentA = a;
-							currentB = b;
-							_detectionInfo += "Second \n"
-						}
+						case 0:{direction = 4;break;}
+						case 1:{direction = 5;break;}
+						case 2:{direction = 6;break;}
+						case 3:{direction = 7;break;}
+						case 4:{direction = 0;break;}	
+						default:{break;}
 					}
+				//Add direction in Array
+				directionArray.push(direction);
+				_detectionInfo += "direction " + direction +" "+coef +"\n";
+				
+				
+				const directionArrayLength:int = directionArray.length;
+				//If last Direction Add is not a continuity of previous mouvment(replace by is a aknown mvt)
+				if (directionArrayLength >=2 && (directionArray[directionArrayLength - 1] != directionArray[directionArrayLength - 2]))
+				{
+					prunning();
+					return;
 				}
 			}
+			return;	
 		}
 		
-		
-		public function between(myVal:Number,val1:Number, val2:Number):Boolean
+
+		public function addDetectedPoints(points:Array):void 
 		{
-			if (myVal >= val1 && myVal <= val2)
-				return true;
-			return false;
-		}
-		public function addAll(points:Array):void 
-		{
+		/*
+		 * if (myVal >= val1 && myVal <= val2)
+					return true;
+					return false;*/
+			
 			if (points[0] != null)
-				_points[0].push(points[0]);
+
+			{
+				if (_points[0].length > 0)
+				{
+					//PB plusieur fois le meme point A changer
+					if((_points[0][_points[0].length - 1].x != points[0].x) &&
+						(_points[0][_points[0].length - 1].y != points[0].y))
+					{
+						_points[0].push(points[0]);
+						
+						//_error += points[0].x + " " + points[0].y+"\n";
+						createVector();
+					}
+					
+				}
+				else
+					_points[0].push(points[0]);
+			}
+			/*if (_points[0].length > 20)
+			{
+				delete(_points[0].shift());
+			}*/
+
 		}
+		
+		
 		public function getPoint():Array
 		{
 			return _points[0];

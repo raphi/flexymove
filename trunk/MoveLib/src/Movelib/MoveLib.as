@@ -8,7 +8,7 @@ package Movelib
 	import Movelib.recognition.Recognition;
 	
 	import flash.display.BitmapData;
-	import flash.events.TransformGestureEvent;
+	import flash.events.Event;
 	import flash.utils.Timer;
 	
 	import mx.core.UIComponent;
@@ -19,33 +19,34 @@ package Movelib
 		private static var _PreProc:PreProcessing
 		private static var _ColDetect:ColorsDetection;
 		private static var _PointsDetect:PointsDetection;
-		private static var _Reco:Recognition;
+		
+		/*public just for debug*/
+		public static var _Reco:Recognition;
 		private static var _registeredObjects:Array = new Array();
 		private static var _timer:Timer
-		private static var e:MoveLibEvent;
-		private static var i:int = 0;
+		private static var frameAnalysedEvent:MoveLibEvent;
 		
 		public function MoveLib()
 		{
 		}
 		
 		/** initialisation of the MoveLib */
-		public static function start() : void
+		public static function start(frequency:Number=1000/25) : void
 		{
 			_ImgAcq = new ImageAcquisition();
 			_PreProc = new PreProcessing();
 			_ColDetect = new ColorsDetection();
 			_PointsDetect = new PointsDetection();
 			_Reco = new Recognition();
-			e = new MoveLibEvent(MoveLibEvent.FRAME_ANALYSED);
+			frameAnalysedEvent = new MoveLibEvent(MoveLibEvent.FRAME_ANALYSED);
 			
 			//init the timer and start it
-			_timer = new Timer(1000/25, 0);
+			_timer = new Timer(frequency, 0);
 			_timer.addEventListener("timer", frame);
 			_timer.start();
 		}
 
-		/** records an object to accept move events */
+		/** Register objects to accept move events */
 		public static function registerObject(...UIobject) : void
 		{
 			for each (var object:Object in UIobject)
@@ -56,16 +57,16 @@ package Movelib
 
 		}
 		
-		private static function eventManager() : void
+		public static function dispatchEventToMovelibObjects(e:Event) : void
 		{
 			for each (var obj:UIComponent in _registeredObjects)
-				obj.dispatchEvent(new TransformGestureEvent(TransformGestureEvent.GESTURE_SWIPE));
+				obj.dispatchEvent(e);
 		}
 		
 		/** The function called by the timer */
 		public static function frame(s:String) : void
 		{
-			//begin frame
+			//Begin frame
 			//Capture the picture
 			var img:BitmapData = _ImgAcq.capturePicture();
 			//Apply the pre-traitement
@@ -86,10 +87,6 @@ package Movelib
 			Reco.addAll(PointsDetect.points);
 			Reco.recognize(img);
 			
-			if (i % 60 == 0)
-				eventManager();
-			i++;
-			//_obj.dispatchEvent(e);
 			//end frame
 		}
 		
