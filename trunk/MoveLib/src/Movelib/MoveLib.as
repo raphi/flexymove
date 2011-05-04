@@ -40,7 +40,7 @@ package Movelib
 			_Reco = new Recognition();
 			frameAnalysedEvent = new MoveLibEvent(MoveLibEvent.FRAME_ANALYSED);
 			
-			//init the timer and start it
+  			//init the timer and start it
 			_timer = new Timer(frequency, 0);
 			_timer.addEventListener("timer", frame);
 			_timer.start();
@@ -62,6 +62,12 @@ package Movelib
 			for each (var obj:UIComponent in _registeredObjects)
 				obj.dispatchEvent(e);
 		}
+		public static function reset() : void
+		{
+			_ColDetect.reset();
+			_Reco.reset();
+			PointsDetect.askForRecalibration = false;
+		}
 		
 		/** The function called by the timer */
 		public static function frame(s:String) : void
@@ -70,22 +76,21 @@ package Movelib
 			//Capture the picture
 			var img:BitmapData = _ImgAcq.capturePicture();
 			//Apply the pre-traitement
-			PreProc.apply(img);
+			_PreProc.apply(img);
 			//Detect colors
-			ColDetect.detect(img);
+			_ColDetect.detect(img);
 			//get the detected colors to the PointsDetect object
-			PointsDetect.colors = ColDetect.colors;
+			_PointsDetect.colors = ColDetect.colors;
 			//Transform the detected colors to points
-			PointsDetect.detect(img);
-			if (PointsDetect.askForRecalibration)
+			_PointsDetect.detect(img);
+			if (_PointsDetect.askForRecalibration)
 			{
-				ColDetect.reset();
-				PointsDetect.askForRecalibration = false;
+				reset();
 				return;
 			}
 			//Give the detected points to the Recognition object
-			Reco.addAll(PointsDetect.points);
-			Reco.recognize(img);
+			_Reco.addAll(PointsDetect.points);
+			_Reco.recognize(img);
 			
 			dispatchEventToMovelibObjects(frameAnalysedEvent);
 			//end frame

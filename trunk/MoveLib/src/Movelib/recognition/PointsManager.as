@@ -31,6 +31,10 @@ package Movelib.recognition
 			currentdirection = 0;
 		}
 		
+		public function reset():void
+		{
+			_points[0] = [];
+		}
 		/** "élagage" in French : prune the point array */ 
 		public function prunning():void
 		{

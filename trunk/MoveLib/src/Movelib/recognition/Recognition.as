@@ -23,6 +23,10 @@ package Movelib.recognition
 			_points.addDetectedPoints(points);
 			
 		}
+		public function reset():void
+		{
+			_points.reset();
+		}
 		
 		/** recognize a mouvement from a point list */
 		public function recognize(img:BitmapData) : void
