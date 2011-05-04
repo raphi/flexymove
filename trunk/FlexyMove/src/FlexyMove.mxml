@@ -12,6 +12,7 @@
 			import mx.controls.Alert;
 			import mx.events.MoveEvent;
 			
+			
 			public function init():void
 			{
 				addEventListener(MoveLibEvent.FRAME_ANALYSED, onEndOfFrame);
@@ -23,9 +24,15 @@
 			{
 				var b:Bitmap = new Bitmap(MoveLib.ImgAcq.snapshot);
 				bit1.mask = b;
-				textarea.text = Movelib.MoveLib.Reco._error;
-				textarea2.text = Movelib.MoveLib.Reco._detectionInfo;
+				//textarea.text = Movelib.MoveLib.Reco._error;
+				//textarea2.text = Movelib.MoveLib.Reco._detectionInfo;
 			}
+			
+			public function reset():void
+			{
+				Movelib.MoveLib.reset();
+			}
+			
 			
 		]]>
 	</fx:Script>
@@ -33,7 +40,6 @@
 	<s:layout>
 		<s:HorizontalLayout />
 	</s:layout>
-	
 	<s:VGroup>
 		<s:BitmapImage
 			id="bit1"
@@ -43,6 +49,5 @@
 		<s:TextArea id="textarea2" height="200" width="100"/>
 		<s:Button click="Movelib.MoveLib.reset();" label="reset" />
 	</s:VGroup>
-
 	<homecube:HomeCube />
 </s:WindowedApplication>
