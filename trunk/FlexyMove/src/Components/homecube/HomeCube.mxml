@@ -25,13 +25,25 @@
 			
 			private function init():void
 			{
-				addEventListener(MovementEvent.SWIPE_BOTTOM, rotateCube);
+				addEventListener(MovementEvent.SWIPE_LEFT, leftCubeRotation);
+				addEventListener(MovementEvent.SWIPE_RIGHT, rightCubeRotation);
 				
 				MoveLib.registerObject(this);
 				Movelib.MoveLib.start();
 			}
 			
-			private function rotateCube(e:MovementEvent):void
+			private function leftCubeRotation(e:MovementEvent):void
+			{
+				switch (currentState)
+				{
+					case "MapState":	currentState = "ProfileState";	break;
+					case "ProfileState":currentState = "YouTubeState"; break;
+					case "YouTubeState":currentState = "MapState"; break;
+					default: break;
+				}
+			}
+			
+			private function rightCubeRotation(e:MovementEvent):void
 			{
 				switch (currentState)
 				{
@@ -40,7 +52,6 @@
 					case "YouTubeState":currentState = "ProfileState"; break;
 					default: break;
 				}
-				
 			}
 			
 		]]>
