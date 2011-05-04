@@ -7,6 +7,8 @@ package Movelib.recognition
 	import flash.events.TransformGestureEvent;
 	import flash.geom.Point;
 	
+	import mx.controls.Alert;
+	
 	public class Recognition
 	{
 		private var _points:PointsManager = null;
@@ -51,9 +53,9 @@ package Movelib.recognition
 				
 				switch(_points.currentdirection)
 				{
-					case 0:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_RIGHT)); break;}
-					case 4:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_RIGHT)); break;}
-					case 2:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_LEFT)); break;}
+					case 0:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_TOP)); break;}
+					case 4:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_BOTTOM)); break;}
+					case 2:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_RIGHT)); break;}
 					case 6:{ MoveLib.dispatchEventToMovelibObjects(new MovementEvent(MovementEvent.SWIPE_LEFT)); break;}	
 					default:{break;}
 				}

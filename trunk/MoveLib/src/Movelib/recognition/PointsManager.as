@@ -38,6 +38,16 @@ package Movelib.recognition
 		/** "élagage" in French : prune the point array */ 
 		public function prunning():void
 		{
+			var newArray:Array = new Array();
+			if (directionArray.length == 2)
+			{
+				
+				newArray.push(_points[0][ _points[0].length - 1]);
+				directionArray = [];
+				_points[0] = newArray;
+				return;
+				
+			}
 			mvtDetected = true;
 			var sequenceLength:int = _points[0].length - 1;
 			
@@ -47,8 +57,9 @@ package Movelib.recognition
 			velocity = 0;
 			
 			currentdirection = directionArray[0];
+			directionArray = [];
 			_error += "direction" + currentdirection+ "\n";
-			var newArray:Array = new Array();
+			//var newArray:Array = new Array();
 			newArray.push(_points[0][ _points[0].length - 1]);
 			
 			_points[0] = newArray;
@@ -80,7 +91,8 @@ package Movelib.recognition
 				_detectionInfo += "pt2 " + nendPoint.x + " " + nendPoint.y + "\n";
 				
 				//Get direction from Coef
-				if (coef > 1.5)
+				/*Good VERSION*/
+				/*if (coef > 1.5)
 					direction = 4;
 				else if (coef > 0.5)
 					direction = 3;
@@ -88,6 +100,15 @@ package Movelib.recognition
 					direction = 2;
 				else if (coef > -1.5)
 					direction = 1;
+				else 
+					direction = 0;
+				*/
+				
+				if (coef > 1)
+					direction = 4;
+				
+				else if (coef > -1)
+					direction = 2;
 				else 
 					direction = 0;
 				
