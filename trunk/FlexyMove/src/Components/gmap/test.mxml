@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:maps="com.google.maps.*"
+		 width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import com.google.maps.InfoWindowOptions;
+			import com.google.maps.LatLng;
+			import com.google.maps.MapEvent;
+			import com.google.maps.MapMouseEvent;
+			import com.google.maps.MapType;
+			import com.google.maps.View;
+			import com.google.maps.controls.MapTypeControl;
+			import com.google.maps.controls.NavigationControl;
+			import com.google.maps.controls.ZoomControl;
+			import com.google.maps.overlays.Marker;
+			
+			public function onMapReady(event:MapEvent):void 
+			{
+				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
+				map.viewMode = View.VIEWMODE_ORTHOGONAL;
+				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
+				map.enableScrollWheelZoom();
+				map.enableContinuousZoom();
+				map.enableControlByKeyboard();
+				map.addControl(new NavigationControl());
+				map.addControl(new MapTypeControl());
+			}
+			
+			public function mapClicked(event:MapMouseEvent):void
+			{
+				var latLng:LatLng = event.latLng;
+				var marker:Marker = new Marker(latLng);
+				var inputBox:videoMarker = new videoMarker();
+				map.addOverlay(marker);
+				marker.openInfoWindow(new InfoWindowOptions({customContent:inputBox,width:200,height:50,drawDefaultFrame:true}));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<maps:Map3D id="map"
+				width="100%" height="100%" 
+				key="ABQIAAAApevjLsy0a4ChuZ1lcd50AhTsslF4Y8xkhf7W8wmKT7ADz-aLqhRgYJNmWAMy90YGUU-Zs8_XupF7fQ"
+				url="http://asme.fr"
+				mapevent_mapready="onMapReady(event)"
+				sensor="false">
+	</maps:Map3D>
+	
+</s:Group>
