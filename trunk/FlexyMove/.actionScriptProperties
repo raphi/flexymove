@@ -19,6 +19,9 @@
     <application path="Test_coverFlow.mxml">
       <airExcludes/>
     </application>
+    <application path="GMapTest.mxml">
+      <airExcludes/>
+    </application>
     <application path="PlayerTest.mxml">
       <airExcludes/>
     </application>
@@ -26,12 +29,6 @@
       <airExcludes/>
     </application>
     <application path="CoverFlow.mxml">
-      <airExcludes/>
-    </application>
-    <application path="CubeTest.mxml">
-      <airExcludes/>
-    </application>
-    <application path="GMapTest.mxml">
       <airExcludes/>
     </application>
   </applications>

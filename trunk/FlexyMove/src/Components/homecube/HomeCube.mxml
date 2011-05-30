@@ -6,6 +6,7 @@
 		 xmlns:maps="Components.maps.*" 
 		 xmlns:profile="Components.profile.*" 
 		 xmlns:youtube="Components.player.youtube.*"
+		 xmlns:gmap="Components.gmap.*"
 		 creationComplete="init()"
 		 width="100%" height="100%">
 	
@@ -88,9 +89,9 @@
 		</s:Sequence>
 	</fx:Declarations>
 	
-	<maps:argisAir id="mapView"
-				   change="oldView=mapView; newView=profileView; currentState='ProfileState'"
-				   includeInLayout.ProfileState="false" includeInLayout.YouTubeState="false"/>
+	<gmap:test id="mapView"
+			   change="oldView=mapView; newView=profileView; currentState='ProfileState'"
+			   includeInLayout.ProfileState="false" includeInLayout.YouTubeState="false"/>
 	
 	<profile:ProfileView id="profileView"
 						 visible="false"
