@@ -13,6 +13,7 @@
 		<![CDATA[
 			import com.google.maps.InfoWindowOptions;
 			import com.google.maps.LatLng;
+			import com.google.maps.Map;
 			import com.google.maps.MapEvent;
 			import com.google.maps.MapMouseEvent;
 			import com.google.maps.MapType;
@@ -21,6 +22,17 @@
 			import com.google.maps.controls.NavigationControl;
 			import com.google.maps.controls.ZoomControl;
 			import com.google.maps.overlays.Marker;
+			import com.google.maps.overlays.MarkerOptions;
+			import com.google.maps.services.ClientGeocoder;
+			import com.google.maps.services.ClientGeocoderOptions;
+			import com.google.maps.services.GeocodingEvent;
+			import com.google.maps.services.Placemark;
+			
+			import mx.controls.Alert;
+			import mx.controls.Image;
+			import mx.core.mx_internal;
+			
+			import spark.components.HGroup;
 			
 			public function onMapReady(event:MapEvent):void 
 			{
@@ -34,18 +46,63 @@
 				map.addControl(new MapTypeControl());
 			}
 			
+			public function onClickOnMarker(event:MapMouseEvent):void
+			{
+				showInfoMarker(Marker(event.currentTarget));
+			}
+			
 			public function mapClicked(event:MapMouseEvent):void
 			{
 				var latLng:LatLng = event.latLng;
 				var marker:Marker = new Marker(latLng);
-				var inputBox:videoMarker = new videoMarker();
+				var label:Label = new Label();
+				label.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude" + marker.getLatLng().lng().toFixed(2);;
+				label.y = 5;
+				var item:BorderContainer = new BorderContainer();
+				item.width = 230;
+				item.height = 32;
+				item.styleDeclaration = new CSSStyleDeclaration();
+				item.styleDeclaration.setStyle("borderWeight", "1");
+				item.styleDeclaration.setStyle("cornerRadius", "5");
+				item.addElement(label);
+				markerList.addElement(item);
+				marker.addEventListener(MapMouseEvent.CLICK, onClickOnMarker);
 				map.addOverlay(marker);
-				marker.openInfoWindow(new InfoWindowOptions({customContent:inputBox,width:200,height:50,drawDefaultFrame:true}));
+				showInfoMarker(marker);
 			}
+			
+			public function showInfoMarker(marker:Marker):void
+			{
+				//label.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude" + marker.getLatLng().lng().toFixed(2);
+				var place:Placemark = new Placemark();
+				var geocodingreq:GeocodingEvent = new GeocodingEvent("geocode");
+				
+				var geocoder:ClientGeocoder = new ClientGeocoder();
+				
+				latlng.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude : " + marker.getLatLng().lng().toFixed(2);
+				geocoder.addEventListener(
+					GeocodingEvent.GEOCODING_SUCCESS,
+					function(event:GeocodingEvent):void
+					{
+						var placemarks:Array = event.response.placemarks;
+						if (placemarks.length > 0)
+						{
+							var place:Placemark = placemarks[0];
+							adress.text = place.address;
+						}
+					});
+				geocoder.addEventListener(
+					GeocodingEvent.GEOCODING_FAILURE,
+					function(event:GeocodingEvent):void
+					{
+						adress.text = "reboot please";
+					});
+				geocoder.reverseGeocode(marker.getLatLng());
+			}
+			
 			
 		]]>
 	</fx:Script>
-	
 	<maps:Map3D id="map"
 				width="100%" height="100%" 
 				key="ABQIAAAApevjLsy0a4ChuZ1lcd50AhTsslF4Y8xkhf7W8wmKT7ADz-aLqhRgYJNmWAMy90YGUU-Zs8_XupF7fQ"
@@ -53,7 +110,23 @@
 				mapevent_mapready="onMapReady(event)"
 				sensor="false">
 	</maps:Map3D>
-	
+	<s:Group width="280" height="100%" right="0" top="40">
+		<s:BorderContainer width="100%" height="100%" >
+			<s:backgroundFill>
+				<s:LinearGradient rotation="90">
+					<s:GradientEntry color="0x444444" alpha="0.4"/>
+					<s:GradientEntry color="0x888888" alpha="0.4"/>
+				</s:LinearGradient>
+			</s:backgroundFill>
+		</s:BorderContainer>
+		<s:VGroup>
+			<s:Label x="5" y="5" id="latlng" fontFamily="Calibri" fontSize="20"/>
+			<s:Label x="5" y="5" id="adress" fontFamily="Calibri" fontSize="12"/>
+			<s:Scroller width="280" height="500">
+				<s:VGroup  id="markerList"/>
+			</s:Scroller>
+		</s:VGroup>
+	</s:Group>
 	<s:Button label="View YouTube" click="dispatchEvent( new Event( Event.CHANGE ) );" />
 	
 </s:Group>

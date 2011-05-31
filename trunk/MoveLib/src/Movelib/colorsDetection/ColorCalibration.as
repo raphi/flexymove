@@ -94,6 +94,12 @@ package Movelib.colorsDetection
 				drawRectangleBorder(img, 0xAAAAAA);
 				return;
 			}
+			var pix:int = img.getPixel(_areaDetection.x + 3, _areaDetection.y + 3);
+			var r:int = (pix & 0xFF0000) / (256 * 256);
+			var g:int = (pix & 0x00FF00) / 256;
+			var b:int = (pix & 0x0000FF);
+			_error = "pixels : \n R : " + r + "\nG : " + g + "\nB : " + b;
+			
 			drawRectangleBorder(img, 0xFFFFFF);
 			var n:int = 0;
 			var j:int = 0;
@@ -118,11 +124,10 @@ package Movelib.colorsDetection
 			
 			if (n > 0.4 * _realAreaDetection.width * _realAreaDetection.height)
 			{
-				_state = 1;
 				var pixel:int = 0;
-				var r:int;
-				var g:int;
-				var b:int;
+				//var r:int;
+				//var g:int;
+				//var b:int;
 				var rmin:int = 255;
 				var gmin:int = 255; 
 				var bmin:int = 255;

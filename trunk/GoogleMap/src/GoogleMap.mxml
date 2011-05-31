@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:maps="com.google.maps.*" 
+				width="100%" height="100%" layout="absolute" viewSourceURL="srcview/index.html">
+	<mx:Panel title="Google Maps Geocoding Demo" width="100%" height="100%">
+		<mx:VBox width="100%" height="100%">
+			<mx:HBox width="100%" height="25">
+				<mx:Label
+					text="Enter address: "/>
+				<mx:TextInput
+					id="address"
+					text="Sydney AU"
+					dropShadowColor="0x000000"
+					enter="doGeocode(event);"
+					/>
+				<mx:Button
+					id="submitButton" label="Search"
+					click="doGeocode(event);"
+					/>
+			</mx:HBox>
+			<!--
+			<maps:Map 
+				id="map" 
+				sensor="false" key="your_api_key" 
+				mapevent_mapready="onMapReady(event)"
+				width="100%" height="100%"/>
+			-->
+		</mx:VBox>
+	</mx:Panel>
+	<mx:Script>
+		<![CDATA[
+		import com.google.maps.services.ClientGeocoderOptions;
+		import com.google.maps.LatLng;
+		import com.google.maps.Map;
+		import com.google.maps.MapEvent;
+		import com.google.maps.MapMouseEvent;
+		import com.google.maps.MapType;
+		import com.google.maps.services.ClientGeocoder;
+		import com.google.maps.services.GeocodingEvent;
+		import com.google.maps.overlays.Marker;
+		import com.google.maps.overlays.MarkerOptions;
+		import com.google.maps.InfoWindowOptions;
+		import mx.controls.Alert;
+		import com.google.maps.controls.ZoomControl;
+		
+		private function onMapReady(event:Event):void {
+		map.enableScrollWheelZoom();
+		map.enableContinuousZoom();
+		map.addControl(new ZoomControl());
+		}
+		
+		private function doGeocode(event:Event):void {
+		// Geocoding example
+		var geocoder:ClientGeocoder = new ClientGeocoder();
+		
+		geocoder.addEventListener(
+		GeocodingEvent.GEOCODING_SUCCESS,
+		function(event:GeocodingEvent):void {
+		var placemarks:Array = event.response.placemarks;
+		if (placemarks.length > 0) {
+		map.setCenter(placemarks[0].point);
+		var marker:Marker = new Marker(placemarks[0].point);
+		
+		marker.addEventListener(MapMouseEvent.CLICK, function (event:MapMouseEvent):void {
+		marker.openInfoWindow(new InfoWindowOptions({content: placemarks[0].address}));
+		});
+		map.addOverlay(marker);
+		}
+		});
+		geocoder.addEventListener(
+		GeocodingEvent.GEOCODING_FAILURE,
+		function(event:GeocodingEvent):void {
+		Alert.show("Geocoding failed");
+		trace(event);
+		trace(event.status);
+		});
+		geocoder.geocode(address.text);
+		}
+		]]>
+	</mx:Script>
+</mx:Application>
