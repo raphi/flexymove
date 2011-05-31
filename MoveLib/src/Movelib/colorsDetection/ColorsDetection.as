@@ -53,11 +53,13 @@ package Movelib.colorsDetection
 			var max:int = 0x36A4FF;
 			min = 0x000040;
 			max = 0x36A4FF;
-			colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(100,100,40,40)));
-			_colors.addItem(-1);
+			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(100,100,40,40)));
+			//_colors.addItem(-1);
 			
-			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(150,100,40,40)));
-			//_colors[1] = -1;
+			min = 0x000000;
+			max = 0xFFA0A0;
+			colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(220,100,40,40)));
+			_colors.addItem(-1);
 			
 			//colorsCalibrations.addItem(new ColorCalibration(new ColorRange(min, max), new Rectangle(200,100,40,40)));
 			
@@ -79,6 +81,7 @@ package Movelib.colorsDetection
 				var n:int = 0;
 				for each(calib in colorsCalibrations)
 				{
+					_error = calib._error;
 					calib.calibrate(img);
 					if (calib.state == 0)
 					{
@@ -101,7 +104,6 @@ package Movelib.colorsDetection
 				{
 					img.paletteMap(img, r, p, calib.redArray, calib.greenArray, calib.blueArray);
 					img.threshold(img, r, p, '!=', calib.range.moyValue, 0x000000, 0x00FFFFFF);
-					break;
 				}
 			}
 		}
