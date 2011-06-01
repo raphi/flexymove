@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:ai="http://ns.adobe.com/ai/2009"
+				xmlns:d="http://ns.adobe.com/fxg/2008/dt"
+				xmlns:flm="http://ns.adobe.com/flame/2008"
+				xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				width="100%" height="100%" autoDrawBackground="false"
+				width.up="623" height.up="450">
+	
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="overed"/>
+	</s:states>
+	
+	<s:Group id="group2" x="0" blendMode="normal"
+			 x.overed="18" y.overed="0"
+			 y.up="21" width.up="577" height.up="397" >
+		<s:BitmapImage id="film" source="@Embed('../coverflow/assets/film.jpg')"
+					   x.up="13" y.up="69" width.up="557" height.up="262"/>
+		<s:BitmapImage id="pellicule" source="@Embed('../coverflow/assets/pellicule.png')"
+					   x.up="1" y.up="1" width.up="577" height.up="389"/>
+<!--		
+		<s:BitmapImage id="film" source="@Embed('../coverflow/assets/film.jpg')"
+					   x.up="13" y.up="69" width.up="557" height.up="262"/>-->
+	
+	</s:Group>
+</s:ItemRenderer>
