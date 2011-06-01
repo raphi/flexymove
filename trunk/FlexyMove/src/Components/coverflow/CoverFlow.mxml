@@ -15,9 +15,10 @@
 			import Components.itemsRenderers.FolderRenderer;
 			import Components.itemsRenderers.MovieRenderer;
 			import Components.itemsRenderers.MusicRenderer;
+			import Components.itemsRenderers.MyFolderRenderer;
+			import Components.itemsRenderers.MyMovieRenderer;
 			import Components.itemsRenderers.PictureRenderer;
 			import Components.itemsRenderers.PodRenderer;
-			import Components.itemsRenderers.MovieRenderer;
 			
 			import mx.collections.ArrayList;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
@@ -37,25 +38,25 @@
 			{
 				for (var i:int = 0; i < 5; i++) 
 				{
-					fileList.addItem("OTHER");
+					var itemFolder:ItemCoverFlow = new ItemCoverFlow(true);
+					itemFolder.title = "Folder " + i;
+					itemFolder.owner = "Peron " + i;
+					
+					fileList.addItem(itemFolder);
 				}
-				for (i = 0; i < 5; i++) 
+				for ( i = 0; i < 10; i++) 
 				{
-					fileList.addItem("Music");
+					
+					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false);
+					itemVideo.title = "Movie " + i;
+					itemVideo.time = i * 10;
+					itemVideo.owner = "Peron " + i + 10;
+					itemVideo.chanel = "chanel" + i;
+					itemVideo.pathImg = "../coverflow/assets/Pulp_Fiction.jpg";
+					fileList.addItem(itemVideo);
+					
 				}
-				for (i = 0; i < 5; i++) 
-				{
-					fileList.addItem("Folder");
-				}
-				for (i = 0; i < 1; i++) 
-				{
-					fileList.addItem("Movie");
-				}
-				for (i = 0; i < 5; i++) 
-				{
-					fileList.addItem("Picture");
-				}
-
+				
 			}
 			
 			/** Return a Class Factory adapted to the item :
@@ -63,46 +64,71 @@
 			 * 	- Picture
 			 *  - Folder
 			 *  - Music */
-			private function itemRender(item:Object):ClassFactory {
+			private function itemRender(item:ItemCoverFlow):ClassFactory {
 				var cla:Class = PodRenderer;
-				switch (item) {
-					case "Movie":
-						cla = MovieRenderer;
-						break;
- 					case "Picture":
-						cla = PictureRenderer
-						break;
-					case "Music":
-						cla = MusicRenderer;
-						break;
-					case "Folder":
-						cla = FolderRenderer;
-						break; 
-					default:
-						break;
-				}
+				if (item.isFolder)
+					cla = MyFolderRenderer;
+				else
+					cla = MyMovieRenderer;				
 				return new ClassFactory(cla);
-				return null;
 			}
-					
+			
+			public function getTitle():void
+			{
+				var item:ItemCoverFlow = ItemCoverFlow(list.selectedItem);
+				
+				type.text = item.isFolder ? "folder" : "Movie";
+				title.text = item.title;
+				prop.text = item.owner;
+				chanel.text = item.chanel;
+				if (!item.isFolder)
+				{
+					duree.width = 100;
+					duree.height = 10;
+					InfoDuree.width = 100;
+					InfoDuree.height = 10;
+					duree.text = item.time + " s";
+				}
+				else
+				{
+					duree.width = 0;
+					duree.height = 0;
+					InfoDuree.width = 0;
+					InfoDuree.height = 0;
+				}
+			}
+			
 		]]>
 	</fx:Script>
+	
+	
+	
 
-	<s:List id="list" dataProvider="{fileList}" width="100%" height="100%" 
-			selectedIndex="0" itemRendererFunction="itemRender" >
+	<s:List id="list" x="0" y="0" width="100%" height="100%" borderVisible="false"
+			click="{getTitle()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
+			itemRendererFunction="itemRender" selectedIndex="0">
+		
 		<s:layout>
 			<coverflow:CoverflowLayout id="coverflow" 
-										selectedIndex="{ list.selectedIndex }"
-										horizontalDistance="{HORIZONTALDISTANCE}"
-										selectedItemProximity="{SELECTEDITEMPROXIMITY}"
-										depthDistance="{DEPTHDISTANCE}" 
-										elementRotation="{ELEMENTROTATION}" 
-										focalLength="{FOCALLENGTH}"
-										perspectiveProjectionX="{PERSPECTIVEPROJECTIONX}" 
-										perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
+									   selectedIndex="{ list.selectedIndex }"
+									   horizontalDistance="{HORIZONTALDISTANCE}"
+									   selectedItemProximity="{SELECTEDITEMPROXIMITY}"
+									   depthDistance="{DEPTHDISTANCE}" 
+									   elementRotation="{ELEMENTROTATION}" 
+									   focalLength="{FOCALLENGTH}"
+									   perspectiveProjectionX="{PERSPECTIVEPROJECTIONX}" 
+									   perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
+			
 		</s:layout>
+		
 	</s:List>
+	
 	<s:Label id="l1" text="{list.selectedItem}"/>
-	
-	
+	<s:Panel id = "info" x="24" y="10" width="206" height="128" title="Info">
+		<s:Label x="2" text="Type :"/> <s:Label id="type" x="47" y="0" />
+		<s:Label x="2" y="15" height="12" text="Titre :"/> <s:Label id="title" x="47" y="15" />
+		<s:Label x="2" y="30" height="12" text="Propriétaire :"/> <s:Label id="prop" x="75" y="29" />
+		<s:Label x="2" y="45" height="12" text="chanel :"/> <s:Label id="chanel" x="47" y="45" />
+		<s:Label id="InfoDuree" x="2" y="60" height="12" text="Durée :"/> <s:Label id="duree" x="47" y="60" />
+	</s:Panel>
 </s:Group>

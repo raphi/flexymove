@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				autoDrawBackground="false"
+				width.up="419" height.up="426">
+	<s:states>
+		<s:State name="up"/>
+		<s:State name="overed"/>
+	</s:states>
+	
+	<s:Group id="group2" x="0" blendMode="normal"
+			 x.overed="18" y.overed="0"
+			 x.up="-1" y.up="46" width.up="269" height.up="258">
+		
+		<s:BitmapImage id="Folder" source="@Embed('../coverflow/assets/folder3.png')"
+					   x.up="-40" y.up="-40"/>
+		
+		
+		
+	</s:Group>
+	
+	
+</s:ItemRenderer>
