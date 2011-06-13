@@ -10,8 +10,8 @@
       </libraryPathEntry>
       <libraryPathEntry kind="3" linkType="1" path="/MoveLib/bin/MoveLib.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="libs/DistortionEffects.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="libs/agslib-2.2-2010-12-08.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="libs/map_flex_1_20.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="libs/lccs.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
