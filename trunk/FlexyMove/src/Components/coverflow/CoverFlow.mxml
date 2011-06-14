@@ -12,13 +12,13 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.itemsRenderers.FolderRenderer;
-			import Components.itemsRenderers.MovieRenderer;
-			import Components.itemsRenderers.MusicRenderer;
-			import Components.itemsRenderers.MyFolderRenderer;
-			import Components.itemsRenderers.MyMovieRenderer;
-			import Components.itemsRenderers.PictureRenderer;
-			import Components.itemsRenderers.PodRenderer;
+			import Components.coverflow.itemsRenderers.FolderRenderer;
+			import Components.coverflow.itemsRenderers.MovieRenderer;
+			import Components.coverflow.itemsRenderers.MusicRenderer;
+			import Components.coverflow.itemsRenderers.MyFolderRenderer;
+			import Components.coverflow.itemsRenderers.MyMovieRenderer;
+			import Components.coverflow.itemsRenderers.PictureRenderer;
+			import Components.coverflow.itemsRenderers.PodRenderer;
 			
 			import mx.collections.ArrayList;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
