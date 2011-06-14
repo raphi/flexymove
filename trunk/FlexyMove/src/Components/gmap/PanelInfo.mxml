@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="280" height="100%" right="0" top="40">
+	
+	<s:BorderContainer width="100%" height="100%" >
+		<s:backgroundFill>
+			<s:LinearGradient rotation="90">
+				<s:GradientEntry color="0x444444" alpha="0.4"/>
+				<s:GradientEntry color="0x888888" alpha="0.4"/>
+			</s:LinearGradient>
+		</s:backgroundFill>
+	</s:BorderContainer>
+	<s:VGroup>
+		<s:Label x="5" y="5" id="latlng" fontFamily="Calibri" fontSize="20"/>
+		<s:Label x="5" y="5" id="adress" fontFamily="Calibri" fontSize="12"/>
+		<s:Scroller width="280" height="500">
+			<s:VGroup  id="markerList"/>
+		</s:Scroller>
+	</s:VGroup>
+</s:Group>
