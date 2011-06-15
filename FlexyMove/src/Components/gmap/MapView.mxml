@@ -11,9 +11,10 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
-			import Components.gmap.VideoMarker;
+			import Components.gmap.core.VideoVO;
 			
 			import com.adobe.rtc.events.AuthenticationEvent;
+			import com.flexymove.MarkerManager;
 			import com.google.maps.InfoWindowOptions;
 			import com.google.maps.LatLng;
 			import com.google.maps.MapEvent;
@@ -33,8 +34,12 @@
 			import spark.components.BorderContainer;
 			import spark.components.Label;
 			
+			private var markerManager:MarkerManager;
+			
 			public function onMapReady(event:MapEvent):void 
 			{
+				markerManager = new MarkerManager(map);
+				
 				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
 				map.viewMode = View.VIEWMODE_ORTHOGONAL;
 				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
@@ -53,7 +58,8 @@
 			public function mapClicked(event:MapMouseEvent):void
 			{
 				var latLng:LatLng = event.latLng;
-				var marker:SharedMarker = new SharedMarker(latLng);
+				var videoInfos:VideoVO = new VideoVO("raphi", latLng);
+				var marker:SharedMarker = new SharedMarker(latLng, videoInfos);
 				var label:Label = new Label();
 				label.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude" + marker.getLatLng().lng().toFixed(2);;
 				label.y = 5;
@@ -66,7 +72,9 @@
 				item.addElement(label);
 				panelInfo.markerList.addElement(item);
 				marker.addEventListener(MapMouseEvent.CLICK, onClickOnMarker);
-				map.addOverlay(marker);
+				
+				//map.addOverlay(marker); WHAT FOR??
+				markerManager.addMarker(marker);
 				showInfoMarker(marker);
 			}
 			

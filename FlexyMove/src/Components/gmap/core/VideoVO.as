@@ -1,20 +1,22 @@
 package Components.gmap.core
 {
+	import com.google.maps.LatLng;
+	
 	import mx.core.IUID;
 	import mx.utils.UIDUtil;
 
+	[Bindable]
+	[RemoteClass] 
 	public class VideoVO implements IUID
 	{
 		public var author:String;
-		public var lat:Number;
-		public var long:Number;
+		public var latlng:LatLng;
 		private var _uid:String;
 		
-		public function VideoVO(author:String, lat:Number, long:Number)
+		public function VideoVO(author:String, latlng:LatLng)
 		{
 			this.author = author;
-			this.lat = lat;
-			this.long = long;
+			this.latlng = latlng;
 			
 			_uid = UIDUtil.createUID();
 		}
