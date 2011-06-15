@@ -71,7 +71,7 @@ package Components.gmap.core {
 		 *   {Boolean} Whether or not this manager should track marker
 		 *                   movements.
 		 */
-		public function MarkerManager(map:IMap, opt_opts:Object) {
+		public function MarkerManager(map:IMap, opt_opts:Object = null) {
 			this.map_ = map;
 			this.mapZoom_ = map.getZoom();
 			this.projection_ = map.getCurrentMapType().getProjection();
