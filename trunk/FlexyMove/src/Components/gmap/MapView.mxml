@@ -11,7 +11,7 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
-			import Components.gmap.cVideoMarker;
+			import Components.gmap.VideoMarker;
 			
 			import com.adobe.rtc.events.AuthenticationEvent;
 			import com.google.maps.InfoWindowOptions;
@@ -97,7 +97,7 @@
 					});
 				geocoder.reverseGeocode(marker.getLatLng());
 				
-				var vm:cVideoMarker = new cVideoMarker();
+				var vm:VideoMarker = new VideoMarker();
 				marker.openInfoWindow(new InfoWindowOptions({customContent:vm,width:200,height:100, drawDefaultFrame:true}));
 			}
 			
