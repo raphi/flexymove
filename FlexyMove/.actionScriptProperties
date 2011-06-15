@@ -40,7 +40,9 @@
   <buildTargets>
     <buildTarget buildTargetName="default">
       <airSettings airCertificatePath="" airTimestamp="true" version="1">
-        <airExcludes/>
+        <airExcludes>
+          <pathEntry path="argisAir.swf"/>
+        </airExcludes>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>
