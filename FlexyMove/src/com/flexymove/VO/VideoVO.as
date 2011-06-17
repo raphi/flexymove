@@ -1,4 +1,4 @@
-package Components.gmap.core
+package com.flexymove.VO
 {
 	import com.google.maps.LatLng;
 	
