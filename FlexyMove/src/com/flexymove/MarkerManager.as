@@ -4,47 +4,50 @@ package com.flexymove
 	import Components.gmap.core.SharedMarker;
 	import Components.gmap.core.VideoVO;
 	
-	import com.adobe.rtc.sharedModel.SharedCollection;
+	import com.adobe.rtc.events.CollectionNodeEvent;
+	import com.adobe.rtc.messaging.MessageItem;
+	import com.adobe.rtc.session.ConnectSession;
+	import com.adobe.rtc.sharedModel.CollectionNode;
+	import com.google.maps.LatLng;
 	import com.google.maps.interfaces.IMap;
-	import com.google.maps.overlays.Marker;
-	
-	import mx.events.CollectionEvent;
 	
 	public class MarkerManager
 	{
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
-		private var _sharedVideoList:SharedCollection;
+		private var _sharedVideoList:CollectionNode;
 		
-		public function MarkerManager(map:IMap)
+		public function MarkerManager(map:IMap, connectSession:ConnectSession)
 		{
 			gmarkerManager = new Components.gmap.core.MarkerManager(map);
-			initializeSharedList();
+			initializeSharedList(connectSession);
 		}
 		
-		private function initializeSharedList():void
+		private function initializeSharedList(connectSession:ConnectSession):void
 		{
-			_sharedVideoList = new SharedCollection();
-			_sharedVideoList.nodeName = "videoList";
+			_sharedVideoList = new CollectionNode();
+			_sharedVideoList.connectSession = connectSession;
 			_sharedVideoList.sharedID = "videoShared";
-			_sharedVideoList.idField = "uid";
+			
+			_sharedVideoList.addEventListener(CollectionNodeEvent.ITEM_RECEIVE, onCollectionChange);
 			
 			_sharedVideoList.subscribe();
 			
-			_sharedVideoList.addEventListener(CollectionEvent.COLLECTION_CHANGE, onCollectionChange);
+			// This will serialize the objects and then we can cast then when we receive then from the server
+			MessageItem.registerBodyClass(VideoVO);
 		}
 		
 		public function addMarker(marker:SharedMarker):void
 		{
-			_sharedVideoList.addItem(marker.video);
+			_sharedVideoList.publishItem(new MessageItem("videoList", marker.video, marker.video.uid));
 		}
 		
-		private function onCollectionChange(e:CollectionEvent):void
+		private function onCollectionChange(e:CollectionNodeEvent):void
 		{
-			// Connection with LiveCycle enable
-			if (_sharedVideoList.isSynchronized)
+			var videoVO:VideoVO = e.item.body as VideoVO;
+			
+			if (videoVO)
 			{
-				var videoVO:* = e.items.pop();
-				var marker:SharedMarker = new SharedMarker(videoVO.latlng, videoVO);
+				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO);
 				
 				gmarkerManager.addMarker(marker, 0, 10);
 			}
