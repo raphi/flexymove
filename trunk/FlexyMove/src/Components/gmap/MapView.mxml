@@ -38,7 +38,7 @@
 			
 			public function onMapReady(event:MapEvent):void 
 			{
-				markerManager = new MarkerManager(map);
+				markerManager = new MarkerManager(map, LCConnectManager);
 				
 				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
 				map.viewMode = View.VIEWMODE_ORTHOGONAL;
@@ -58,8 +58,13 @@
 			public function mapClicked(event:MapMouseEvent):void
 			{
 				var latLng:LatLng = event.latLng;
-				var videoInfos:VideoVO = new VideoVO("raphi", latLng);
+				var videoInfos:VideoVO = new VideoVO();
+				videoInfos.author = "raphi";
+				videoInfos.lat = latLng.lat();
+				videoInfos.lng = latLng.lng();
 				var marker:SharedMarker = new SharedMarker(latLng, videoInfos);
+				
+				// ------------------- Shit to change --------------------
 				var label:Label = new Label();
 				label.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude" + marker.getLatLng().lng().toFixed(2);;
 				label.y = 5;
@@ -71,6 +76,8 @@
 				item.styleDeclaration.setStyle("cornerRadius", "5");
 				item.addElement(label);
 				panelInfo.markerList.addElement(item);
+				// ------------------- End of shit --------------------
+				
 				marker.addEventListener(MapMouseEvent.CLICK, onClickOnMarker);
 				
 				//map.addOverlay(marker); WHAT FOR??
@@ -101,7 +108,7 @@
 					GeocodingEvent.GEOCODING_FAILURE,
 					function(event:GeocodingEvent):void
 					{
-						panelInfo.adress.text = "reboot please";
+						panelInfo.adress.text = "Sorry we can't locate this position. Try again";
 					});
 				geocoder.reverseGeocode(marker.getLatLng());
 				
@@ -130,7 +137,7 @@
 	<fx:Declarations>
 		<rtc:ConnectSession id="LCConnectManager" roomURL="https://collaboration.adobelivecycle.com/flexymove/sharedvideos">
 			<rtc:authenticator>
-				<rtc:AdobeHSAuthenticator id="test2" userName="flexymove@googlegroups.com" password="flexymovepowa" 
+				<rtc:AdobeHSAuthenticator userName="flexymove@googlegroups.com" password="flexymovepowa" 
 										  authenticationFailure="authenticationFailureHandler(event)"
 										  authenticationSuccess="authenticationSuccessHandler(event)">
 				</rtc:AdobeHSAuthenticator>
@@ -145,6 +152,6 @@
 				mapevent_mapready="onMapReady(event)"
 				sensor="false">
 	</maps:Map3D>
-	<gmap:userInfo />
+	<!--<gmap:userInfo />-->
 	<gmap:PanelInfo id="panelInfo" />
 </s:Group>
