@@ -145,5 +145,6 @@
 				mapevent_mapready="onMapReady(event)"
 				sensor="false">
 	</maps:Map3D>
+	<gmap:userInfo />
 	<gmap:PanelInfo id="panelInfo" />
 </s:Group>
