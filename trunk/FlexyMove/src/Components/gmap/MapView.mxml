@@ -11,7 +11,7 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
-			import Components.gmap.core.VideoVO;
+			import com.flexymove.VO.VideoVO;
 			
 			import com.adobe.rtc.events.AuthenticationEvent;
 			import com.flexymove.MarkerManager;
@@ -52,7 +52,7 @@
 			
 			public function onClickOnMarker(event:MapMouseEvent):void
 			{
-				showInfoMarker(Marker(event.currentTarget));
+				//showInfoMarker(Marker(event.currentTarget));
 			}
 			
 			public function mapClicked(event:MapMouseEvent):void
@@ -78,14 +78,14 @@
 				panelInfo.markerList.addElement(item);
 				// ------------------- End of shit --------------------
 				
-				marker.addEventListener(MapMouseEvent.CLICK, onClickOnMarker);
+				//marker.addEventListener(MapMouseEvent.CLICK, onClickOnMarker);
 				
 				//map.addOverlay(marker); WHAT FOR??
 				markerManager.addMarker(marker);
 				showInfoMarker(marker);
 			}
 			
-			public function showInfoMarker(marker:Marker):void
+			public function showInfoMarker(marker:SharedMarker):void
 			{
 				var place:Placemark = new Placemark();
 				var geocodingreq:GeocodingEvent = new GeocodingEvent("geocode");
@@ -112,8 +112,7 @@
 					});
 				geocoder.reverseGeocode(marker.getLatLng());
 				
-				var vm:VideoMarker = new VideoMarker();
-				marker.openInfoWindow(new InfoWindowOptions({customContent:vm,width:200,height:100, drawDefaultFrame:true}));
+				//markerManager.showInfoMarker(marker);
 			}
 			
 			private function authenticationSuccessHandler(event:AuthenticationEvent):void

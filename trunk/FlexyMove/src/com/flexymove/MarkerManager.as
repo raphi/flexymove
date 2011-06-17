@@ -1,14 +1,17 @@
 package com.flexymove
 {
+	import Components.gmap.VideoMarker;
 	import Components.gmap.core.MarkerManager;
 	import Components.gmap.core.SharedMarker;
-	import Components.gmap.core.VideoVO;
 	
 	import com.adobe.rtc.events.CollectionNodeEvent;
 	import com.adobe.rtc.messaging.MessageItem;
 	import com.adobe.rtc.session.ConnectSession;
 	import com.adobe.rtc.sharedModel.CollectionNode;
+	import com.flexymove.VO.VideoVO;
+	import com.google.maps.InfoWindowOptions;
 	import com.google.maps.LatLng;
+	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
 	
 	public class MarkerManager
@@ -22,6 +25,9 @@ package com.flexymove
 			initializeSharedList(connectSession);
 		}
 		
+		/**
+		 * Set variable to bind the correct database in LCCS
+		 */
 		private function initializeSharedList(connectSession:ConnectSession):void
 		{
 			_sharedVideoList = new CollectionNode();
@@ -36,9 +42,20 @@ package com.flexymove
 			MessageItem.registerBodyClass(VideoVO);
 		}
 		
+		/**
+		 * Add a marker on the map and synchronize it with the server
+		 */
 		public function addMarker(marker:SharedMarker):void
 		{
 			_sharedVideoList.publishItem(new MessageItem("videoList", marker.video, marker.video.uid));
+		}
+		
+		private function showInfoMarker(e:MapMouseEvent):void
+		{
+			var marker:SharedMarker = e.currentTarget as SharedMarker;
+			var vm:VideoMarker = new VideoMarker();
+			
+			marker.openInfoWindow(new InfoWindowOptions({customContent:vm,width:200,height:100, drawDefaultFrame:true}));
 		}
 		
 		private function onCollectionChange(e:CollectionNodeEvent):void
@@ -49,6 +66,7 @@ package com.flexymove
 			{
 				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO);
 				
+				marker.addEventListener(MapMouseEvent.CLICK, showInfoMarker);
 				gmarkerManager.addMarker(marker, 0, 10);
 			}
 		}

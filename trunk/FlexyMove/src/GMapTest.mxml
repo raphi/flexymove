@@ -6,6 +6,7 @@
 					   xmlns:gmap="Components.gmap.*"
 					   xmlns:homecube="Components.homecube.*" 
 					   xmlns:rtc="http://ns.adobe.com/rtc"
-					   height="500" width="1000">
+					   height="500" width="1000"
+					   showStatusBar="false">
 	<gmap:MapView />
 </s:WindowedApplication>
