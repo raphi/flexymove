@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 width="280" height="100%" right="0" top="40">
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   right="0" top="40" width="280" height="100%" backgroundAlpha="0.75"
+				   backgroundColor="#000000" contentBackgroundAlpha="1.0"
+				   contentBackgroundColor="#838383" dropShadowVisible="true">
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
 	
-	<s:BorderContainer width="100%" height="100%" >
-		<s:backgroundFill>
-			<s:LinearGradient rotation="90">
-				<s:GradientEntry color="0x444444" alpha="0.4"/>
-				<s:GradientEntry color="0x888888" alpha="0.4"/>
-			</s:LinearGradient>
-		</s:backgroundFill>
-	</s:BorderContainer>
+	<s:Label width="100%" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
-		<s:Label x="5" y="5" id="latlng" fontFamily="Calibri" fontSize="20"/>
-		<s:Label x="5" y="5" id="adress" fontFamily="Calibri" fontSize="12"/>
-		<s:Scroller width="280" height="500">
-			<s:VGroup  id="markerList"/>
-		</s:Scroller>
+		<s:HGroup>
+			<s:Label styleName="infoLabel" text="Date :"/>
+			<s:Label id="dateField" styleName="textInfo" text=""/>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label styleName="infoLabel" text="Lieu :"/>
+			<s:Label id="placeField" styleName="textInfo" text=""/>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label styleName="infoLabel" text="Channel :"/>
+			<s:Label id="channelField" styleName="textInfo" text=""/>
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label styleName="infoLabel" text="Vues :"/>
+			<s:Label id="viewsField" styleName="textInfo" text=""/>
+			<s:Label styleName="textInfo" text=" fois"/>
+		</s:HGroup>
 	</s:VGroup>
-</s:Group>
+	<s:Label width="100%" styleName="panelInfoTitle" text="Description"/>
+	<s:TextArea id="descriptionField"/>
+	<s:Label width="100%" styleName="panelInfoTitle" text="Auteur"/>
+	<s:HGroup>
+		<s:Label styleName="infoLabel" text="Pseudo :"/>
+		<s:Label id="pseudoField" styleName="textInfo" text=""/>
+	</s:HGroup>
+	<s:Button label="Suivre ce channel"/>
+</s:BorderContainer>

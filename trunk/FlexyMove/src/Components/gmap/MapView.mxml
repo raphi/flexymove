@@ -11,10 +11,10 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
-			import com.flexymove.VO.VideoVO;
 			
 			import com.adobe.rtc.events.AuthenticationEvent;
 			import com.flexymove.MarkerManager;
+			import com.flexymove.VO.VideoInfoVO;
 			import com.google.maps.InfoWindowOptions;
 			import com.google.maps.LatLng;
 			import com.google.maps.MapEvent;
@@ -39,6 +39,7 @@
 			public function onMapReady(event:MapEvent):void 
 			{
 				markerManager = new MarkerManager(map, LCConnectManager);
+				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 				
 				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
 				map.viewMode = View.VIEWMODE_ORTHOGONAL;
@@ -50,74 +51,25 @@
 				map.addControl(new MapTypeControl());
 			}
 			
-			public function onClickOnMarker(event:MapMouseEvent):void
+			private function onMarkerClick(e:MapMouseEvent):void
 			{
-				//showInfoMarker(Marker(event.currentTarget));
+				var marker:SharedMarker = e.feature as SharedMarker;
+				
+				panelInfo.channelField.text = marker.videoInfo.channel;
+				panelInfo.pseudoField.text = marker.videoInfo.pseudo;
 			}
 			
 			public function mapClicked(event:MapMouseEvent):void
 			{
-				var latLng:LatLng = event.latLng;
-				var videoInfos:VideoVO = new VideoVO();
-				videoInfos.author = "raphi";
-				videoInfos.lat = latLng.lat();
-				videoInfos.lng = latLng.lng();
-				var marker:SharedMarker = new SharedMarker(latLng, videoInfos);
-				
-				// ------------------- Shit to change --------------------
-				var label:Label = new Label();
-				label.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude" + marker.getLatLng().lng().toFixed(2);;
-				label.y = 5;
-				var item:BorderContainer = new BorderContainer();
-				item.width = 230;
-				item.height = 32;
-				item.styleDeclaration = new CSSStyleDeclaration();
-				item.styleDeclaration.setStyle("borderWeight", "1");
-				item.styleDeclaration.setStyle("cornerRadius", "5");
-				item.addElement(label);
-				panelInfo.markerList.addElement(item);
-				// ------------------- End of shit --------------------
-				
-				//marker.addEventListener(MapMouseEvent.CLICK, onClickOnMarker);
+				var marker:SharedMarker = new SharedMarker(event.latLng);
 				
 				//map.addOverlay(marker); WHAT FOR??
 				markerManager.addMarker(marker);
-				showInfoMarker(marker);
-			}
-			
-			public function showInfoMarker(marker:SharedMarker):void
-			{
-				var place:Placemark = new Placemark();
-				var geocodingreq:GeocodingEvent = new GeocodingEvent("geocode");
-				
-				var geocoder:ClientGeocoder = new ClientGeocoder();
-				
-				panelInfo.latlng.text = "Latitude : " + marker.getLatLng().lat().toFixed(2) + "\nLongitude : " + marker.getLatLng().lng().toFixed(2);
-				geocoder.addEventListener(
-					GeocodingEvent.GEOCODING_SUCCESS,
-					function(event:GeocodingEvent):void
-					{
-						var placemarks:Array = event.response.placemarks;
-						if (placemarks.length > 0)
-						{
-							var place:Placemark = placemarks[0];
-							panelInfo.adress.text = place.address;
-						}
-					});
-				geocoder.addEventListener(
-					GeocodingEvent.GEOCODING_FAILURE,
-					function(event:GeocodingEvent):void
-					{
-						panelInfo.adress.text = "Sorry we can't locate this position. Try again";
-					});
-				geocoder.reverseGeocode(marker.getLatLng());
-				
-				//markerManager.showInfoMarker(marker);
 			}
 			
 			private function authenticationSuccessHandler(event:AuthenticationEvent):void
 			{
-				Alert.show("Login success");
+				//Alert.show("Login success");
 			}
 			
 			private function authenticationFailureHandler(event:AuthenticationEvent):void
