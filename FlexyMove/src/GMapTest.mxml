@@ -8,5 +8,6 @@
 					   xmlns:rtc="http://ns.adobe.com/rtc"
 					   height="500" width="1000"
 					   showStatusBar="false">
+	<fx:Style source="assets/css/design.css"/>
 	<gmap:MapView />
 </s:WindowedApplication>

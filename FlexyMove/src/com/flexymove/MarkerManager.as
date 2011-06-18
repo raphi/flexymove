@@ -1,6 +1,5 @@
 package com.flexymove
 {
-	import Components.gmap.VideoMarker;
 	import Components.gmap.core.MarkerManager;
 	import Components.gmap.core.SharedMarker;
 	
@@ -8,13 +7,17 @@ package com.flexymove
 	import com.adobe.rtc.messaging.MessageItem;
 	import com.adobe.rtc.session.ConnectSession;
 	import com.adobe.rtc.sharedModel.CollectionNode;
-	import com.flexymove.VO.VideoVO;
-	import com.google.maps.InfoWindowOptions;
+	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
+	import com.google.maps.services.ClientGeocoder;
+	import com.google.maps.services.GeocodingEvent;
+	import com.google.maps.services.Placemark;
 	
-	public class MarkerManager
+	import flash.events.EventDispatcher;
+	
+	public class MarkerManager extends EventDispatcher
 	{
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
 		private var _sharedVideoList:CollectionNode;
@@ -39,7 +42,7 @@ package com.flexymove
 			_sharedVideoList.subscribe();
 			
 			// This will serialize the objects and then we can cast then when we receive then from the server
-			MessageItem.registerBodyClass(VideoVO);
+			MessageItem.registerBodyClass(VideoInfoVO);
 		}
 		
 		/**
@@ -47,26 +50,26 @@ package com.flexymove
 		 */
 		public function addMarker(marker:SharedMarker):void
 		{
-			_sharedVideoList.publishItem(new MessageItem("videoList", marker.video, marker.video.uid));
+			_sharedVideoList.publishItem(new MessageItem("videoList", marker.videoInfo, marker.videoInfo.uid));
 		}
 		
-		private function showInfoMarker(e:MapMouseEvent):void
+		// Re-dispatch the event (to be listan by view here)
+		private function onMarkerClick(e:MapMouseEvent):void
 		{
-			var marker:SharedMarker = e.currentTarget as SharedMarker;
-			var vm:VideoMarker = new VideoMarker();
+			var evt:MapMouseEvent = new MapMouseEvent(MapMouseEvent.CLICK, e.target, e.latLng);
 			
-			marker.openInfoWindow(new InfoWindowOptions({customContent:vm,width:200,height:100, drawDefaultFrame:true}));
+			dispatchEvent(evt);
 		}
 		
 		private function onCollectionChange(e:CollectionNodeEvent):void
 		{
-			var videoVO:VideoVO = e.item.body as VideoVO;
+			var videoVO:VideoInfoVO = e.item.body as VideoInfoVO;
 			
 			if (videoVO)
 			{
 				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO);
 				
-				marker.addEventListener(MapMouseEvent.CLICK, showInfoMarker);
+				marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 				gmarkerManager.addMarker(marker, 0, 10);
 			}
 		}
