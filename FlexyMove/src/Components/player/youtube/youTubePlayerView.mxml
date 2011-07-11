@@ -2,7 +2,7 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark" 
 		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 width="1000" height="800" 
+		 width="1000" height="700" 
 		 xmlns:components="Components.player.youtube.components.*">
 
 	<fx:Metadata>
@@ -21,14 +21,14 @@
 			
 			[Bindable]
 			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());
-			
+			public var idYoutubeVideo : String = "";
 			//----------------------------------
 			//  YouTube Event Handling
 			//----------------------------------
 			private function handlePlayerLoaded(event:YouTubeEvent):void
 	        {
 	        	trackingActions.addItem({label:"YouTube Playinger API loaded"});
-	        	youTubePlayer.cueVideoById("8RHAEwQAZlA",0,YouTubeVideoQuality.DEFAULT);
+	        	youTubePlayer.cueVideoById(idYoutubeVideo,0,YouTubeVideoQuality.DEFAULT);
 	        }
 	        
 	        private function handlePlayingState(event:YouTubeEvent):void
@@ -132,6 +132,14 @@
 				this.addEventListener(Event.ENTER_FRAME,handlePlayingTime);
 			}
 			
+			private function fullScreen(event:MouseEvent):void
+			{
+				
+				youTubePlayer.height = 500;
+				youTubePlayer.width= 500;
+			}
+			
+			
 			private function handlePause(event:MouseEvent):void
 			{
 				youTubePlayer.pauseVideo();
@@ -187,13 +195,15 @@
 				<mx:Button label="Stop" click="{handleStop(event);}"/>
 				<mx:Button label="Play" click="{handlePlay(event);}" />
 				<mx:Button label="Pause" click="{handlePause(event);}" />
-				<mx:Label id="labelTime"  width="150"/>
+				<mx:Button id="FullScreen" label="Full Screen" click="{fullScreen(event);}" />
+				<mx:Label id="labelTime"  width="100"/>
+				<mx:HSlider id="sliderVolume" minimum="0" maximum="100" value="100" liveDragging="true" />
 			</mx:HBox>
 				
 			<mx:HBox>
 					<mx:ProgressBar id="progresPlayingVideo" label="playbar" mode="manual" labelPlacement="center" />
 					<mx:ProgressBar id="progressLoadVideo" label="loading bar" mode="manual" labelPlacement="center" />
-					<mx:HSlider id="sliderVolume" minimum="0" maximum="100" value="100" liveDragging="true" />
+					
 			</mx:HBox>	
 <!--			<mx:HBox>
 				<mx:Button label="destroy" click="{youTubePlayer.destroy();}" />
@@ -203,10 +213,10 @@
 		</mx:VBox>
 		
 		<!--<mx:Form>-->
-			<mx:FormItem label="Video ClipID">
+<!--			<mx:FormItem label="Video ClipID">
 				<mx:TextInput id="inputClipID" text="Video Link" />
 				<mx:Button label="changeVideo" click="{youTubePlayer.cueVideoById(getIDFromUrl(inputClipID.text),0,YouTubeVideoQuality.DEFAULT);}" />
-			</mx:FormItem>
+			</mx:FormItem>-->
 			<!--		
 			<mx:FormItem label="Video Seek to">
 				<mx:TextInput id="inputSeek" width="60" />
@@ -228,7 +238,7 @@
 		
 		
 		<!--<mx:List id="listAction" dataProvider="{trackingActions}" width="600" height="100" />-->
-		<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />
+		<!--<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />-->
 	</mx:VBox>
 </s:Group>
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="vertical" width="100%" height="100%"
+				title="Video" horizontalAlign="center"
+				showCloseButton="true"
+				creationComplete="init()"
+				close="closeWindow(event);" xmlns:components="Components.player.youtube.components.*" xmlns:youtube="Components.player.youtube.*" >
+	
+	<mx:Script>
+		<![CDATA[
+			
+			import mx.core.IFlexDisplayObject;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			public var idYoutubeVideo : String = "";
+			
+			private function init(): void
+			{
+				YoutubePlayer.idYoutubeVideo = idYoutubeVideo;
+			}
+			
+			private function closeWindow(e:CloseEvent):void {
+				PopUpManager.removePopUp(e.target as IFlexDisplayObject);
+				YoutubePlayer.youTubePlayer.stopVideo();
+			}
+			
+		]]>
+	</mx:Script>
+	<youtube:youTubePlayerView id="YoutubePlayer"/>
+	
+</mx:TitleWindow>
