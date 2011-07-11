@@ -12,6 +12,7 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import Components.PopUpPlayer.PopUpPlayer;
 			import Components.coverflow.itemsRenderers.FolderRenderer;
 			import Components.coverflow.itemsRenderers.MovieRenderer;
 			import Components.coverflow.itemsRenderers.MusicRenderer;
@@ -21,6 +22,9 @@
 			import Components.coverflow.itemsRenderers.PodRenderer;
 			
 			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
 			public const SELECTEDITEMPROXIMITY:Number = 30;		// 0 TO 200	
 			public const DEPTHDISTANCE:Number = 68; 			// 1 TO 200
@@ -47,12 +51,11 @@
 				for ( i = 0; i < 10; i++) 
 				{
 					
-					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false);
+					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"PXRX47L_3yE");
 					itemVideo.title = "Movie " + i;
 					itemVideo.time = i * 10;
 					itemVideo.owner = "Peron " + i + 10;
 					itemVideo.chanel = "chanel" + i;
-					itemVideo.pathImg = "../coverflow/assets/Pulp_Fiction.jpg";
 					fileList.addItem(itemVideo);
 					
 				}
@@ -98,15 +101,63 @@
 				}
 			}
 			
+
+			private function getListVideosInChanelFromLiveCycle(chanelName:String):ArrayList
+			{
+				var itemList: ArrayList = new ArrayList();
+				//Implement It to check LiveCycle
+				for (var i:int = 0; i < 2; i++) 
+				{
+					var itemFolder:ItemCoverFlow = new ItemCoverFlow(true);
+					itemFolder.title = "Folder " + i;
+					itemFolder.owner = "Peron " + i;
+					
+					itemList.addItem(itemFolder);
+				}
+				for ( i = 0; i < 5; i++) 
+				{
+					
+					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"8RHAEwQAZlA");
+					itemVideo.title = "Movie " + i;
+					itemVideo.time = i * 10;
+					itemVideo.owner = "Peron " + i + 10;
+					itemVideo.chanel = "chanel" + i;
+					itemList.addItem(itemVideo);
+					
+				}
+				return itemList;
+			}
+			private function onDisplayButtonDoubleClick(e:MouseEvent):void
+			{
+				var selected : ItemCoverFlow = (list.selectedItem as ItemCoverFlow);
+				
+				if (selected.isFolder)
+				{
+					//Get List Chanel and reload list
+					fileList = new ArrayList();
+					
+					fileList = getListVideosInChanelFromLiveCycle(selected.chanel);
+					
+				}
+				else
+				{	// popup Video
+					var win : PopUpPlayer = new PopUpPlayer();
+					win.idYoutubeVideo = selected.idYoutubeVideo;
+					PopUpManager.addPopUp(win,this,true);
+					
+					PopUpManager.centerPopUp(win);
+				}
+			}
+			
 		]]>
 	</fx:Script>
 	
 	
 	
-
+	
 	<s:List id="list" x="0" y="0" width="100%" height="100%" borderVisible="false"
 			click="{getTitle()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
-			itemRendererFunction="itemRender" selectedIndex="0">
+			itemRendererFunction="itemRender" selectedIndex="0" doubleClickEnabled="true" doubleClick="onDisplayButtonDoubleClick(event)">
 		
 		<s:layout>
 			<coverflow:CoverflowLayout id="coverflow" 
