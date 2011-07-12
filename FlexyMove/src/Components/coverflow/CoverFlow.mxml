@@ -13,12 +13,8 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.PopUpPlayer.PopUpPlayer;
-			import Components.coverflow.itemsRenderers.FolderRenderer;
-			import Components.coverflow.itemsRenderers.MovieRenderer;
-			import Components.coverflow.itemsRenderers.MusicRenderer;
 			import Components.coverflow.itemsRenderers.MyFolderRenderer;
 			import Components.coverflow.itemsRenderers.MyMovieRenderer;
-			import Components.coverflow.itemsRenderers.PictureRenderer;
 			import Components.coverflow.itemsRenderers.PodRenderer;
 			
 			import mx.collections.ArrayList;
@@ -144,7 +140,6 @@
 					var win : PopUpPlayer = new PopUpPlayer();
 					win.idYoutubeVideo = selected.idYoutubeVideo;
 					PopUpManager.addPopUp(win,this,true);
-					
 					PopUpManager.centerPopUp(win);
 				}
 			}
