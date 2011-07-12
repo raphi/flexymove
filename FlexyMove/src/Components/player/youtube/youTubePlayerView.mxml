@@ -230,7 +230,7 @@
 	
 	<s:BorderContainer id="PlayerControlVideo" height="25" width="100%">
 		
-		<mx:VBox  dropShadowVisible="false" width="100%">
+		<mx:VBox dropShadowVisible="false" width="100%">
 			<mx:HBox width="100%">
 				<mx:Button label="Stop" click="{fullScreen(event);}"/>
 				<mx:Button id="PlayBouton" label="Play" click="{handlePlay(event);}"
