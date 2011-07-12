@@ -96,8 +96,6 @@
 				</rtc:AdobeHSAuthenticator>
 			</rtc:authenticator>
 		</rtc:ConnectSession>
-		
-
 	</fx:Declarations>
 	
 	<maps:Map3D id="map"

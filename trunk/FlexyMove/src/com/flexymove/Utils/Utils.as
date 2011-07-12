@@ -1,5 +1,7 @@
 package com.flexymove.Utils
 {
+	import mx.controls.Alert;
+
 	public class Utils
 	{
 		public function Utils()
@@ -11,8 +13,15 @@ package com.flexymove.Utils
 		 */
 		public static function getIDFromUrl(youTubeUrl:String):String
 		{
-			//Manque la gestion des erreur
-			return youTubeUrl.split("?v=")[1].split("&")[0];
+			try
+			{
+				return youTubeUrl.split("?v=")[1].split("&")[0];
+			}
+			catch (e:*)
+			{
+				Alert.show("Le lien " + youTubeUrl + " n'est pas une url YouTube correcte.", "Erreur d'url");
+			}
+			return null;
 		}
 	}
 }

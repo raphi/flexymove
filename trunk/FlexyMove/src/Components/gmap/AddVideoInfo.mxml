@@ -26,15 +26,20 @@
 			
 			private function addVideoButtonClickHandler(event:MouseEvent):void
 			{
-				var marker:SharedMarker = new SharedMarker(latLngMarkerAdded);
+				var youTubeURL:String = Utils.getIDFromUrl(youtubeUrlInput.text);
 				
-				marker.videoInfo.idYoutubeVideo = youtubeUrlInput.text;
-				marker.videoInfo.description = Utils.getIDFromUrl(descriptionInput.text);
-				marker.videoInfo.date = new Date();
-				
-				//map.addOverlay(marker); WHAT FOR??
-				MarkerManager.getInstance().addMarker(marker);
-				this.visible = false;
+				if (youTubeURL != null)
+				{
+					var marker:SharedMarker = new SharedMarker(latLngMarkerAdded);
+					
+					marker.videoInfo.idYoutubeVideo = youTubeURL;
+					marker.videoInfo.description = descriptionInput.text;
+					marker.videoInfo.date = new Date();
+					
+					//map.addOverlay(marker); WHAT FOR??
+					MarkerManager.getInstance().addMarker(marker);
+					this.visible = false;
+				}
 			}
 		]]>
 	</fx:Script>
