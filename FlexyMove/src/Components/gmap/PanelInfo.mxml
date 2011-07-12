@@ -2,18 +2,33 @@
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				   xmlns:s="library://ns.adobe.com/flex/spark"
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
-				   right="0" top="40" width="280" height="100%" backgroundAlpha="0.75"
-				   backgroundColor="#000000" contentBackgroundAlpha="1.0"
-				   contentBackgroundColor="#838383" dropShadowVisible="true">
+				   showEffect="{showEffect}" hideEffect="{hideEffect}"
+				   right="0" top="40" bottom="10" width="280" height="100%"
+				   styleName="panelInfoStyle">
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center"/>
 	</s:layout>
+	
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="1000" />
+		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="1000" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.flexymove.VO.VideoInfoVO;
+			
+			[Bindable]
+			public var markerInfo:VideoInfoVO;
+			
+		]]>
+	</fx:Script>
 	
 	<s:Label width="100%" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Date :"/>
-			<s:Label id="dateField" styleName="textInfo" text=""/>
+			<s:Label id="dateField" styleName="textInfo" text="{markerInfo.date.toString()}"/>
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Lieu :"/>
@@ -21,7 +36,7 @@
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Channel :"/>
-			<s:Label id="channelField" styleName="textInfo" text=""/>
+			<s:Label id="channelField" styleName="textInfo" text="{markerInfo.channel}"/>
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Vues :"/>
@@ -30,11 +45,11 @@
 		</s:HGroup>
 	</s:VGroup>
 	<s:Label width="100%" styleName="panelInfoTitle" text="Description"/>
-	<s:TextArea id="descriptionField"/>
+	<s:TextArea id="descriptionField" text="{markerInfo.description}"/>
 	<s:Label width="100%" styleName="panelInfoTitle" text="Auteur"/>
 	<s:HGroup>
 		<s:Label styleName="infoLabel" text="Pseudo :"/>
-		<s:Label id="pseudoField" styleName="textInfo" text=""/>
+		<s:Label id="pseudoField" styleName="textInfo" text="{markerInfo.pseudo}"/>
 	</s:HGroup>
 	<s:Button label="Suivre ce channel"/>
 </s:BorderContainer>

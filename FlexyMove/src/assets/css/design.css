@@ -2,21 +2,28 @@
 @namespace s "library://ns.adobe.com/flex/spark";
 @namespace mx "library://ns.adobe.com/flex/mx";
 
+s|BorderContainer.panelInfoStyle
+{
+	backgroundAlpha:		0.75;
+	backgroundColor:		#000000;
+	contentBackgroundAlpha:	1.0;
+	dropShadowVisible:		true;
+}
+
 s|Label.panelInfoTitle
 {
-	color: #316BD5;
-	fontSize: 22;
-	fontWeight: bold;
-	textAlign: center;
+	color: 					#316BD5;
+	fontSize: 				22;
+	fontWeight: 			bold;
+	textAlign: 				center;
 }
 s|Label.infoLabel
 {
-	color: #FFFFFF;
-	fontWeight: bold;
+	color: 					#FFFFFF;
+	fontWeight: 			bold;
 }
 
 s|Label.textInfo
 {
-	color: #FFFFFF;
+	color: 					#FFFFFF;
 }
-	
