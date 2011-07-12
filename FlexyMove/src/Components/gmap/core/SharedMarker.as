@@ -6,9 +6,6 @@ package Components.gmap.core
 	import com.google.maps.LatLng;
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
-	import com.google.maps.services.GeocodingEvent;
-	import com.google.maps.services.GeocodingResponse;
-	import com.google.maps.services.Placemark;
 	
 	import flash.events.Event;
 	
@@ -20,10 +17,7 @@ package Components.gmap.core
 		public function SharedMarker(latitudeAndLongitude:LatLng, videoInfoVO:VideoInfoVO = null, markerOptions:MarkerOptions = null)
 		{
 			if (videoInfoVO)
-			{
 				this.videoInfo = videoInfoVO;
-				//dispatchEvent(new Event("SHARED_MARKER_CREATION_COMPLETE"));	
-			}
 			else
 			{
 				this.videoInfo = new VideoInfoVO("currentUser", latitudeAndLongitude.lat(), latitudeAndLongitude.lng());
