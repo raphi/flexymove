@@ -11,11 +11,11 @@ package com.flexymove.Managers
 	import com.google.maps.LatLng;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
-	import com.google.maps.services.ClientGeocoder;
-	import com.google.maps.services.GeocodingEvent;
-	import com.google.maps.services.Placemark;
 	
 	import flash.events.EventDispatcher;
+	
+	import mx.controls.Alert;
+	import mx.managers.CursorManager;
 	
 	/**
 	 * Singleton class.

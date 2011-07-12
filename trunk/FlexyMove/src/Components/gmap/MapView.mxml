@@ -13,6 +13,7 @@
 			import Components.gmap.core.SharedMarker;
 			
 			import com.adobe.rtc.events.AuthenticationEvent;
+			import com.adobe.rtc.events.SessionEvent;
 			import com.flexymove.Managers.MarkerManager;
 			import com.google.maps.LatLng;
 			import com.google.maps.MapEvent;
@@ -24,6 +25,7 @@
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
 			
 			private var markerManager:MarkerManager = MarkerManager.getInstance();
 			
@@ -53,14 +55,16 @@
 			
 			public function mapClicked(event:MapMouseEvent):void
 			{
-				panelInfoView.visible = false;
-				addVideoInfoView.visible = true;
-				addVideoInfoView.latLngMarkerAdded = event.latLng;
+				if (LCConnectManager.isSynchronized)
+				{
+					panelInfoView.visible = false;
+					addVideoInfoView.visible = true;
+					addVideoInfoView.latLngMarkerAdded = event.latLng;
+				}
 			}
 			
 			private function authenticationSuccessHandler(event:AuthenticationEvent):void
 			{
-				cursorManager.removeBusyCursor();
 			}
 			
 			private function authenticationFailureHandler(event:AuthenticationEvent):void
@@ -74,11 +78,18 @@
 				LCConnectManager.login();
 			}
 			
+			private function onSynchronizationChangeHandler(event:SessionEvent):void
+			{
+				if (LCConnectManager.isSynchronized)
+					CursorManager.removeBusyCursor();
+			}
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
-		<rtc:ConnectSession id="LCConnectManager" roomURL="https://collaboration.adobelivecycle.com/flexymove/sharedvideos">
+		<rtc:ConnectSession id="LCConnectManager" roomURL="https://collaboration.adobelivecycle.com/flexymove/sharedvideos" 
+							synchronizationChange="onSynchronizationChangeHandler(event)">
 			<rtc:authenticator>
 				<rtc:AdobeHSAuthenticator userName="flexymove@googlegroups.com" password="flexymovepowa" 
 										  authenticationFailure="authenticationFailureHandler(event)"
