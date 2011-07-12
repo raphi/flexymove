@@ -17,12 +17,31 @@ package com.flexymove
 	
 	import flash.events.EventDispatcher;
 	
+	/**
+	 * Singleton class.
+	 * Handles marker on the google map.
+	 */ 
 	public class MarkerManager extends EventDispatcher
 	{
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
 		private var _sharedVideoList:CollectionNode;
 		
-		public function MarkerManager(map:IMap, connectSession:ConnectSession)
+		private static var instance:MarkerManager;
+		
+		public static function getInstance():MarkerManager
+		{
+			if( instance == null ) instance = new MarkerManager();
+			return instance;
+		}
+		
+		public function MarkerManager()
+		{
+		}
+		
+		/**
+		 * Init the marker manager with the gmap and livecycle connection
+		 */
+		public function init(map:IMap, connectSession:ConnectSession):void
 		{
 			gmarkerManager = new Components.gmap.core.MarkerManager(map);
 			initializeSharedList(connectSession);
@@ -53,7 +72,7 @@ package com.flexymove
 			_sharedVideoList.publishItem(new MessageItem("videoList", marker.videoInfo, marker.videoInfo.uid));
 		}
 		
-		// Re-dispatch the event (to be listan by view here)
+		// Re-dispatch the event (to be listen by view here)
 		private function onMarkerClick(e:MapMouseEvent):void
 		{
 			var evt:MapMouseEvent = new MapMouseEvent(MapMouseEvent.CLICK, e.target, e.latLng);

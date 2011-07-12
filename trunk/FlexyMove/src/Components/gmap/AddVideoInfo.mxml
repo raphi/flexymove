@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   right="0" top="40" bottom="10" width="280" height="100%"
+				   showEffect="{showEffect}" hideEffect="{hideEffect}"
+				   styleName="panelInfoStyle">
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="1000" />
+		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="1000" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.gmap.core.SharedMarker;
+			
+			import com.flexymove.MarkerManager;
+			import com.flexymove.Utils;
+			import com.google.maps.LatLng;
+			
+			public var latLngMarkerAdded:LatLng = null;
+			
+			private function addVideoButtonClickHandler(event:MouseEvent):void
+			{
+				var marker:SharedMarker = new SharedMarker(latLngMarkerAdded);
+				
+				marker.videoInfo.idYoutubeVideo = youtubeUrlInput.text;
+				marker.videoInfo.description = Utils.getIDFromUrl(descriptionInput.text);
+				marker.videoInfo.date = new Date();
+				
+				//map.addOverlay(marker); WHAT FOR??
+				MarkerManager.getInstance().addMarker(marker);
+				this.visible = false;
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Label width="100%" styleName="panelInfoTitle" text="Informations"/>
+	<s:VGroup>
+		<s:HGroup>
+			<s:Label styleName="infoLabel" text="Url YouTube :"/>
+			<s:TextInput id="youtubeUrlInput" styleName="textInfo"/>
+		</s:HGroup>
+	</s:VGroup>
+	<s:Label width="100%" styleName="panelInfoTitle" text="Description"/>
+	<s:TextArea id="descriptionInput"/>
+	<s:Button id="addVideoButton" label="Publier la vidéo" click="addVideoButtonClickHandler(event)"/>
+</s:BorderContainer>

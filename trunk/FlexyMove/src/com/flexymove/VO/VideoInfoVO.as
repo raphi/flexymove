@@ -5,11 +5,15 @@ package com.flexymove.VO
 	import mx.core.IUID;
 	import mx.utils.UIDUtil;
 
+	[Bindable]
 	public class VideoInfoVO implements IUID
 	{
 		public var pseudo:String = "";
 		public var channel:String = "";
 		public var address:String = "";
+		public var date:Date;
+		public var idYoutubeVideo:String = "";
+		public var description:String = "";
 		public var lat:Number = 0;
 		public var lng:Number = 0;
 		private var _uid:String;

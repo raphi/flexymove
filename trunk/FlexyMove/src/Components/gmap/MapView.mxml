@@ -28,17 +28,19 @@
 			import com.google.maps.services.GeocodingEvent;
 			import com.google.maps.services.Placemark;
 			
+			import flashx.textLayout.factory.TruncationOptions;
+			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
 			import spark.components.BorderContainer;
 			import spark.components.Label;
 			
-			private var markerManager:MarkerManager;
+			private var markerManager:MarkerManager = MarkerManager.getInstance();
 			
 			public function onMapReady(event:MapEvent):void 
 			{
-				markerManager = new MarkerManager(map, LCConnectManager);
+				markerManager.init(map, LCConnectManager);
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 				
 				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
@@ -55,16 +57,14 @@
 			{
 				var marker:SharedMarker = e.feature as SharedMarker;
 				
-				panelInfo.channelField.text = marker.videoInfo.channel;
-				panelInfo.pseudoField.text = marker.videoInfo.pseudo;
+				panelInfoView.markerInfo = marker.videoInfo;
+				panelInfoView.visible = true;
 			}
 			
 			public function mapClicked(event:MapMouseEvent):void
 			{
-				var marker:SharedMarker = new SharedMarker(event.latLng);
-				
-				//map.addOverlay(marker); WHAT FOR??
-				markerManager.addMarker(marker);
+				addVideoInfoView.visible = true;
+				addVideoInfoView.latLngMarkerAdded = event.latLng;
 			}
 			
 			private function authenticationSuccessHandler(event:AuthenticationEvent):void
@@ -94,6 +94,8 @@
 				</rtc:AdobeHSAuthenticator>
 			</rtc:authenticator>
 		</rtc:ConnectSession>
+		
+
 	</fx:Declarations>
 	
 	<maps:Map3D id="map"
@@ -103,6 +105,8 @@
 				mapevent_mapready="onMapReady(event)"
 				sensor="false">
 	</maps:Map3D>
+	
 	<!--<gmap:userInfo />-->
-	<gmap:PanelInfo id="panelInfo" />
+	<gmap:PanelInfo id="panelInfoView" visible="false"/>
+	<gmap:AddVideoInfo id="addVideoInfoView" visible="false"/>
 </s:Group>
