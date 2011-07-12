@@ -132,12 +132,13 @@
 			//----------------------------------
 			private function handlePlay(event:MouseEvent):void
 			{
-				if (PlayBouton.label == "Pause")
+				// FIXME CHANGE THAT
+/* 				if (PlayBouton.label == "Pause")
 				{
 					handlePause(event);
 					return;
 				}
-				PlayBouton.label = "Pause";
+				PlayBouton.label = "Pause"; */
 				youTubePlayer.playVideo();
 				this.addEventListener(Event.ENTER_FRAME,handlePlayingTime);
 			}
@@ -169,7 +170,6 @@
 			
 			private function handlePause(event:MouseEvent):void
 			{
-				PlayBouton.label = "Play";
 				youTubePlayer.pauseVideo();
 				this.removeEventListener(Event.ENTER_FRAME,handlePlayingTime);
 			}
@@ -227,8 +227,8 @@
 		<mx:VBox dropShadowVisible="false" width="100%">
 			<mx:HBox width="100%">
 				<mx:Button label="Stop" click="{fullScreen(event);}"/>
-				<mx:Button id="PlayBouton" label="Play" click="{handlePlay(event);}"
-						   icon="@Embed('/assets/images/Play.png')"/>
+				<s:Image id="PlayBouton" click="{handlePlay(event);}"
+						 source="@Embed('/assets/images/Play.png')"/>
 				<mx:Label id="labelTime"  width="80" paddingTop="2"/>
 				<mx:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" />
 				<mx:HBox paddingTop="7" width="100%" paddingRight="5">
