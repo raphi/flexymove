@@ -19,7 +19,6 @@
 			import com.google.maps.MapEvent;
 			import com.google.maps.MapMouseEvent;
 			import com.google.maps.MapType;
-			import com.google.maps.View;
 			import com.google.maps.controls.MapTypeControl;
 			import com.google.maps.controls.NavigationControl;
 			
@@ -35,7 +34,6 @@
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 				
 				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
-				map.viewMode = View.VIEWMODE_ORTHOGONAL;
 				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
 				map.enableScrollWheelZoom();
 				map.enableContinuousZoom();
@@ -99,13 +97,13 @@
 		</rtc:ConnectSession>
 	</fx:Declarations>
 	
-	<maps:Map3D id="map"
-				width="100%" height="100%" 
-				key="ABQIAAAApevjLsy0a4ChuZ1lcd50AhTsslF4Y8xkhf7W8wmKT7ADz-aLqhRgYJNmWAMy90YGUU-Zs8_XupF7fQ"
-				url="http://asme.fr"
-				mapevent_mapready="onMapReady(event)"
-				sensor="false">
-	</maps:Map3D>
+	<maps:Map id="map"
+			  width="100%" height="100%" 
+			  key="ABQIAAAApevjLsy0a4ChuZ1lcd50AhTsslF4Y8xkhf7W8wmKT7ADz-aLqhRgYJNmWAMy90YGUU-Zs8_XupF7fQ"
+			  url="http://asme.fr"
+			  mapevent_mapready="onMapReady(event)"
+			  sensor="false">
+	</maps:Map>
 	
 	<!--<gmap:userInfo />-->
 	<gmap:PanelInfo id="panelInfoView" visible="false"/>
