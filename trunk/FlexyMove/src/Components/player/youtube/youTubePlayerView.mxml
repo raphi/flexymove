@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:Group  xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 width="730" height="498" 
-		 xmlns:components="Components.player.youtube.components.*"
-		 >
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx" 
+		  width="730" height="498" 
+		  xmlns:components="Components.player.youtube.components.*"
+		  >
 	
 	
 	<fx:Style>
@@ -144,28 +144,27 @@
 				
 			}
 			
-
+			
 			
 			private function fullScreen(event:MouseEvent):void
 			{
-/* 				this.parent.x = 0;
+				this.parent.x = 0;
 				this.parent.y = 0;
-
+				
 				this.parent.height = Capabilities.screenResolutionY;
 				this.parent.width= Capabilities.screenResolutionX ; 
-				youTubePlayer.height = Capabilities.screenResolutionY;
+/* 				youTubePlayer.height = Capabilities.screenResolutionY;
 				youTubePlayer.width= Capabilities.screenResolutionX; 
 				youTubePlayer.x = 0;
-				youTubePlayer.y = 0; */
+				youTubePlayer.y = 0; */ 
 			}
 			
 			private function  onSeekToClick(event: MouseEvent) : void
 			{
 				
 				var pos : Number = event.localX ;//- progresPlayingVideo.stage.x ;
-				pos = (pos * 100 ) / progresPlayingVideo.width;
+				pos = (pos * 100 ) / progresPlayingVideo.width + 1;
 				
-				Alert.show(event.localX +" " + progresPlayingVideo.stage.x  + " " + pos);
 				pos = youTubePlayer.getDuration() * pos / 100;
 				youTubePlayer.seekTo(pos);
 				
@@ -212,17 +211,17 @@
 				progresPlayingVideo.maximum = youTubePlayer.getDuration();
 				progresPlayingVideo.setProgress(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
 				
-				progressLoadVideo.minimum = 0;
+				/* progressLoadVideo.minimum = 0;
 				progressLoadVideo.maximum = youTubePlayer.getVideoBytesTotal();
 				progressLoadVideo.setProgress(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
-			}
+			*/		}
 			
 		]]>
 	</fx:Script>
-
 	
 	
-	<components:AirYouTube id="youTubePlayer" width="730" height="498"
+	
+	<components:AirYouTube id="youTubePlayer" width="100%" height="100%"
 						   volume="{sliderVolume.value}"
 						   youtubeError="{handleYouTubeError(event);}"
 						   youtubePlayerLoaded="{handlePlayerLoaded(event);}"
@@ -237,14 +236,12 @@
 				<mx:Button label="Stop" click="{fullScreen(event);}"/>
 				<mx:Button id="PlayBouton" label="Play" click="{handlePlay(event);}"
 						   icon="@Embed('/assets/Play.png')"/>
-				<mx:Label id="labelTime"  width="80"/>
+				<mx:Label id="labelTime"  width="80" paddingTop="2"/>
 				<mx:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" />
-				<!--			</mx:HBox>
-				
-				<mx:HBox>-->
-				<mx:ProgressBar id="progresPlayingVideo" label="" mode="manual" labelPlacement="center" click="onSeekToClick(event)" />
-				<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />
-				
+				<mx:HBox paddingTop="7" width="100%" paddingRight="5">
+					<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
+					<!--<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />-->
+				</mx:HBox>
 			</mx:HBox>	
 			<!--			<mx:HBox>
 			<mx:Button label="destroy" click="{youTubePlayer.destroy();}" />
