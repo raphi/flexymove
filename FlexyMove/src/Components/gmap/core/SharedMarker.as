@@ -1,28 +1,46 @@
 package Components.gmap.core
 {
 	import com.flexymove.Utils.GMapUtils;
+	import com.flexymove.Utils.GMapUtilsEvent;
 	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
+	import com.google.maps.services.GeocodingEvent;
+	import com.google.maps.services.GeocodingResponse;
+	import com.google.maps.services.Placemark;
+	
+	import flash.events.Event;
 	
 	public class SharedMarker extends Marker
 	{
 		public var videoInfo:VideoInfoVO;
+		private var gmapUtils:GMapUtils = new GMapUtils();
 		
 		public function SharedMarker(latitudeAndLongitude:LatLng, videoInfoVO:VideoInfoVO = null, markerOptions:MarkerOptions = null)
 		{
 			if (videoInfoVO)
+			{
 				this.videoInfo = videoInfoVO;
+				//dispatchEvent(new Event("SHARED_MARKER_CREATION_COMPLETE"));	
+			}
 			else
 			{
 				this.videoInfo = new VideoInfoVO("currentUser", latitudeAndLongitude.lat(), latitudeAndLongitude.lng());
 				this.videoInfo.channel = "Green Paris";
 				this.videoInfo.pseudo = "Metalikange";
-				//this.videoInfo.address = GMapUtils.getAddressFromLatLng(latitudeAndLongitude);
-			}
 				
+				gmapUtils.addEventListener(GMapUtilsEvent.GET_ADDRESS, onGetAddress);
+				gmapUtils.getAddressFromLatLng(latitudeAndLongitude);
+			}
+			
 			super(latitudeAndLongitude, markerOptions);
+		}
+		
+		private function onGetAddress(evt:GMapUtilsEvent):void
+		{
+			this.videoInfo.address = evt.address;
+			dispatchEvent(new Event("SHARED_MARKER_CREATION_COMPLETE"));
 		}
 	}
 }

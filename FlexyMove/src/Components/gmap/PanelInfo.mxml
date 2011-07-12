@@ -56,7 +56,7 @@
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Lieu :"/>
-			<s:Label id="placeField" styleName="textInfo" text=""/>
+			<s:Label id="placeField" maxWidth="200" styleName="textInfo" text="{markerInfo.address}"/>
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Channel :"/>
