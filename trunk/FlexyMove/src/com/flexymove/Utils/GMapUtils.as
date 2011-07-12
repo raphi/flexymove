@@ -1,4 +1,4 @@
-package com.flexymove
+package com.flexymove.Utils
 {
 	import com.google.maps.LatLng;
 	import com.google.maps.services.ClientGeocoder;

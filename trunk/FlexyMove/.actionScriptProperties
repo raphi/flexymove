@@ -21,10 +21,10 @@
     <application path="Test_coverFlow.mxml">
       <airExcludes/>
     </application>
-    <application path="GMapTest.mxml">
+    <application path="PlayerTest.mxml">
       <airExcludes/>
     </application>
-    <application path="PlayerTest.mxml">
+    <application path="Main.mxml">
       <airExcludes/>
     </application>
     <application path="FlexyMove.mxml">

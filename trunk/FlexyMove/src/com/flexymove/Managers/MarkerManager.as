@@ -1,4 +1,4 @@
-package com.flexymove
+package com.flexymove.Managers
 {
 	import Components.gmap.core.MarkerManager;
 	import Components.gmap.core.SharedMarker;

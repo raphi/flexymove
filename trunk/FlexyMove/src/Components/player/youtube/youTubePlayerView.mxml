@@ -9,8 +9,7 @@
 	
 	<fx:Style>
 		#PlayerControlVideo {
-			background-image: Embed("/assets/Controle.png");
-			
+			background-image: Embed("/assets/images/Controle.png");
 		}
 	</fx:Style>
 	
@@ -235,7 +234,7 @@
 			<mx:HBox width="100%">
 				<mx:Button label="Stop" click="{fullScreen(event);}"/>
 				<mx:Button id="PlayBouton" label="Play" click="{handlePlay(event);}"
-						   icon="@Embed('/assets/Play.png')"/>
+						   icon="@Embed('/assets/images/Play.png')"/>
 				<mx:Label id="labelTime"  width="80" paddingTop="2"/>
 				<mx:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" />
 				<mx:HBox paddingTop="7" width="100%" paddingRight="5">
