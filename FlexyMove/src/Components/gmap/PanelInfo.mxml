@@ -16,26 +16,36 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import Components.PopUpPlayer.PopUpPlayer;
+			
 			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
+			import mx.managers.PopUpManager;
+			
 			[Bindable]
 			public var markerInfo:VideoInfoVO;
-			
-			private function imageClickHandler(event:MouseEvent):void
-			{
-				// TODO Auto-generated method stub
-			}
 			
 			private function channelFieldClickHandler(event:MouseEvent):void
 			{
 				NavigatorManager.getInstance().currentView = NavigatorManager.CHANNEL_VIEW;
 			}
 			
+			private function imageDoubleClickHandler(event:MouseEvent):void
+			{
+				var popup:PopUpPlayer = new PopUpPlayer();
+				
+				popup.idYoutubeVideo = markerInfo.idYoutubeVideo;
+				PopUpManager.addPopUp(popup, this.parent, false);
+				PopUpManager.centerPopUp(popup);
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:Image width="100" height="100" click="imageClickHandler(event)"/>
+	<s:Image width="100" height="100" 
+			 click="imageDoubleClickHandler(event)"
+			 source="assets/images/Play.png"/>
 	<s:Label width="100%" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
 		<s:HGroup>
