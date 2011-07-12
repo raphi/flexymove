@@ -1,6 +1,6 @@
 package com.flexymove
 {
-	public static class Utils
+	public class Utils
 	{
 		public function Utils()
 		{
