@@ -16,14 +16,26 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
 			[Bindable]
 			public var markerInfo:VideoInfoVO;
 			
+			private function imageClickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+			}
+			
+			private function channelFieldClickHandler(event:MouseEvent):void
+			{
+				NavigatorManager.getInstance().currentView = NavigatorManager.CHANNEL_VIEW;
+			}
+			
 		]]>
 	</fx:Script>
 	
+	<s:Image width="100" height="100" click="imageClickHandler(event)"/>
 	<s:Label width="100%" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
 		<s:HGroup>
@@ -36,7 +48,11 @@
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Channel :"/>
-			<s:Label id="channelField" styleName="textInfo" text="{markerInfo.channel}"/>
+			<s:Label id="channelField" 
+					 buttonMode="true"
+					 click="channelFieldClickHandler(event)" 
+					 styleName="textInfo"
+					 text="{markerInfo.channel}" textDecoration="underline"/>
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Vues :"/>
@@ -45,7 +61,8 @@
 		</s:HGroup>
 	</s:VGroup>
 	<s:Label width="100%" styleName="panelInfoTitle" text="Description"/>
-	<s:TextArea id="descriptionField" text="{markerInfo.description}"/>
+	<s:TextArea id="descriptionField" borderVisible="false" color="#FFFFFF"
+				contentBackgroundAlpha="0.0" editable="true" text="{markerInfo.description}"/>
 	<s:Label width="100%" styleName="panelInfoTitle" text="Auteur"/>
 	<s:HGroup>
 		<s:Label styleName="infoLabel" text="Pseudo :"/>

@@ -1,4 +1,4 @@
-package com.flexymove
+package com.flexymove.Utils
 {
 	public class Utils
 	{

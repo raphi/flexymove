@@ -10,7 +10,7 @@
 	</fx:Metadata>
 	
 	<s:BitmapImage id="img"
-				   source="@Embed('/assets/nature2_back.jpg')"
+				   source="@Embed('/assets/images/nature2_back.jpg')"
 				   fillMode="scale"
 				   left="0" right="0"
 				   top="0" bottom="0" />

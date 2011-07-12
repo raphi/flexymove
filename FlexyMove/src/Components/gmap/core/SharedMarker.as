@@ -1,7 +1,7 @@
 package Components.gmap.core
 {
-	import com.flexymove.GMapUtils;
-	import com.flexymove.MarkerManager;
+	import com.flexymove.Utils.GMapUtils;
+	import com.flexymove.Managers.MarkerManager;
 	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
 	import com.google.maps.overlays.Marker;

@@ -18,8 +18,8 @@
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
 			
-			import com.flexymove.MarkerManager;
-			import com.flexymove.Utils;
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
 			public var latLngMarkerAdded:LatLng = null;
