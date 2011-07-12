@@ -44,14 +44,14 @@
 		]]>
 	</fx:Script>
 	
-	<s:Label width="100%" styleName="panelInfoTitle" text="Informations"/>
+	<s:Label width="100%" paddingTop="15" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
-		<s:HGroup>
+		<s:HGroup verticalAlign="middle">
 			<s:Label styleName="infoLabel" text="Url YouTube :"/>
-			<s:TextInput id="youtubeUrlInput" styleName="textInfo"/>
+			<s:TextInput id="youtubeUrlInput" width="160" styleName="textInfo"/>
 		</s:HGroup>
 	</s:VGroup>
-	<s:Label width="100%" styleName="panelInfoTitle" text="Description"/>
+	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Description"/>
 	<s:TextArea id="descriptionInput"/>
 	<s:Button id="addVideoButton" label="Publier la vidéo" click="addVideoButtonClickHandler(event)"/>
 </s:BorderContainer>

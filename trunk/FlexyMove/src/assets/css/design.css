@@ -16,6 +16,7 @@ s|Label.panelInfoTitle
 	fontSize: 				22;
 	fontWeight: 			bold;
 	textAlign: 				center;
+	top:					10;
 }
 s|Label.infoLabel
 {

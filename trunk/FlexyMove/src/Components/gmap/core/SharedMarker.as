@@ -1,7 +1,6 @@
 package Components.gmap.core
 {
 	import com.flexymove.Utils.GMapUtils;
-	import com.flexymove.Managers.MarkerManager;
 	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
 	import com.google.maps.overlays.Marker;
@@ -20,8 +19,7 @@ package Components.gmap.core
 				this.videoInfo = new VideoInfoVO("currentUser", latitudeAndLongitude.lat(), latitudeAndLongitude.lng());
 				this.videoInfo.channel = "Green Paris";
 				this.videoInfo.pseudo = "Metalikange";
-				// load the adress here
-				//this.videoInfo.address = gmapUtils.getAddressFromLatLng(latitudeAndLongitude);
+				//this.videoInfo.address = GMapUtils.getAddressFromLatLng(latitudeAndLongitude);
 			}
 				
 			super(latitudeAndLongitude, markerOptions);

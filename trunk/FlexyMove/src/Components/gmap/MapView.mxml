@@ -14,8 +14,6 @@
 			
 			import com.adobe.rtc.events.AuthenticationEvent;
 			import com.flexymove.Managers.MarkerManager;
-			import com.flexymove.VO.VideoInfoVO;
-			import com.google.maps.InfoWindowOptions;
 			import com.google.maps.LatLng;
 			import com.google.maps.MapEvent;
 			import com.google.maps.MapMouseEvent;
@@ -23,18 +21,9 @@
 			import com.google.maps.View;
 			import com.google.maps.controls.MapTypeControl;
 			import com.google.maps.controls.NavigationControl;
-			import com.google.maps.overlays.Marker;
-			import com.google.maps.services.ClientGeocoder;
-			import com.google.maps.services.GeocodingEvent;
-			import com.google.maps.services.Placemark;
-			
-			import flashx.textLayout.factory.TruncationOptions;
 			
 			import mx.controls.Alert;
 			import mx.events.FlexEvent;
-			
-			import spark.components.BorderContainer;
-			import spark.components.Label;
 			
 			private var markerManager:MarkerManager = MarkerManager.getInstance();
 			
@@ -71,16 +60,17 @@
 			
 			private function authenticationSuccessHandler(event:AuthenticationEvent):void
 			{
-				//Alert.show("Login success");
+				cursorManager.removeBusyCursor();
 			}
 			
 			private function authenticationFailureHandler(event:AuthenticationEvent):void
 			{
-				Alert.show("Login fail");
+				Alert.show("Login fail", "Login error");
 			}
 			
 			private function creationCompleteHandler(event:FlexEvent):void
 			{
+				cursorManager.setBusyCursor();
 				LCConnectManager.login();
 			}
 			
