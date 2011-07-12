@@ -19,10 +19,13 @@
 			import Components.gmap.core.SharedMarker;
 			
 			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Utils.GMapUtilsEvent;
 			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
 			public var latLngMarkerAdded:LatLng = null;
+			
+			private var marker:SharedMarker;
 			
 			private function addVideoButtonClickHandler(event:MouseEvent):void
 			{
@@ -30,17 +33,28 @@
 				
 				if (youTubeURL != null)
 				{
-					var marker:SharedMarker = new SharedMarker(latLngMarkerAdded);
+					var _marker:SharedMarker = new SharedMarker(latLngMarkerAdded);
 					
-					marker.videoInfo.idYoutubeVideo = youTubeURL;
-					marker.videoInfo.description = descriptionInput.text;
-					marker.videoInfo.date = new Date();
+					_marker.addEventListener("SHARED_MARKER_CREATION_COMPLETE", onSharedMarkerCreationComplete);
 					
+					_marker.videoInfo.idYoutubeVideo = youTubeURL;
+					_marker.videoInfo.description = descriptionInput.text;
+					_marker.videoInfo.date = new Date();
+					marker = _marker;
+						
 					//map.addOverlay(marker); WHAT FOR??
-					MarkerManager.getInstance().addMarker(marker);
-					this.visible = false;
 				}
 			}
+			
+			/**
+			 * This will wait the set of address because of the call service to google geocoding
+			 */
+			private function onSharedMarkerCreationComplete(evt:Event):void
+			{
+				MarkerManager.getInstance().addMarker(marker);
+				this.visible = false;
+			}
+			
 		]]>
 	</fx:Script>
 	

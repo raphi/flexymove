@@ -1,7 +1,5 @@
 package Components.player.youtube.components
 {
-
-     
 	import flash.events.Event; 
 	 
     public class YouTubeEvent extends Event
