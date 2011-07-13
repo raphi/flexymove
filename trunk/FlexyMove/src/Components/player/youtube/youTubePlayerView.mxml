@@ -3,6 +3,8 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx" 
 		  xmlns:components="Components.player.youtube.components.*"
+		  rollOver="onRollOverPlayer(event)"
+		  rollOut="onRollOutPlayer(event)"
 		  width="730" height="498">
 	
 	<fx:Style>
@@ -17,8 +19,8 @@
 	</fx:Metadata>
 	
 	<fx:Declarations>
-		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="1000" />
-		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="1000" />
+		<s:Fade id="showEffect" alphaTo="1" duration="1000" targets="{PlayerControlVideo}"/>
+		<s:Fade id="hideEffect" alphaTo="0" duration="1000" targets="{PlayerControlVideo}"/>
 	</fx:Declarations>
 	
 	<fx:Script>
@@ -30,6 +32,9 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			
+			import spark.skins.spark.windowChrome.CloseButtonSkin;
 			
 			[Bindable]
 			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());
@@ -107,6 +112,7 @@
 			private function handleYouTubeError(event:YouTubeEvent):void
 			{
 				var message:String = "";
+				
 				switch(event.errorCode)
 				{
 					case YouTubeError.VIDEO_NOT_FOUND:
@@ -123,7 +129,8 @@
 						message = "undefined Error:" + event.errorCode;
 						break;
 				}
-				Alert.show(message,"YouTube Error",Alert.OK);
+				
+				Alert.show(message, "YouTube Error", Alert.OK);
 				trackingActions.addItem({label:"Video Error: " + message});
 			}
 			
@@ -133,14 +140,14 @@
 			private function handlePlay(event:MouseEvent):void
 			{
 				// FIXME CHANGE THAT
-/* 				if (PlayBouton.label == "Pause")
+				/* 				if (PlayBouton.label == "Pause")
 				{
-					handlePause(event);
-					return;
+				handlePause(event);
+				return;
 				}
 				PlayBouton.label = "Pause"; */
 				youTubePlayer.playVideo();
-				this.addEventListener(Event.ENTER_FRAME,handlePlayingTime);
+				this.addEventListener(Event.ENTER_FRAME, handlePlayingTime);
 			}
 			
 			private function fullScreen(event:MouseEvent):void
@@ -150,7 +157,7 @@
 				
 				this.parent.height = Capabilities.screenResolutionY;
 				this.parent.width= Capabilities.screenResolutionX ; 
-/* 				youTubePlayer.height = Capabilities.screenResolutionY;
+				/* 				youTubePlayer.height = Capabilities.screenResolutionY;
 				youTubePlayer.width= Capabilities.screenResolutionX; 
 				youTubePlayer.x = 0;
 				youTubePlayer.y = 0; */ 
@@ -171,13 +178,13 @@
 			private function handlePause(event:MouseEvent):void
 			{
 				youTubePlayer.pauseVideo();
-				this.removeEventListener(Event.ENTER_FRAME,handlePlayingTime);
+				this.removeEventListener(Event.ENTER_FRAME, handlePlayingTime);
 			}
 			
 			private function handleStop(event:MouseEvent):void
 			{
 				youTubePlayer.stopVideo();
-				this.removeEventListener(Event.ENTER_FRAME,handlePlayingTime);
+				this.removeEventListener(Event.ENTER_FRAME, handlePlayingTime);
 				
 			}
 			
@@ -210,6 +217,23 @@
 				progressLoadVideo.setProgress(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
 			*/		}
 			
+			// FIXME bug because the player doesnt send rollover and rollout events
+			private function onRollOverPlayer(event:MouseEvent):void
+			{
+				//showEffect.play();
+			}
+			
+			// FIXME bug because the player doesnt send rollover and rollout events
+			private function onRollOutPlayer(event:MouseEvent):void
+			{
+				//hideEffect.play();
+			}
+			
+			private function onCloseButton(event:MouseEvent):void
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -218,11 +242,13 @@
 						   youtubeError="{handleYouTubeError(event);}"
 						   youtubePlayerLoaded="{handlePlayerLoaded(event);}"
 						   youtubeStatus="{handlePlayingState(event);}"
-						   youtubeVideoQuality="{handleVideoQuality(event);}"  />
+						   youtubeVideoQuality="{handleVideoQuality(event);}"/>
 	
 	<s:BorderContainer id="PlayerControlVideo" 
-					   bottom="0" width="100%" height="25" alpha="0" rollOver="fullScreen(event)"
-					   rollOverEffect="{showEffect}" rollOutEffect="{hideEffect}">
+					   bottom="0" width="100%" height="25">
+		<s:layout>
+			<s:HorizontalLayout verticalAlign="middle"/>
+		</s:layout>
 		
 		<mx:VBox dropShadowVisible="false" width="100%">
 			<mx:HBox width="100%">
@@ -272,5 +298,9 @@
 		<!--<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />-->
 		
 	</s:BorderContainer>
+	<s:Image x="10" y="10" width="25" height="25" 
+			 source="@Embed('/assets/images/closeIcon2.png')"
+			 buttonMode="true"
+			 click="onCloseButton(event)"/>
 </s:Group>
 
