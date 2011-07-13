@@ -51,7 +51,7 @@
 				panelInfoView.visible = true;
 			}
 			
-			public function mapClicked(event:MapMouseEvent):void
+			private function mapClicked(event:MapMouseEvent):void
 			{
 				if (LCConnectManager.isSynchronized)
 				{

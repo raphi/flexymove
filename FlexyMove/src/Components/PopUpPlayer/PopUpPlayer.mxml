@@ -13,16 +13,17 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			public var idYoutubeVideo : String = "";
+			public var idYoutubeVideo:String = "";
 			
-			private function init(): void
+			private function init():void
 			{
 				YoutubePlayer.idYoutubeVideo = idYoutubeVideo;
+				YoutubePlayer.addEventListener(CloseEvent.CLOSE, closeWindow);
 			}
 			
 			private function closeWindow(e:CloseEvent):void 
 			{
-				PopUpManager.removePopUp(e.target as IFlexDisplayObject);
+				PopUpManager.removePopUp(this as IFlexDisplayObject);
 				YoutubePlayer.youTubePlayer.stopVideo();
 			}
 			
