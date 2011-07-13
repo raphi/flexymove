@@ -3,8 +3,6 @@
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx" 
 		  xmlns:components="Components.player.youtube.components.*"
-		  rollOver="onRollOverPlayer(event)"
-		  rollOut="onRollOutPlayer(event)"
 		  width="730" height="498" xmlns:youtube="Components.player.youtube.*"
 		  creationComplete="init()">
 	
