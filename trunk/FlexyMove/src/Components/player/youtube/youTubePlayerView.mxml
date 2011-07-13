@@ -8,7 +8,6 @@
 		  width="730" height="498" xmlns:youtube="Components.player.youtube.*"
 		  creationComplete="init()">
 	
-	
 	<fx:Style>
 		#PlayerControlVideo 
 		{
@@ -21,10 +20,9 @@
 	</fx:Metadata>
 	
 	<fx:Declarations>
-		<s:Fade id="showEffect" alphaTo="1" duration="1000" targets="{PlayerControlVideo}"/>
-		<s:Fade id="hideEffect" alphaTo="0" duration="1000" targets="{PlayerControlVideo}"/>
+		<s:Fade id="showEffect" alphaTo="1" duration="300"/>
+		<s:Fade id="hideEffect" alphaTo="0" duration="300"/>
 	</fx:Declarations>
-	
 	
 	<fx:Script>
 		<![CDATA[
@@ -53,19 +51,22 @@
 			{
 				var areaStartWidth:int = youTubePlayer.width;
 				var areaStartHeight:int = youTubePlayer.height;
-				//Alert.show(this.contentMouseX + " " + this.contentMouseY);
+				
 				if (this.contentMouseX >= youTubePlayer.x && this.contentMouseX <= (youTubePlayer.x + areaStartWidth) && 
 					this.contentMouseY >= youTubePlayer.y && this.contentMouseY <= (youTubePlayer.y + areaStartHeight))
 				{
 					if (closePlayerButton.visible == false)
 						closePlayerButton.visible = true;
+					PlayerControlVideo.visible = true;
 				}
 				else
 				{
 					if (closePlayerButton.visible == true)
 						closePlayerButton.visible = false;
+					PlayerControlVideo.visible = false;
 				}
 			}
+			
 			private function handlePlayerLoaded(event:YouTubeEvent):void
 			{
 				trackingActions.addItem({label:"YouTube Playinger API loaded"});
@@ -86,7 +87,7 @@
 					case YouTubePlayingState.PLAYING:
 						
 						message = "Video is playing";
-					
+						
 						break;
 					case YouTubePlayingState.PAUSE:
 						message = "Video pause is active";
@@ -164,8 +165,6 @@
 			//----------------------------------
 			private function handlePlay(event:MouseEvent):void
 			{
-				// FIXME CHANGE THAT
-				
 				if (PlayBouton.styleName == "Pause")
 				{
 					PlayBouton.styleName = "Play";
@@ -309,53 +308,37 @@
 						   youtubeStatus="{handlePlayingState(event);}"
 						   youtubeVideoQuality="{handleVideoQuality(event);}"/>
 	
-	<!--rollOver="fullScreen(event)"-->
 	<s:BorderContainer id="PlayerControlVideo" 
-					   
+					   showEffect="{showEffect}" hideEffect="{hideEffect}"
 					   bottom="0" width="100%" height="25">
 		<s:layout>
-			<s:HorizontalLayout verticalAlign="middle"/>
+			<s:HorizontalLayout paddingLeft="5" paddingRight="5" verticalAlign="middle" horizontalAlign="center"/>
 		</s:layout>
 		
+		<s:Image id="PlayBouton" click="{handlePlay(event);}" 
+				 buttonMode="true"
+				 source="@Embed('/assets/images/Play_icon.png')" styleName="Play"/>
 		
-		<mx:VBox dropShadowVisible="false" width="100%">
-			<mx:HBox width="100%">
-				<!--	<mx:Button label="Stop" click="{fullScreen(event);}"/>-->
-				
-				<mx:Box paddingTop="3" paddingLeft="10">
-					<s:Image  id="PlayBouton" click="{handlePlay(event);}" 
-							  source="@Embed('/assets/images/Play_icon.png')" styleName="Play"/>
-				</mx:Box>
-				
-				<mx:Label id="labelTime" text="00:00/00:00" width="80" paddingTop="2" color="white"/>
-
-				<mx:HBox paddingTop="7" width="100%" paddingRight="5">
-					<!--	<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
-					<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />
-					-->	<youtube:ProgressComponent id="Progress" click="onSeekToClick(event)"/>
-				</mx:HBox>
-				<mx:Box paddingTop="5">
-					<s:Image  id="Sound"  source="@Embed('/assets/images/sound_icon.png')" />
-				</mx:Box>
-				
-				<mx:Box paddingTop="4">
-					<mx:HSlider  id="sliderVolume" width="50" height="5" minimum="0" maximum="100" value="0" liveDragging="true" />
-				</mx:Box>
-				<mx:Box paddingTop="3" paddingRight="15">
-					<s:Image  id="FullScreen" click="{fullScreen(event);}" 
-							  source="@Embed('/assets/images/fullscreen_icon.png')"/>
-				</mx:Box>
-				
-				
-			</mx:HBox>	
-		</mx:VBox>
+		<s:Label id="labelTime" color="white" text="00:00/00:00"/>
 		
+		<!--	<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
+		<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />
+		-->	
+		<youtube:ProgressComponent id="Progress" width="100%" click="onSeekToClick(event)" buttonMode="true"/>
+		<s:Image id="Sound" source="@Embed('/assets/images/sound_icon.png')" />
+		
+		<s:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" buttonMode="true"/>
+		<s:Image id="FullScreen" click="{fullScreen(event);}" 
+				 buttonMode="true"
+				 source="@Embed('/assets/images/fullscreen_icon.png')"/>
 	</s:BorderContainer>
+	
 	<s:Image x="-10" y="-10" width="25" height="25" 
 			 source="@Embed('/assets/images/closeIcon2.png')"
 			 buttonMode="true"
 			 visible="false"
-			 id ="closePlayerButton"
+			 id="closePlayerButton"
+			 showEffect="{showEffect}" hideEffect="{hideEffect}"
 			 click="onCloseButton(event)"/>
 </s:Group>
 
