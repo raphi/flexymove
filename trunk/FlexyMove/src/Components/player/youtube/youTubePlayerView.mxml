@@ -5,7 +5,8 @@
 		  xmlns:components="Components.player.youtube.components.*"
 		  rollOver="onRollOverPlayer(event)"
 		  rollOut="onRollOutPlayer(event)"
-		  width="730" height="498">
+		  width="730" height="498" xmlns:youtube="Components.player.youtube.*">
+
 	
 	<fx:Style>
 		#PlayerControlVideo 
@@ -23,12 +24,15 @@
 		<s:Fade id="hideEffect" alphaTo="0" duration="1000" targets="{PlayerControlVideo}"/>
 	</fx:Declarations>
 	
+	
 	<fx:Script>
 		<![CDATA[
 			import Components.player.youtube.components.YouTubeError;
 			import Components.player.youtube.components.YouTubeEvent;
 			import Components.player.youtube.components.YouTubePlayingState;
 			import Components.player.youtube.components.YouTubeVideoQuality;
+			
+			import com.degrafa.geometry.Geometry;
 			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
@@ -140,38 +144,66 @@
 			private function handlePlay(event:MouseEvent):void
 			{
 				// FIXME CHANGE THAT
-				/* 				if (PlayBouton.label == "Pause")
+
+				if (PlayBouton.styleName == "Pause")
 				{
-				handlePause(event);
-				return;
+					PlayBouton.styleName = "Play";
+					PlayBouton.source="/assets/images/Play_icon.png"
+					handlePause(event);
+					return;
 				}
-				PlayBouton.label = "Pause"; */
+				PlayBouton.styleName = "Pause";
+				PlayBouton.source="/assets/images/Pause_icon.png"
 				youTubePlayer.playVideo();
 				this.addEventListener(Event.ENTER_FRAME, handlePlayingTime);
 			}
 			
+			
+			/*save Parameter*/
+			private var saveX :int = 0;
+			private var saveY :int = 0;
+			private var saveHeight :int = 0;
+			private var saveWidth :int = 0;
 			private function fullScreen(event:MouseEvent):void
 			{
-				this.parent.x = 0;
-				this.parent.y = 0;
 				
-				this.parent.height = Capabilities.screenResolutionY;
-				this.parent.width= Capabilities.screenResolutionX ; 
-				/* 				youTubePlayer.height = Capabilities.screenResolutionY;
-				youTubePlayer.width= Capabilities.screenResolutionX; 
-				youTubePlayer.x = 0;
-				youTubePlayer.y = 0; */ 
+				//Fix Probleme With Controle BAr
+				if( youTubePlayer.stage.displayState == StageDisplayState.NORMAL )
+				{
+					// set full screen display
+					this.stage.displayState = StageDisplayState.FULL_SCREEN;
+					saveX = this.parent.x;
+					saveY = this.parent.y;
+					saveHeight  = youTubePlayer.height;
+					saveWidth = youTubePlayer.width;
+					youTubePlayer.height = Capabilities.screenResolutionY;
+					youTubePlayer.width= Capabilities.screenResolutionX; 
+					this.parent.x = 0;
+					this.parent.y = 0;
+					FullScreen.source =  "/assets/images/nofullscreen_icon.png"
+				}
+				else
+				{
+					// set normal display
+					this.stage.displayState = StageDisplayState.NORMAL;
+					youTubePlayer.height = saveHeight;
+					youTubePlayer.width= saveWidth; 
+					this.parent.x = saveX;
+					this.parent.y = saveY;
+					FullScreen.source =  "/assets/images/fullscreen_icon.png"
+				}
+
 			}
 			
 			private function  onSeekToClick(event: MouseEvent) : void
 			{
 				var pos : Number = event.localX ;//- progresPlayingVideo.stage.x ;
-				pos = (pos * 100 ) / progresPlayingVideo.width + 1;
+				pos = (pos * 100 ) / Progress.insetRect.width;
 				
 				pos = youTubePlayer.getDuration() * pos / 100;
 				youTubePlayer.seekTo(pos);
 				
-				progresPlayingVideo.setProgress(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
+				Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
 				
 			}
 			
@@ -208,14 +240,18 @@
 				
 				labelTime.text = currenttime + " / " + duration;
 				
-				progresPlayingVideo.minimum = 0;
+				/* progresPlayingVideo.minimum = 0;
 				progresPlayingVideo.maximum = youTubePlayer.getDuration();
 				progresPlayingVideo.setProgress(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
+				
+			 */	Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
 				
 				/* progressLoadVideo.minimum = 0;
 				progressLoadVideo.maximum = youTubePlayer.getVideoBytesTotal();
 				progressLoadVideo.setProgress(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
-			*/		}
+		 */		Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
+				
+			}
 			
 			// FIXME bug because the player doesnt send rollover and rollout events
 			private function onRollOverPlayer(event:MouseEvent):void
@@ -244,58 +280,42 @@
 						   youtubeStatus="{handlePlayingState(event);}"
 						   youtubeVideoQuality="{handleVideoQuality(event);}"/>
 	
+	<!--rollOver="fullScreen(event)"-->
 	<s:BorderContainer id="PlayerControlVideo" 
+
 					   bottom="0" width="100%" height="25">
 		<s:layout>
 			<s:HorizontalLayout verticalAlign="middle"/>
 		</s:layout>
+
 		
 		<mx:VBox dropShadowVisible="false" width="100%">
 			<mx:HBox width="100%">
-				<mx:Button label="Stop" click="{fullScreen(event);}"/>
-				<s:Image id="PlayBouton" click="{handlePlay(event);}"
-						 source="@Embed('/assets/images/Play.png')"/>
-				<mx:Label id="labelTime"  width="80" paddingTop="2"/>
-				<mx:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" />
+				<!--	<mx:Button label="Stop" click="{fullScreen(event);}"/>-->
+				
+				<mx:Box paddingTop="3" paddingLeft="10">
+					<s:Image  id="PlayBouton" click="{handlePlay(event);}" 
+							  source="@Embed('/assets/images/Play_icon.png')" styleName="Play"/>
+				</mx:Box>
+				
+				<mx:Label id="labelTime"  width="80" paddingTop="2" color="white"/>
+				
+				<mx:HSlider  id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" />
+				
 				<mx:HBox paddingTop="7" width="100%" paddingRight="5">
-					<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
-					<!--<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />-->
+				<!--	<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
+					<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />
+			-->	<youtube:ProgressComponent id="Progress" click="onSeekToClick(event)"/>
 				</mx:HBox>
+				
+				<mx:Box paddingTop="3" paddingRight="15">
+					<s:Image  id="FullScreen" click="{fullScreen(event);}" 
+							  source="@Embed('/assets/images/fullscreen_icon.png')"/>
+				</mx:Box>
+				
+			
 			</mx:HBox>	
-			<!--			<mx:HBox>
-			<mx:Button label="destroy" click="{youTubePlayer.destroy();}" />
-			<mx:Button label="show Embed Code" click="{Alert.show(youTubePlayer.getVideoEmbedCode(),'YouTube Embed Code',Alert.OK);}" />
-			<mx:Button label="show Video URL" click="{Alert.show(youTubePlayer.getVideoUrl(),'YouTube Video URL',Alert.OK);}" />
-			</mx:HBox>-->
 		</mx:VBox>
-		
-		<!--<mx:Form>-->
-		<!--			<mx:FormItem label="Video ClipID">
-		<mx:TextInput id="inputClipID" text="Video Link" />
-		<mx:Button label="changeVideo" click="{youTubePlayer.cueVideoById(getIDFromUrl(inputClipID.text),0,YouTubeVideoQuality.DEFAULT);}" />
-		</mx:FormItem>-->
-		<!--		
-		<mx:FormItem label="Video Seek to">
-		<mx:TextInput id="inputSeek" width="60" />
-		<mx:Button label="jumpTo" click="{youTubePlayer.seekTo(Number(inputSeek.text));}" />
-		</mx:FormItem>
-		
-		<mx:FormItem label="Video Size">
-		<mx:TextInput id="inputWidth" text="320" />
-		<mx:TextInput id="inputHeight" text="240" />
-		</mx:FormItem>
-		
-		<mx:FormItem label="Video QUALITY">
-		<mx:ComboBox id="comboVideoQuality" 
-		dataProvider="{YouTubeVideoQuality.ALL}" 
-		close="handleComboQuality(event)" />
-		</mx:FormItem>
-		
-		</mx:Form>-->
-		
-		
-		<!--<mx:List id="listAction" dataProvider="{trackingActions}" width="600" height="100" />-->
-		<!--<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />-->
 		
 	</s:BorderContainer>
 	<s:Image x="10" y="10" width="25" height="25" 
