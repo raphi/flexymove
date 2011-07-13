@@ -9,13 +9,6 @@
 		[Event("change", type="mx.events.Event")]
 	</fx:Metadata>
 	
-	<s:BitmapImage id="img"
-				   source="@Embed('/assets/images/nature2_back.jpg')"
-				   fillMode="scale"
-				   left="0" right="0"
-				   top="0" bottom="0" />
-	
-	
 	<s:VGroup width="100%" height="100%">
 		<coverflow:CoverFlow id="coverflowID" />
 		<s:Button label="View Maps" click="dispatchEvent( new Event( Event.CHANGE ) );" />

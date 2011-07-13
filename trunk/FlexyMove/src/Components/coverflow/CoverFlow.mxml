@@ -2,9 +2,9 @@
 <s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
-		 xmlns:Components="Components.*"
+		 xmlns:coverflow="Components.coverflow.*"
 		 width="100%" height="100%" 
-		 creationComplete="init()" xmlns:coverflow="Components.coverflow.*">
+		 creationComplete="init()">
 	
 	<fx:Metadata>
 		[Event("change", type="mx.events.Event")]
@@ -46,14 +46,12 @@
 				}
 				for ( i = 0; i < 10; i++) 
 				{
-					
 					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"PXRX47L_3yE");
 					itemVideo.title = "Movie " + i;
 					itemVideo.time = i * 10;
 					itemVideo.owner = "Peron " + i + 10;
 					itemVideo.chanel = "chanel" + i;
 					fileList.addItem(itemVideo);
-					
 				}
 				
 			}
@@ -96,7 +94,6 @@
 					InfoDuree.height = 0;
 				}
 			}
-			
 
 			private function getListVideosInChanelFromLiveCycle(chanelName:String):ArrayList
 			{
@@ -147,12 +144,16 @@
 		]]>
 	</fx:Script>
 	
-	
-	
+	<s:BitmapImage id="img"
+				   source="@Embed('/assets/images/nature2_back.jpg')"
+				   fillMode="scale"
+				   left="0" right="0"
+				   top="0" bottom="0" />
 	
 	<s:List id="list" x="0" y="0" width="100%" height="100%" borderVisible="false"
 			click="{getTitle()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
-			itemRendererFunction="itemRender" selectedIndex="0" doubleClickEnabled="true" doubleClick="onDisplayButtonDoubleClick(event)">
+			doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
+			itemRendererFunction="itemRender" selectedIndex="0">
 		
 		<s:layout>
 			<coverflow:CoverflowLayout id="coverflow" 
@@ -164,9 +165,7 @@
 									   focalLength="{FOCALLENGTH}"
 									   perspectiveProjectionX="{PERSPECTIVEPROJECTIONX}" 
 									   perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
-			
 		</s:layout>
-		
 	</s:List>
 	
 	<s:Label id="l1" text="{list.selectedItem}"/>
