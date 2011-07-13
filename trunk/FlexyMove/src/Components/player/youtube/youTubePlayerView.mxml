@@ -186,7 +186,6 @@
 			private var saveWidth :int = 0;
 			private function fullScreen(event:MouseEvent):void
 			{
-				
 				//Fix Probleme With Controle BAr
 				if( youTubePlayer.stage.displayState == StageDisplayState.NORMAL )
 				{
@@ -194,7 +193,7 @@
 					this.stage.displayState = StageDisplayState.FULL_SCREEN;
 					saveX = this.parent.x;
 					saveY = this.parent.y;
-					saveHeight  = youTubePlayer.height;
+					saveHeight = youTubePlayer.height;
 					saveWidth = youTubePlayer.width;
 					youTubePlayer.height = Capabilities.screenResolutionY;
 					youTubePlayer.width= Capabilities.screenResolutionX; 
@@ -202,9 +201,7 @@
 					this.parent.y = 0;
 					closePlayerButton.visible = false;
 					this.removeEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
-					FullScreen.source =  "/assets/images/nofullscreen_icon.png"
-					PlayerControlVideo.x = 0;
-					PlayerControlVideo.y = 0;
+					FullScreen.source = "/assets/images/nofullscreen_icon.png"
 				}
 				else
 				{
@@ -279,18 +276,6 @@
 				*/		Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
 				
 				
-			}
-			
-			// FIXME bug because the player doesnt send rollover and rollout events
-			private function onRollOverPlayer(event:MouseEvent):void
-			{
-				//showEffect.play();
-			}
-			
-			// FIXME bug because the player doesnt send rollover and rollout events
-			private function onRollOutPlayer(event:MouseEvent):void
-			{
-				//hideEffect.play();
 			}
 			
 			private function onCloseButton(event:MouseEvent):void
