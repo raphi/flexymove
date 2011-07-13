@@ -14,7 +14,6 @@
 			import Components.PopUpPlayer.PopUpPlayer;
 			import Components.coverflow.itemsRenderers.MyFolderRenderer;
 			import Components.coverflow.itemsRenderers.MyMovieRenderer;
-			import Components.coverflow.itemsRenderers.PodRenderer;
 			
 			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.VO.VideoInfoVO;
@@ -62,7 +61,7 @@
 			 *  - Music */
 			private function itemRender(item:VideoInfoVO):ClassFactory 
 			{
-				var cla:Class = PodRenderer;
+				var cla:Class = null;
 				
 				if (!item is VideoInfoVO)
 					cla = MyFolderRenderer;
