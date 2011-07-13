@@ -84,7 +84,9 @@
 			{
 				trackingActions.addItem({label:"YouTube Playinger API loaded"});
 				youTubePlayer.cueVideoById(idYoutubeVideo,0,YouTubeVideoQuality.DEFAULT);
-				handlePlay();
+				
+				
+				handlePlay(); 
 			}
 			
 			private function handlePlayingState(event:YouTubeEvent):void
