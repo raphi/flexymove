@@ -16,7 +16,9 @@
 		]]>
 	</fx:Script>
 
-	<mx:ViewStack selectedIndex="{NavigatorManager.getInstance().currentView}" height="100%" width="100%">
+	<mx:ViewStack selectedIndex="{NavigatorManager.getInstance().currentView}" height="100%" width="100%"
+				  contentBackgroundAlpha="0.5"
+				  >
 		<s:NavigatorContent>
 			<gmap:MapView />
 		</s:NavigatorContent>
@@ -24,5 +26,4 @@
 			<coverflow:CoverFlow />
 		</s:NavigatorContent>
 	</mx:ViewStack>
-
 </s:WindowedApplication>

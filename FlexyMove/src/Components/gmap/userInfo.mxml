@@ -24,9 +24,9 @@
 		</s:backgroundFill>
 	</s:BorderContainer>
 	<s:Group>
-		<s:Label text="Prénom :"	top="25" left="5" /><s:TextArea heightInLines="1" text="Tom"				 top="20" left="60"/>
-		<s:Label text="Nom :"		top="75" left="22"/><s:TextArea heightInLines="1" text="Nasri"				 top="65" left="60"/>
-		<s:Label text="E-mail :"	top="115" left="13"/><s:TextArea heightInLines="1" text="tom.nasri@gmail.com" top="110" left="60"/>
+		<s:Label text="Prénom :"	top="25" left="5" /><s:TextInput text="Tom"				 top="20" left="60"/>
+		<s:Label text="Nom :"		top="75" left="22"/><s:TextInput text="Nasri"				 top="65" left="60"/>
+		<s:Label text="E-mail :"	top="115" left="13"/><s:TextInput text="tom.nasri@gmail.com" top="110" left="60"/>
 		<s:Label text="Photo :"	top="25" left="260"/>
 		<s:Image source="@Embed(source='assets/photo.jpg')" top="50" left="260" width="100" height="150"/>
 	</s:Group>
