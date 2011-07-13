@@ -16,7 +16,6 @@
 			{
 				title.text = (data as VideoInfoVO).title;
 				theowner.text = "Propiétaire : " + (data as VideoInfoVO).pseudo;
-				channel.text = "Channel : "  +(data as VideoInfoVO).channel;
 			}
 			
 		]]>
@@ -33,8 +32,6 @@
 				 x.up="162" y.up="108"/>
 		<s:Label id="theowner" color="0x208015" fontSize="20" fontFamily="Cooper Std Black"
 				 x.up="200" y.up="221"/>
-		<s:Label id="channel" color="0x208015" fontSize="20" fontFamily="Cooper Std Black"
-				 x.up="200" y.up="171"/>
 	</s:Group>
 
 </s:ItemRenderer>

@@ -24,7 +24,7 @@
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
 			public const SELECTEDITEMPROXIMITY:Number = 30;		// 0 TO 200	
 			public const DEPTHDISTANCE:Number = 68; 			// 1 TO 200
-			public const ELEMENTROTATION:Number = -35; 			// -90 TO 0
+			public const ELEMENTROTATION:Number = -45; 			// -90 TO 0 -35
 			public const FOCALLENGTH:Number = 1000;				// 1 TO 1000
 			public const PERSPECTIVEPROJECTIONX:Number = 250;	// -1000 TO 1000
 			public const PERSPECTIVEPROJECTIONY:Number = 124;	// -1000 TO 1000
@@ -72,30 +72,10 @@
 				return new ClassFactory(cla);
 			}
 			
-			public function getTitle():void
+			public function onClick():void
 			{
 				var item:VideoInfoVO = list.selectedItem as VideoInfoVO;
-				
-				type.text = item is VideoInfoVO ? "Movie" : "folder";
-				title.text = item.title;
-				prop.text = item.pseudo;
 				channel.text = item.channel;
-				
-				if (item is VideoInfoVO)
-				{
-					duree.width = 100;
-					duree.height = 10;
-					InfoDuree.width = 100;
-					InfoDuree.height = 10;
-					duree.text = item.time + " s";
-				}
-				else
-				{
-					duree.width = 0;
-					duree.height = 0;
-					InfoDuree.width = 0;
-					InfoDuree.height = 0;
-				}
 			}
 			
 			private function getListVideosInChanelFromLiveCycle(channelName:String):ArrayList
@@ -135,8 +115,10 @@
 				   left="0" right="0"
 				   top="0" bottom="0" />
 	
+	<s:Label y="27" id="channel" color="0x208015" fontSize="25" fontFamily="Cooper Std Black" horizontalCenter="0" />
+	
 	<s:List id="list" x="0" y="0" width="100%" height="100%" borderVisible="false"
-			click="{getTitle()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
+			click="{onClick()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
 			doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
 			itemRendererFunction="itemRender" selectedIndex="0">
 		
@@ -152,13 +134,4 @@
 									   perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
 		</s:layout>
 	</s:List>
-	
-	<s:Label id="l1" text="{list.selectedItem}"/>
-	<s:Panel id = "info" x="24" y="10" width="206" height="128" title="Info">
-		<s:Label x="2" text="Type :"/> <s:Label id="type" x="47" y="0" />
-		<s:Label x="2" y="15" height="12" text="Titre :"/> <s:Label id="title" x="47" y="15" />
-		<s:Label x="2" y="30" height="12" text="Propriétaire :"/> <s:Label id="prop" x="75" y="29" />
-		<s:Label x="2" y="45" height="12" text="chanel :"/> <s:Label id="channel" x="47" y="45" />
-		<s:Label id="InfoDuree" x="2" y="60" height="12" text="Durée :"/> <s:Label id="duree" x="47" y="60" />
-	</s:Panel>
 </s:Group>
