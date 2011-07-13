@@ -14,8 +14,7 @@ package com.flexymove.Managers
 	
 	import flash.events.EventDispatcher;
 	
-	import mx.controls.Alert;
-	import mx.managers.CursorManager;
+	import mx.collections.ArrayList;
 	
 	/**
 	 * Singleton class.
@@ -25,6 +24,7 @@ package com.flexymove.Managers
 	{
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
 		private var _sharedVideoList:CollectionNode;
+		private var videoInfosList:ArrayList = new ArrayList();
 		
 		private static var instance:MarkerManager;
 		
@@ -64,6 +64,11 @@ package com.flexymove.Managers
 			MessageItem.registerBodyClass(VideoInfoVO);
 		}
 		
+		public function getVideoList():ArrayList
+		{
+			return videoInfosList;
+		}
+		
 		/**
 		 * Add a marker on the map and synchronize it with the server
 		 */
@@ -86,6 +91,8 @@ package com.flexymove.Managers
 			
 			if (videoVO)
 			{
+				videoInfosList.addItem(videoVO);
+				
 				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO);
 				
 				marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);

@@ -19,10 +19,10 @@
     </sourceAttachmentPath>
   </compiler>
   <applications>
-    <application path="Components/coverflow/CoverFlow.mxml">
+    <application path="Test_coverFlow.mxml">
       <airExcludes/>
     </application>
-    <application path="Test_coverFlow.mxml">
+    <application path="CoverFlowTest.mxml">
       <airExcludes/>
     </application>
     <application path="Main.mxml">
@@ -31,7 +31,7 @@
     <application path="FlexyMove.mxml">
       <airExcludes/>
     </application>
-    <application path="CoverFlow.mxml">
+    <application path="Components/coverflow/CoverFlow.mxml">
       <airExcludes/>
     </application>
   </applications>

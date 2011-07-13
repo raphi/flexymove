@@ -32,13 +32,9 @@
 			import Components.player.youtube.components.YouTubePlayingState;
 			import Components.player.youtube.components.YouTubeVideoQuality;
 			
-			import com.degrafa.geometry.Geometry;
-			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
-			
-			import spark.skins.spark.windowChrome.CloseButtonSkin;
 			
 			[Bindable]
 			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());

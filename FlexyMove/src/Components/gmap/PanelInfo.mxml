@@ -19,9 +19,11 @@
 		<![CDATA[
 			import Components.PopUpPlayer.PopUpPlayer;
 			
+			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
+			import mx.collections.ArrayList;
 			import mx.managers.PopUpManager;
 			
 			[Bindable]

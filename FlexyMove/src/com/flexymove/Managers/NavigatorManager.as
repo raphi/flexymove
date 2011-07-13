@@ -1,5 +1,8 @@
 package com.flexymove.Managers
 {
+	/**
+	 * Handle the current view.
+	 */
 	[Bindable]
 	public class NavigatorManager
 	{
