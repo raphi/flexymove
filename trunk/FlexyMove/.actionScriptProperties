@@ -22,16 +22,13 @@
     <application path="Test_coverFlow.mxml">
       <airExcludes/>
     </application>
-    <application path="CoverFlowTest.mxml">
-      <airExcludes/>
-    </application>
     <application path="Main.mxml">
       <airExcludes/>
     </application>
     <application path="FlexyMove.mxml">
       <airExcludes/>
     </application>
-    <application path="Components/coverflow/CoverFlow.mxml">
+    <application path="CoverFlowTest.mxml">
       <airExcludes/>
     </application>
   </applications>
