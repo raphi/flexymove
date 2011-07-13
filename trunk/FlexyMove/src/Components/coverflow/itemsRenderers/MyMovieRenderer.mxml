@@ -14,9 +14,11 @@
 			
 			protected function init(event:FlexEvent):void
 			{
-				title.text = (data as VideoInfoVO).title;
+				if ((data as VideoInfoVO).title == "" )
+					title.text = "--";
+				else
+					title.text = (data as VideoInfoVO).title;
 				theowner.text = " (" + (data as VideoInfoVO).pseudo + ")";
-				title.text= "Ma petite vidéo";
 			}
 			
 		]]>
@@ -31,7 +33,7 @@
 		<s:BitmapImage id="pellicule" source="@Embed('../assets/pellicule3.png')"
 					   width="100%" height="100%"/>
 		<s:BitmapImage id="film" source="{YOUTUBE_IMG_URL + (data as VideoInfoVO).idYoutubeVideo + '/0.jpg'}"
-					   verticalCenter="0" horizontalCenter="0"  maxWidth="460" maxHeight="298" />
+					   verticalCenter="0" horizontalCenter="0"  width="500" maxHeight="332" />
 		<s:HGroup width="100%" horizontalAlign="center"
 				  x.up="0" y.up="20">
 			<s:Label id="title" x="100" color="0x208015" fontSize="23" fontFamily="Cooper Std Black" />
