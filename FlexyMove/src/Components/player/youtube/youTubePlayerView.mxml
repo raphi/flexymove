@@ -5,7 +5,8 @@
 		  xmlns:components="Components.player.youtube.components.*"
 		  rollOver="onRollOverPlayer(event)"
 		  rollOut="onRollOutPlayer(event)"
-		  width="730" height="498" xmlns:youtube="Components.player.youtube.*">
+		  width="730" height="498" xmlns:youtube="Components.player.youtube.*"
+		  creationComplete="init()">
 	
 	
 	<fx:Style>
@@ -43,6 +44,28 @@
 			//----------------------------------
 			//  YouTube Event Handling
 			//----------------------------------
+			private function init() : void
+			{
+				this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
+			}
+			
+			private function roolHoverOnYoutube (e:Event):void
+			{
+				var areaStartWidth:int = youTubePlayer.width;
+				var areaStartHeight:int = youTubePlayer.height;
+				//Alert.show(this.contentMouseX + " " + this.contentMouseY);
+				if (this.contentMouseX >= youTubePlayer.x && this.contentMouseX <= (youTubePlayer.x + areaStartWidth) && 
+					this.contentMouseY >= youTubePlayer.y && this.contentMouseY <= (youTubePlayer.y + areaStartHeight))
+				{
+					if (closePlayerButton.visible == false)
+						closePlayerButton.visible = true;
+				}
+				else
+				{
+					if (closePlayerButton.visible == true)
+						closePlayerButton.visible = false;
+				}
+			}
 			private function handlePlayerLoaded(event:YouTubeEvent):void
 			{
 				trackingActions.addItem({label:"YouTube Playinger API loaded"});
@@ -61,7 +84,9 @@
 						message = "Player is unstarted";
 						break;
 					case YouTubePlayingState.PLAYING:
+						
 						message = "Video is playing";
+					
 						break;
 					case YouTubePlayingState.PAUSE:
 						message = "Video pause is active";
@@ -176,7 +201,11 @@
 					youTubePlayer.width= Capabilities.screenResolutionX; 
 					this.parent.x = 0;
 					this.parent.y = 0;
+					closePlayerButton.visible = false;
+					this.removeEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 					FullScreen.source =  "/assets/images/nofullscreen_icon.png"
+					PlayerControlVideo.x = 0;
+					PlayerControlVideo.y = 0;
 				}
 				else
 				{
@@ -187,6 +216,7 @@
 					this.parent.x = saveX;
 					this.parent.y = saveY;
 					FullScreen.source =  "/assets/images/fullscreen_icon.png"
+					this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 				}
 				
 			}
@@ -223,6 +253,8 @@
 			
 			private function handlePlayingTime(e:Event):void
 			{
+				
+				/**Progress */
 				var currenttimeMn : int = youTubePlayer.getCurrentTime() / 60;
 				var currenttimeS : int =  youTubePlayer.getCurrentTime() - currenttimeMn * 60;
 				var currenttime : String = ((currenttimeMn <10 ) ? "0" + currenttimeMn : currenttimeMn) + ":" +
@@ -246,6 +278,7 @@
 				progressLoadVideo.maximum = youTubePlayer.getVideoBytesTotal();
 				progressLoadVideo.setProgress(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
 				*/		Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
+				
 				
 			}
 			
@@ -318,9 +351,11 @@
 		</mx:VBox>
 		
 	</s:BorderContainer>
-	<s:Image x="10" y="10" width="25" height="25" 
+	<s:Image x="-10" y="-10" width="25" height="25" 
 			 source="@Embed('/assets/images/closeIcon2.png')"
 			 buttonMode="true"
+			 visible="false"
+			 id ="closePlayerButton"
 			 click="onCloseButton(event)"/>
 </s:Group>
 
