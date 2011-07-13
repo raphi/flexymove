@@ -19,6 +19,9 @@
     </sourceAttachmentPath>
   </compiler>
   <applications>
+    <application path="Components/coverflow/CoverFlow.mxml">
+      <airExcludes/>
+    </application>
     <application path="Test_coverFlow.mxml">
       <airExcludes/>
     </application>
