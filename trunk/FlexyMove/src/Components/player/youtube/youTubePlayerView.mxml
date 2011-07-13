@@ -36,15 +36,30 @@
 			[Bindable]
 			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());
 			public var idYoutubeVideo : String = "";
-			
 			//----------------------------------
 			//  YouTube Event Handling
 			//----------------------------------
 			private function init() : void
 			{
+				this.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHandler);
 				this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 			}
-			
+			private function keyHandler(event:KeyboardEvent):void 
+			{
+				
+				if( event.keyCode == 27 && youTubePlayer.stage.displayState == StageDisplayState.FULL_SCREEN_INTERACTIVE )
+				{
+					
+					// set normal display
+					this.stage.displayState = StageDisplayState.NORMAL;
+					youTubePlayer.height = saveHeight;
+					youTubePlayer.width= saveWidth; 
+					this.parent.x = saveX;
+					this.parent.y = saveY;
+					FullScreen.source =  "/assets/images/fullscreen_icon.png"
+					this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
+				}
+			}
 			private function roolHoverOnYoutube (e:Event):void
 			{
 				var areaStartWidth:int = youTubePlayer.width;
@@ -69,6 +84,7 @@
 			{
 				trackingActions.addItem({label:"YouTube Playinger API loaded"});
 				youTubePlayer.cueVideoById(idYoutubeVideo,0,YouTubeVideoQuality.DEFAULT);
+				handlePlay();
 			}
 			
 			private function handlePlayingState(event:YouTubeEvent):void
@@ -161,7 +177,7 @@
 			//----------------------------------
 			//  YouTube Player Control
 			//----------------------------------
-			private function handlePlay(event:MouseEvent):void
+			private function handlePlay(event:MouseEvent = null):void
 			{
 				if (PlayBouton.styleName == "Pause")
 				{
@@ -188,7 +204,7 @@
 				if( youTubePlayer.stage.displayState == StageDisplayState.NORMAL )
 				{
 					// set full screen display
-					this.stage.displayState = StageDisplayState.FULL_SCREEN;
+					this.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 					saveX = this.parent.x;
 					saveY = this.parent.y;
 					saveHeight = youTubePlayer.height;
@@ -200,6 +216,7 @@
 					closePlayerButton.visible = false;
 					this.removeEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 					FullScreen.source = "/assets/images/nofullscreen_icon.png"
+					this.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHandler);
 				}
 				else
 				{
@@ -217,7 +234,7 @@
 			
 			private function  onSeekToClick(event: MouseEvent) : void
 			{
-				var pos : Number = event.localX ;//- progresPlayingVideo.stage.x ;
+				var pos : Number = event.localX ;
 				pos = (pos * 100 ) / Progress.insetRect.width;
 				
 				pos = youTubePlayer.getDuration() * pos / 100;
@@ -240,10 +257,6 @@
 				
 			}
 			
-			/* 			private function handleComboQuality(event:Event):void
-			{
-			youTubePlayer.playbackQuality =  String(ComboBox(event.target).selectedItem);
-			} */
 			
 			private function handlePlayingTime(e:Event):void
 			{
@@ -262,16 +275,8 @@
 				
 				labelTime.text = currenttime + " / " + duration;
 				
-				/* progresPlayingVideo.minimum = 0;
-				progresPlayingVideo.maximum = youTubePlayer.getDuration();
-				progresPlayingVideo.setProgress(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
-				
-				*/	Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
-				
-				/* progressLoadVideo.minimum = 0;
-				progressLoadVideo.maximum = youTubePlayer.getVideoBytesTotal();
-				progressLoadVideo.setProgress(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
-				*/		Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
+				Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
+				Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
 				
 				
 			}
@@ -297,23 +302,39 @@
 		<s:layout>
 			<s:HorizontalLayout paddingLeft="5" paddingRight="5" verticalAlign="middle" horizontalAlign="center"/>
 		</s:layout>
+
+		<mx:VBox dropShadowVisible="false" width="100%">
+			<mx:HBox width="100%">
+				<!--	<mx:Button label="Stop" click="{fullScreen(event);}"/>-->
+				
+				<mx:Box paddingTop="3" paddingLeft="10">
+					<s:Image  id="PlayBouton" click="{handlePlay(event);}" 
+							  source="@Embed('/assets/images/Play_icon.png')" styleName="Play"/>
+				</mx:Box>
+				
+				<mx:Label id="labelTime" text="00:00/00:00" width="80" paddingTop="2" color="white"/>
+				
+				<mx:HBox paddingTop="7" width="100%" paddingRight="5">
+					<!--	<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
+					<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />
+					-->	<youtube:ProgressComponent id="Progress" click="onSeekToClick(event)"/>
+				</mx:HBox>
+				<mx:Box paddingTop="5">
+					<s:Image  id="Sound"  source="@Embed('/assets/images/sound_icon.png')" />
+				</mx:Box>
+				
+				<mx:Box paddingTop="4">
+					<mx:HSlider  id="sliderVolume" width="50" height="5" minimum="0" maximum="100" value="50" liveDragging="true" />
+				</mx:Box>
+				<mx:Box paddingTop="3" paddingRight="15">
+					<s:Image  id="FullScreen" click="{fullScreen(event);}" 
+							  source="@Embed('/assets/images/fullscreen_icon.png')"/>
+				</mx:Box>
+				
+				
+			</mx:HBox>	
+		</mx:VBox>
 		
-		<s:Image id="PlayBouton" click="{handlePlay(event);}" 
-				 buttonMode="true"
-				 source="@Embed('/assets/images/Play_icon.png')" styleName="Play"/>
-		
-		<s:Label id="labelTime" color="white" text="00:00/00:00"/>
-		
-		<!--	<mx:ProgressBar chromeColor="#1E6774" id="progresPlayingVideo" label="" mode="manual" height="5" width="100%" click="onSeekToClick(event)" />
-		<mx:ProgressBar  id="progressLoadVideo"  label="loading bar" mode="manual" labelPlacement="center" />
-		-->	
-		<youtube:ProgressComponent id="Progress" width="100%" click="onSeekToClick(event)" buttonMode="true"/>
-		<s:Image id="Sound" source="@Embed('/assets/images/sound_icon.png')" />
-		
-		<s:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" buttonMode="true"/>
-		<s:Image id="FullScreen" click="{fullScreen(event);}" 
-				 buttonMode="true"
-				 source="@Embed('/assets/images/fullscreen_icon.png')"/>
 	</s:BorderContainer>
 	
 	<s:Image x="-10" y="-10" width="25" height="25" 
