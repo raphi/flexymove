@@ -29,6 +29,8 @@
 			[Bindable]
 			public var markerInfo:VideoInfoVO;
 			
+			private const YOUTUBE_IMG_URL:String = "http://img.youtube.com/vi/";
+			
 			private function channelFieldClickHandler(event:MouseEvent):void
 			{
 				NavigatorManager.getInstance().currentView = NavigatorManager.CHANNEL_VIEW;
@@ -46,11 +48,11 @@
 		]]>
 	</fx:Script>
 	
-	<s:Spacer height="15"/>
-	<s:Image width="100" height="100"
-			 click="imageDoubleClickHandler(event)"
-			 source="assets/images/Play.png"/>
-	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Informations"/>
+	<s:Spacer height="5"/>
+	<s:Image width="135" height="135" click="imageDoubleClickHandler(event)" scaleMode="letterbox"
+			 smooth="true" smoothingQuality="high"
+			 source="{YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg'}"/>
+	<s:Label width="100%" paddingTop="5" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Date :"/>
