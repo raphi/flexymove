@@ -3,8 +3,7 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:coverflow="Components.coverflow.*"
-		 width="100%" height="100%"
-		 creationComplete="init()">
+		 width="100%" height="100%">
 	
 	<fx:Metadata>
 		[Event("change", type="mx.events.Event")]
@@ -17,9 +16,10 @@
 			import Components.coverflow.itemsRenderers.MyMovieRenderer;
 			import Components.coverflow.itemsRenderers.PodRenderer;
 			
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.VO.VideoInfoVO;
+			
 			import mx.collections.ArrayList;
-			import mx.controls.Alert;
-			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
 			public const SELECTEDITEMPROXIMITY:Number = 30;		// 0 TO 200	
@@ -30,55 +30,58 @@
 			public const PERSPECTIVEPROJECTIONY:Number = 124;	// -1000 TO 1000
 			
 			[Bindable]
-			public var fileList:ArrayList = new ArrayList();
+			public var fileList:ArrayList = MarkerManager.getInstance().getVideoList(); // FIXME : this is dirty, should be dynamic
 			
 			/** init coverflow component 
 			 **/ 
-			public function init (): void
+			/* 			public function init (): void
 			{
-				for (var i:int = 0; i < 5; i++) 
-				{
-					var itemFolder:ItemCoverFlow = new ItemCoverFlow(true);
-					itemFolder.title = "Folder " + i;
-					itemFolder.owner = "Peron " + i;
-					
-					fileList.addItem(itemFolder);
-				}
-				for ( i = 0; i < 10; i++) 
-				{
-					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"PXRX47L_3yE");
-					itemVideo.title = "Movie " + i;
-					itemVideo.time = i * 10;
-					itemVideo.owner = "Peron " + i + 10;
-					itemVideo.chanel = "chanel" + i;
-					fileList.addItem(itemVideo);
-				}
-				
+			for (var i:int = 0; i < 5; i++) 
+			{
+			var itemFolder:ItemCoverFlow = new ItemCoverFlow(true);
+			itemFolder.title = "Folder " + i;
+			itemFolder.owner = "Peron " + i;
+			
+			fileList.addItem(itemFolder);
 			}
+			for ( i = 0; i < 10; i++) 
+			{
+			var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"PXRX47L_3yE");
+			itemVideo.title = "Movie " + i;
+			itemVideo.time = i * 10;
+			itemVideo.owner = "Peron " + i + 10;
+			itemVideo.chanel = "chanel" + i;
+			fileList.addItem(itemVideo);
+			}
+			} */
 			
 			/** Return a Class Factory adapted to the item :
 			 *  - Movie
 			 * 	- Picture
 			 *  - Folder
 			 *  - Music */
-			private function itemRender(item:ItemCoverFlow):ClassFactory {
+			private function itemRender(item:VideoInfoVO):ClassFactory 
+			{
 				var cla:Class = PodRenderer;
-				if (item.isFolder)
+				
+				if (!item is VideoInfoVO)
 					cla = MyFolderRenderer;
 				else
-					cla = MyMovieRenderer;				
+					cla = MyMovieRenderer;
+				
 				return new ClassFactory(cla);
 			}
 			
 			public function getTitle():void
 			{
-				var item:ItemCoverFlow = ItemCoverFlow(list.selectedItem);
+				var item:VideoInfoVO = list.selectedItem as VideoInfoVO;
 				
-				type.text = item.isFolder ? "folder" : "Movie";
+				type.text = item is VideoInfoVO ? "Movie" : "folder";
 				title.text = item.title;
-				prop.text = item.owner;
-				chanel.text = item.chanel;
-				if (!item.isFolder)
+				prop.text = item.pseudo;
+				channel.text = item.channel;
+				
+				if (item is VideoInfoVO)
 				{
 					duree.width = 100;
 					duree.height = 10;
@@ -94,46 +97,28 @@
 					InfoDuree.height = 0;
 				}
 			}
-
-			private function getListVideosInChanelFromLiveCycle(chanelName:String):ArrayList
+			
+			private function getListVideosInChanelFromLiveCycle(channelName:String):ArrayList
 			{
 				var itemList: ArrayList = new ArrayList();
-				//Implement It to check LiveCycle
-				for (var i:int = 0; i < 2; i++) 
-				{
-					var itemFolder:ItemCoverFlow = new ItemCoverFlow(true);
-					itemFolder.title = "Folder " + i;
-					itemFolder.owner = "Peron " + i;
-					
-					itemList.addItem(itemFolder);
-				}
-				for ( i = 0; i < 5; i++) 
-				{
-					
-					var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"8RHAEwQAZlA");
-					itemVideo.title = "Movie " + i;
-					itemVideo.time = i * 10;
-					itemVideo.owner = "Peron " + i + 10;
-					itemVideo.chanel = "chanel" + i;
-					itemList.addItem(itemVideo);
-					
-				}
+				
+				//FIXME : implement a filter to sort the LiveCycle video list
+				
 				return itemList;
 			}
+			
 			private function onDisplayButtonDoubleClick(e:MouseEvent):void
 			{
-				var selected : ItemCoverFlow = (list.selectedItem as ItemCoverFlow);
+				var selected:VideoInfoVO = (list.selectedItem as VideoInfoVO);
 				
-				if (selected.isFolder)
+				if (!list.selectedItem is VideoInfoVO)
 				{
 					//Get List Chanel and reload list
 					fileList = new ArrayList();
-					
-					fileList = getListVideosInChanelFromLiveCycle(selected.chanel);
-					
+					fileList = getListVideosInChanelFromLiveCycle(selected.channel);
 				}
 				else
-				{	// popup Video
+				{	// Popup Video
 					var win : PopUpPlayer = new PopUpPlayer();
 					win.idYoutubeVideo = selected.idYoutubeVideo;
 					PopUpManager.addPopUp(win,this,true);
@@ -173,7 +158,7 @@
 		<s:Label x="2" text="Type :"/> <s:Label id="type" x="47" y="0" />
 		<s:Label x="2" y="15" height="12" text="Titre :"/> <s:Label id="title" x="47" y="15" />
 		<s:Label x="2" y="30" height="12" text="Propriétaire :"/> <s:Label id="prop" x="75" y="29" />
-		<s:Label x="2" y="45" height="12" text="chanel :"/> <s:Label id="chanel" x="47" y="45" />
+		<s:Label x="2" y="45" height="12" text="chanel :"/> <s:Label id="channel" x="47" y="45" />
 		<s:Label id="InfoDuree" x="2" y="60" height="12" text="Durée :"/> <s:Label id="duree" x="47" y="60" />
 	</s:Panel>
 </s:Group>

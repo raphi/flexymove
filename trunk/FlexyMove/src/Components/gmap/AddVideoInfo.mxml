@@ -39,6 +39,7 @@
 					
 					_marker.videoInfo.idYoutubeVideo = youTubeURL;
 					_marker.videoInfo.description = descriptionInput.text;
+					_marker.videoInfo.title = titleInput.text;
 					_marker.videoInfo.date = new Date();
 					marker = _marker;
 						
@@ -60,6 +61,10 @@
 	
 	<s:Label width="100%" paddingTop="15" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
+		<s:HGroup verticalAlign="middle">
+			<s:Label styleName="infoLabel" text="Titre :"/>
+			<s:TextInput id="titleInput" width="160" styleName="textInfo"/>
+		</s:HGroup>
 		<s:HGroup verticalAlign="middle">
 			<s:Label styleName="infoLabel" text="Url YouTube :"/>
 			<s:TextInput id="youtubeUrlInput" width="160" styleName="textInfo"/>

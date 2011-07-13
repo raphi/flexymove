@@ -14,6 +14,8 @@ package com.flexymove.VO
 		public var date:Date;
 		public var idYoutubeVideo:String = "";
 		public var description:String = "";
+		public var title:String = "";
+		public var time:String = ""; // FIXME to delete?
 		public var lat:Number = 0;
 		public var lng:Number = 0;
 		private var _uid:String;

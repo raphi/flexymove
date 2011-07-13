@@ -3,27 +3,30 @@
 				xmlns:s="library://ns.adobe.com/flex/spark"
 				xmlns:mx="library://ns.adobe.com/flex/mx"
 				autoDrawBackground="false"
-				width.up="500" height.up="332" creationComplete="init(event)">
+				width.up="500" height.up="332" 
+				creationComplete="init(event)">
+	
 	<fx:Script>
 		<![CDATA[
-			import Components.coverflow.ItemCoverFlow;
+			import com.flexymove.VO.VideoInfoVO;
 			
-			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			
 			protected function init(event:FlexEvent):void
 			{
-				title.text = (data as ItemCoverFlow).title;
-				theowner.text = "Propiétaire : " + (data as ItemCoverFlow).owner;
-				channel.text = "Channel : "  +(data as ItemCoverFlow).chanel;
+				title.text = (data as VideoInfoVO).title;
+				theowner.text = "Propiétaire : " + (data as VideoInfoVO).pseudo;
+				channel.text = "Channel : "  +(data as VideoInfoVO).channel;
 			}
 			
 		]]>
 	</fx:Script>
+	
 	<s:states>
 		<s:State name="up"/>
 		<s:State name="overed"/>
 	</s:states>
+
 	<s:Group width="100%" height="100%" contentBackgroundColor="blue">
 		<s:BitmapImage id="Folder" source="@Embed('../assets/folder4.png')" width="100%" height="100%"/>
 		<s:Label id="title" x="100" color="0x208015" fontSize="35" fontFamily="Cooper Std Black"
@@ -33,4 +36,5 @@
 		<s:Label id="channel" color="0x208015" fontSize="20" fontFamily="Cooper Std Black"
 				 x.up="200" y.up="171"/>
 	</s:Group>
+
 </s:ItemRenderer>
