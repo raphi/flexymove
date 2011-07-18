@@ -5,7 +5,7 @@
 					   xmlns:coverflow="Components.coverflow.*"
 					   xmlns:gmap="Components.gmap.*"
 					   height="600" width="1000"
-					   title="FlexyMove2"
+					   title="FlexyMove"
 					   showStatusBar="false">
 	
 	<fx:Style source="assets/css/design.css"/>

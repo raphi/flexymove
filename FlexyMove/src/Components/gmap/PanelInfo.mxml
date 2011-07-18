@@ -10,8 +10,8 @@
 	</s:layout>
 	
 	<fx:Declarations>
-		<s:Fade id="showEffect" alphaTo="1" duration="1000" />
-		<s:Fade id="hideEffect" alphaTo="0" duration="1000" />
+		<s:Fade id="showEffect" alphaTo="1" duration="500" />
+		<s:Fade id="hideEffect" alphaTo="0" duration="500" />
 		<s:DateTimeFormatter id="formatDate" dateStyle="medium"/>
 	</fx:Declarations>
 	
