@@ -36,14 +36,13 @@
 			[Bindable]
 			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());
 			public var idYoutubeVideo : String = "";
-			//----------------------------------
-			//  YouTube Event Handling
-			//----------------------------------
+
 			private function init() : void
 			{
 				this.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHandler);
 				this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 			}
+			
 			private function keyHandler(event:KeyboardEvent):void 
 			{
 				
@@ -60,6 +59,7 @@
 					this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 				}
 			}
+			
 			private function roolHoverOnYoutube (e:Event):void
 			{
 				var areaStartWidth:int = youTubePlayer.width;
@@ -101,9 +101,7 @@
 						message = "Player is unstarted";
 						break;
 					case YouTubePlayingState.PLAYING:
-						
 						message = "Video is playing";
-						
 						break;
 					case YouTubePlayingState.PAUSE:
 						message = "Video pause is active";
@@ -158,21 +156,22 @@
 				switch(event.errorCode)
 				{
 					case YouTubeError.VIDEO_NOT_FOUND:
-						message = "Video not found: " + event.errorCode;
+						message = "Vidéo manquante: " + event.errorCode;
 						break;
 					case YouTubeError.VIDEO_NOT_ALLOWED:
-						message = "Video not allowed: " + event.errorCode;
+						message = "Vidéo non authorisée: " + event.errorCode;
 						break;
 					case YouTubeError.EMBEDDING_NOT_ALLOWED:
-						message = "Embedding not allowed: " + event.errorCode;
+						message = "YouTube ne permet pas la lecture externe de cette vidéo: " + event.errorCode;
 						break;
 					
 					default:
-						message = "undefined Error:" + event.errorCode;
+						message = "Erreur inconnue:" + event.errorCode;
 						break;
 				}
 				
-				Alert.show(message, "YouTube Error", Alert.OK);
+				// FIXME : reactiv this error message
+				//Alert.show(message, "YouTube Erreur", Alert.OK);
 				trackingActions.addItem({label:"Video Error: " + message});
 			}
 			
