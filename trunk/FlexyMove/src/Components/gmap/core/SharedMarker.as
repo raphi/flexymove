@@ -22,7 +22,7 @@ package Components.gmap.core
 			{
 				this.videoInfo = new VideoInfoVO("currentUser", latitudeAndLongitude.lat(), latitudeAndLongitude.lng());
 				this.videoInfo.channel = "Green Paris";
-				this.videoInfo.pseudo = "Metalikange";
+				this.videoInfo.pseudo = "Raphi";
 				
 				gmapUtils.addEventListener(GMapUtilsEvent.GET_ADDRESS, onGetAddress);
 				gmapUtils.getAddressFromLatLng(latitudeAndLongitude);

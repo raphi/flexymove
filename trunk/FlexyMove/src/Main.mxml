@@ -4,7 +4,7 @@
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 					   xmlns:coverflow="Components.coverflow.*"
 					   xmlns:gmap="Components.gmap.*"
-					   height="600" width="1000"
+					   minHeight="600" minWidth="1000"
 					   title="FlexyMove"
 					   showStatusBar="false">
 	
@@ -13,7 +13,6 @@
 	<fx:Script>
 		<![CDATA[
 			import com.flexymove.Managers.NavigatorManager;
-			
 		]]>
 	</fx:Script>
 

@@ -204,7 +204,6 @@
 				this.addEventListener(Event.ENTER_FRAME, handlePlayingTime);
 			}
 			
-			
 			/*save Parameter*/
 			private var saveX :int = 0;
 			private var saveY :int = 0;
@@ -241,7 +240,6 @@
 					FullScreen.source =  "/assets/images/fullscreen_icon.png"
 					this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
 				}
-				
 			}
 			
 			private function onSeekToClick(event: MouseEvent) : void
@@ -253,7 +251,6 @@
 				youTubePlayer.seekTo(pos);
 				
 				Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
-				
 			}
 			
 			private function handlePause(event:MouseEvent):void
@@ -266,13 +263,10 @@
 			{
 				youTubePlayer.stopVideo();
 				this.removeEventListener(Event.ENTER_FRAME, handlePlayingTime);
-				
 			}
-			
 			
 			private function handlePlayingTime(e:Event):void
 			{
-				
 				/**Progress */
 				var currenttimeMn : int = youTubePlayer.getCurrentTime() / 60;
 				var currenttimeS : int =  youTubePlayer.getCurrentTime() - currenttimeMn * 60;
@@ -289,8 +283,6 @@
 				
 				Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
 				Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
-				
-				
 			}
 			
 			private function onCloseButton(event:MouseEvent):void
@@ -325,7 +317,7 @@
 		<youtube:ProgressComponent id="Progress" width="100%" click="onSeekToClick(event)" buttonMode="true"/>
 		<s:Image id="Sound" source="@Embed('/assets/images/sound_icon.png')" />
 		
-		<s:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="0" liveDragging="true" buttonMode="true"/>
+		<s:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="100" liveDragging="true" buttonMode="true"/>
 		<s:Image id="FullScreen" click="{fullScreen(event);}" 
 				 buttonMode="true"
 				 source="@Embed('/assets/images/fullscreen_icon.png')"/>
