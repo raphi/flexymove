@@ -18,7 +18,13 @@ s|Label.panelInfoTitle
 	textAlign: 				center;
 	top:					10;
 }
+
 s|Label.infoLabel
+{
+	color: 					#FFFFFF;
+	fontWeight: 			bold;
+}
+s|FormItem.infoLabelFormItem
 {
 	color: 					#FFFFFF;
 	fontWeight: 			bold;
