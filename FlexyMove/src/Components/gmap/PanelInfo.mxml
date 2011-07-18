@@ -4,7 +4,8 @@
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
 				   showEffect="{showEffect}" hideEffect="{hideEffect}"
 				   right="0" top="40" bottom="10" width="280" height="100%"
-				   styleName="panelInfoStyle">
+				   styleName="panelInfoStyle"
+				   creationComplete="init()">
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center"/>
 	</s:layout>
@@ -28,8 +29,19 @@
 			
 			[Bindable]
 			public var markerInfo:VideoInfoVO;
-			
 			private const YOUTUBE_IMG_URL:String = "http://img.youtube.com/vi/";
+
+			private function init () : void
+			{
+/* 				if (markerInfo != null)
+				{
+					if (markerInfo.playerType == "dailymotion")
+						YOUTUBE_IMG_URL = "http://www.dailymotion.com/thumbnail/135x135/video/" + markerInfo.idYoutubeVideo;
+					else
+						YOUTUBE_IMG_URL= "http://img.youtube.com/vi/" + markerInfo.idYoutubeVideo + '/0.jpg';
+				} */
+				
+			}
 			
 			private function channelFieldClickHandler(event:MouseEvent):void
 			{
@@ -41,17 +53,32 @@
 				var popup:PopUpPlayer = new PopUpPlayer();
 				
 				popup.idYoutubeVideo = markerInfo.idYoutubeVideo;
+				popup.playerType = markerInfo.playerType;
 				PopUpManager.addPopUp(popup, this.parent, false);
 				PopUpManager.centerPopUp(popup);
 			}
-			
+			private function getUrlImage():String
+			{
+				/* var urlimage : String = "";
+				if (markerInfo != null)
+				{
+					if (markerInfo.playerType == "dailymotion")
+						urlimage = "http://www.dailymotion.com/thumbnail/135x135/video/" + markerInfo.idYoutubeVideo;
+					else
+						urlimage= "http://img.youtube.com/vi/" + markerInfo.idYoutubeVideo + '/0.jpg';
+				}  */
+				return YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg';
+			}
 		]]>
 	</fx:Script>
 	
 	<s:Spacer height="5"/>
 	<s:Image width="135" height="135" click="imageDoubleClickHandler(event)" scaleMode="letterbox"
 			 smooth="true" smoothingQuality="high"
-			 source="{YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg'}"/>
+			 source="{markerInfo.playerType == 'youtube' ?
+			 			YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg'
+			 			:
+						'http://www.dailymotion.com/thumbnail/135x135/video/' + markerInfo.idYoutubeVideo}"/>
 	<s:Label width="100%" paddingTop="5" styleName="panelInfoTitle" text="Informations"/>
 	<s:VGroup>
 		<s:HGroup>

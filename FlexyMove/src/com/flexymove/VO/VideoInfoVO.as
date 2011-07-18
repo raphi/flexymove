@@ -18,6 +18,7 @@ package com.flexymove.VO
 		public var time:String = ""; // FIXME to delete?
 		public var lat:Number = 0;
 		public var lng:Number = 0;
+		public var playerType : String= "youtube";
 		private var _uid:String;
 		
 		public function VideoInfoVO(pseudo:String="", lat:Number=0, lng:Number=0)
