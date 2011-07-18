@@ -10,8 +10,8 @@
 	</s:layout>
 	
 	<fx:Declarations>
-		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="1000" />
-		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="1000" />
+		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="500" />
+		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="500" />
 	</fx:Declarations>
 	
 	<fx:Script>
