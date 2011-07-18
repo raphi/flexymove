@@ -11,6 +11,7 @@ package com.flexymove.Managers
 	import com.google.maps.LatLng;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
+	import com.google.maps.overlays.MarkerOptions;
 	
 	import flash.events.EventDispatcher;
 	
@@ -93,6 +94,8 @@ package com.flexymove.Managers
 			{
 				videoInfosList.addItem(videoVO);
 				
+				// FIXME : add this functionnality
+				//var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
 				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO);
 				
 				marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);

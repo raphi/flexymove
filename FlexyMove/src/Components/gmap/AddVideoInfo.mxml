@@ -67,10 +67,10 @@
 	<s:Label width="100%" paddingTop="15" styleName="panelInfoTitle" text="Informations"/>
 	<s:Form width="275">
 		<s:FormItem label="Titre :" styleName="infoLabelFormItem">
-			<s:TextInput id="titleInput" width="160" styleName="textInfo"/>
+			<s:TextInput id="titleInput" width="160" color="#000000" fontWeight="normal"/>
 		</s:FormItem>
 		<s:FormItem label="Url YouTube :" styleName="infoLabelFormItem">
-			<s:TextInput id="youtubeUrlInput" width="160" styleName="textInfo"/>
+			<s:TextInput id="youtubeUrlInput" width="160" color="#000000" fontWeight="normal"/>
 		</s:FormItem>
 	</s:Form>
 	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Description"/>

@@ -34,3 +34,8 @@ s|Label.textInfo
 {
 	color: 					#FFFFFF;
 }
+s|TextInput.textInfoFormItem
+{
+	color: 					#FFFFFF;
+	fontWeight: 			normal;
+}
