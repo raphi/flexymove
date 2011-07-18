@@ -19,7 +19,6 @@
 			import Components.gmap.core.SharedMarker;
 			
 			import com.flexymove.Managers.MarkerManager;
-			import com.flexymove.Utils.GMapUtilsEvent;
 			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
@@ -42,7 +41,7 @@
 					_marker.videoInfo.title = titleInput.text;
 					_marker.videoInfo.date = new Date();
 					marker = _marker;
-						
+					
 					//map.addOverlay(marker); WHAT FOR??
 				}
 			}
@@ -60,16 +59,14 @@
 	</fx:Script>
 	
 	<s:Label width="100%" paddingTop="15" styleName="panelInfoTitle" text="Informations"/>
-	<s:VGroup>
-		<s:HGroup verticalAlign="middle">
-			<s:Label styleName="infoLabel" text="Titre :"/>
+	<s:Form width="275">
+		<s:FormItem label="Titre :" styleName="infoLabelFormItem">
 			<s:TextInput id="titleInput" width="160" styleName="textInfo"/>
-		</s:HGroup>
-		<s:HGroup verticalAlign="middle">
-			<s:Label styleName="infoLabel" text="Url YouTube :"/>
+		</s:FormItem>
+		<s:FormItem label="Url YouTube :" styleName="infoLabelFormItem">
 			<s:TextInput id="youtubeUrlInput" width="160" styleName="textInfo"/>
-		</s:HGroup>
-	</s:VGroup>
+		</s:FormItem>
+	</s:Form>
 	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Description"/>
 	<s:TextArea id="descriptionInput"/>
 	<s:Button id="addVideoButton" label="Publier la vidéo" click="addVideoButtonClickHandler(event)"/>
