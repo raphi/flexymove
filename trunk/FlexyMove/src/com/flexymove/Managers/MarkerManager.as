@@ -95,11 +95,11 @@ package com.flexymove.Managers
 				videoInfosList.addItem(videoVO);
 				
 				// FIXME : add this functionnality
-				//var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
-				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO);
+				var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
+				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
 				
 				marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-				gmarkerManager.addMarker(marker, 0, 10);
+				gmarkerManager.addMarker(marker, 0, 15);
 			}
 		}
 	}
