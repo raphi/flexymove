@@ -22,8 +22,6 @@
 			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
-			import mx.controls.Alert;
-			
 			public var latLngMarkerAdded:LatLng = null;
 			
 			private var marker:SharedMarker;

@@ -15,10 +15,10 @@
 			import com.flexymove.Managers.NavigatorManager;
 		]]>
 	</fx:Script>
-
-	<mx:ViewStack selectedIndex="{NavigatorManager.getInstance().currentView}" height="100%" width="100%"
-				  contentBackgroundAlpha="0.5"
-				  >
+	
+	<mx:ViewStack height="100%" width="100%"
+				  selectedIndex="{NavigatorManager.getInstance().currentView}" 
+				  contentBackgroundAlpha="0.5">
 		<s:NavigatorContent>
 			<gmap:MapView id="mapView"/>
 		</s:NavigatorContent>

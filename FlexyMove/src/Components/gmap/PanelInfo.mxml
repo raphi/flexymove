@@ -20,11 +20,9 @@
 		<![CDATA[
 			import Components.PopUpPlayer.PopUpPlayer;
 			
-			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
-			import mx.collections.ArrayList;
 			import mx.managers.PopUpManager;
 			
 			[Bindable]
@@ -40,7 +38,6 @@
 					else
 						YOUTUBE_IMG_URL= "http://img.youtube.com/vi/" + markerInfo.idYoutubeVideo + '/0.jpg';
 				} */
-				
 			}
 			
 			private function channelFieldClickHandler(event:MouseEvent):void
@@ -57,6 +54,8 @@
 				PopUpManager.addPopUp(popup, this.parent, false);
 				PopUpManager.centerPopUp(popup);
 			}
+			
+			// FIXME : NO NO NO has to be in the MANAGER
 			private function getUrlImage():String
 			{
 				/* var urlimage : String = "";
@@ -69,6 +68,7 @@
 				}  */
 				return YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg';
 			}
+			
 		]]>
 	</fx:Script>
 	

@@ -16,6 +16,7 @@
 			import Components.coverflow.itemsRenderers.MyMovieRenderer;
 			
 			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
 			import mx.collections.ArrayList;
@@ -71,6 +72,7 @@
 				return new ClassFactory(cla);
 			}
 			
+			// FIXME should be the same channel, not to be set like that
 			public function onClick():void
 			{
 				var item:VideoInfoVO = list.selectedItem as VideoInfoVO;
@@ -107,6 +109,12 @@
 				}
 			}
 			
+			// FIXME : to be deleted
+			private function buttonClickHandler(event:MouseEvent):void
+			{
+				NavigatorManager.getInstance().currentView = NavigatorManager.GMAP_VIEW;
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -116,9 +124,9 @@
 				   left="0" right="0"
 				   top="0" bottom="0" />
 	
-	<s:Label y="27" id="channel" color="0x208015" fontSize="25" fontFamily="Cooper Std Black" horizontalCenter="0" />
+	<s:Label y="27" id="channel" color="0x208015" fontSize="25" fontFamily="Cooper Std Black" horizontalCenter="0" click="buttonClickHandler(event)"/>
 	
-	<s:List id="list" x="0" y="0" width="100%" height="100%" borderVisible="false"
+	<s:List id="list" bottom="0" width="100%" height="90%" borderVisible="false"
 			click="{onClick()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
 			doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
 			itemRendererFunction="itemRender" selectedIndex="0">
