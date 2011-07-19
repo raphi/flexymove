@@ -57,6 +57,8 @@
 			{
 				MarkerManager.getInstance().addMarker(marker);
 				this.visible = false;
+				
+				// FIXME do function reinit
 				titleInput.text = "";
 				descriptionInput.text = "";
 				youtubeUrlInput.text = "";
