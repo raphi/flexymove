@@ -4,6 +4,7 @@ package Components.player.youtube.components
 	import flash.events.Event;
 	import flash.net.URLRequest;
 	
+	import mx.controls.Alert;
 	import mx.core.UIComponent;
 	
 	//--------------------------------------
@@ -386,6 +387,7 @@ package Components.player.youtube.components
 			player.setVolume(_volume);
 			var myEvent:YouTubeEvent = new YouTubeEvent(YouTubeEvent.PLAYER_LOADED);
 			dispatchEvent(myEvent);
+			
 		}
 		
 		private function handlePlayerError(event:Event):void 

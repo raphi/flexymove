@@ -69,7 +69,7 @@
 		<s:FormItem label="Titre :" styleName="infoLabelFormItem">
 			<s:TextInput id="titleInput" width="160" color="#000000" fontWeight="normal"/>
 		</s:FormItem>
-		<s:FormItem label="Url YouTube :" styleName="infoLabelFormItem">
+		<s:FormItem label="Url Video :" styleName="infoLabelFormItem">
 			<s:TextInput id="youtubeUrlInput" width="160" color="#000000" fontWeight="normal"/>
 		</s:FormItem>
 	</s:Form>
