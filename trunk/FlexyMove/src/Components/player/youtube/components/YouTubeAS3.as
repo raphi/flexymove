@@ -60,9 +60,8 @@ package Components.player.youtube.components
 			if (playerType == "youtube")
 				loader.load(new URLRequest("http://www.youtube.com/apiplayer?version=3")); // youtube
 			else
-				loader.load(new URLRequest("http://www.dailymotion.com/swf?enableApi=1")); // dailymotion
-			
-			
+				loader.load(new URLRequest("http://www.dailymotion.com/swf?enableApi=1&chromeless=1")); // dailymotion
+	
 		}
 		//--------------------------------------------------------------------------
 		//
