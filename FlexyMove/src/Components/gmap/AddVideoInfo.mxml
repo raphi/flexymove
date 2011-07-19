@@ -57,6 +57,9 @@
 			{
 				MarkerManager.getInstance().addMarker(marker);
 				this.visible = false;
+				titleInput.text = "";
+				descriptionInput.text = "";
+				youtubeUrlInput.text = "";
 			}
 			
 		]]>
