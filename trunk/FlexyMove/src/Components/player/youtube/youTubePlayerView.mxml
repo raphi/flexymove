@@ -30,7 +30,6 @@
 			import Components.player.youtube.components.YouTubeVideoQuality;
 			
 			import mx.collections.ArrayCollection;
-			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			
 			[Bindable]
@@ -38,7 +37,7 @@
 			public var idYoutubeVideo : String = "";
 			
 			[Bindable]
-			public var playerType : String = "youtube" ; //youtube; dailymotion
+			public var playerType : String = "youtube" ; //youtube; dailymotion this is very dirty TO BE DELETED
 			//----------------------------------
 			//  YouTube Event Handling
 			//----------------------------------
@@ -331,9 +330,7 @@
 		
 	</s:BorderContainer>
 	
-	
 	<s:Image x="-5" y="-5" width="25" height="25" 
-			 
 			 source="@Embed('/assets/images/closeIcon2.png')"
 			 buttonMode="true"
 			 visible="false"
