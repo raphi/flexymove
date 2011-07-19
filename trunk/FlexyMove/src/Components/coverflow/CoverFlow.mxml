@@ -3,7 +3,10 @@
 		 xmlns:s="library://ns.adobe.com/flex/spark"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:coverflow="Components.coverflow.*"
-		 width="100%" height="100%">
+		 width="100%" height="100%" >
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
 	
 	<fx:Metadata>
 		[Event("change", type="mx.events.Event")]
@@ -20,6 +23,8 @@
 			import com.flexymove.VO.VideoInfoVO;
 			
 			import mx.collections.ArrayList;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
 			public const SELECTEDITEMPROXIMITY:Number = 30;		// 0 TO 200	
@@ -31,30 +36,8 @@
 			
 			[Bindable]
 			public var fileList:ArrayList = MarkerManager.getInstance().getVideoList(); // FIXME : this is dirty, should be dynamic
-			
-			/** init coverflow component 
-			 **/ 
-			/* 			public function init (): void
-			{
-			for (var i:int = 0; i < 5; i++) 
-			{
-			var itemFolder:ItemCoverFlow = new ItemCoverFlow(true);
-			itemFolder.title = "Folder " + i;
-			itemFolder.owner = "Peron " + i;
-			
-			fileList.addItem(itemFolder);
-			}
-			for ( i = 0; i < 10; i++) 
-			{
-			var itemVideo:ItemCoverFlow = new ItemCoverFlow(false,"PXRX47L_3yE");
-			itemVideo.title = "Movie " + i;
-			itemVideo.time = i * 10;
-			itemVideo.owner = "Peron " + i + 10;
-			itemVideo.chanel = "chanel" + i;
-			fileList.addItem(itemVideo);
-			}
-			} */
-			
+			public var popup : PopUpPlayer = null;// CHANGE THAT
+
 			/** Return a Class Factory adapted to the item :
 			 *  - Movie
 			 * 	- Picture
@@ -77,6 +60,7 @@
 			{
 				var item:VideoInfoVO = list.selectedItem as VideoInfoVO;
 				channel.text = item.channel;
+				videoTitle.text = item.title;
 			}
 			
 			private function getListVideosInChanelFromLiveCycle(channelName:String):ArrayList
@@ -112,21 +96,19 @@
 			// FIXME : to be deleted
 			private function buttonClickHandler(event:MouseEvent):void
 			{
-				NavigatorManager.getInstance().currentView = NavigatorManager.GMAP_VIEW;
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				
 			}
 			
 		]]>
 	</fx:Script>
-	
-	<s:BitmapImage id="img"
-				   source="@Embed('/assets/images/nature2_back.jpg')"
-				   fillMode="scale"
-				   left="0" right="0"
-				   top="0" bottom="0" />
-	
-	<s:Label y="27" id="channel" color="0x208015" fontSize="25" fontFamily="Cooper Std Black" horizontalCenter="0" click="buttonClickHandler(event)"/>
-	
-	<s:List id="list" bottom="0" width="100%" height="90%" borderVisible="false"
+
+	<s:VGroup>
+		<s:Label id="channel" click="buttonClickHandler(event)" color="#000000" fontSize="42"
+				 fontWeight="bold" textAlign="center"/>
+		<s:Label id="videoTitle" click="buttonClickHandler(event)" color="#000000" fontSize="35"/>
+	</s:VGroup>
+	<s:List id="list" bottom="0" width="100%" height="85%" borderVisible="false"
 			click="{onClick()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
 			doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
 			itemRendererFunction="itemRender" selectedIndex="0">

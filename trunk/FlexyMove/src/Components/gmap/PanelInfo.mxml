@@ -19,6 +19,8 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.PopUpPlayer.PopUpPlayer;
+			import Components.PopUpPlayer.PopupCoverflow;
+			import Components.coverflow.CoverFlow;
 			
 			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
@@ -42,7 +44,15 @@
 			
 			private function channelFieldClickHandler(event:MouseEvent):void
 			{
-				NavigatorManager.getInstance().currentView = NavigatorManager.CHANNEL_VIEW;
+				//NavigatorManager.getInstance().currentView = NavigatorManager.CHANNEL_VIEW;
+				
+				
+				/*POPUP COVERFLOW*/
+				var win : PopupCoverflow  = new PopupCoverflow();
+				win.height = 700 ;
+				win.width = 1024;
+				PopUpManager.addPopUp(win,this.parent,true);
+				PopUpManager.centerPopUp(win);
 			}
 			
 			private function imageDoubleClickHandler(event:MouseEvent):void

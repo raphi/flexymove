@@ -330,7 +330,7 @@
 		
 	</s:BorderContainer>
 	
-	<s:Image x="-5" y="-5" width="25" height="25" 
+	<s:Image x="5" y="5" width="25" height="25" 
 			 source="@Embed('/assets/images/closeIcon2.png')"
 			 buttonMode="true"
 			 visible="false"
