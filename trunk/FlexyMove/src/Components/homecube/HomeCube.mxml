@@ -98,7 +98,7 @@
 						 change="oldView=profileView; newView=youtubeView;currentState='YouTubeState'"
 						 includeInLayout.MapState="false" includeInLayout.YouTubeState="false"/>
 	
-	<youtube:youTubePlayerView id="youtubeView"
+	<youtube:playerView id="youtubeView"
 							   visible="false"
 							   change="oldView=youtubeView; newView=mapView;currentState='MapState'"
 							   includeInLayout.MapState="false" includeInLayout.ProfileState="false"/>
