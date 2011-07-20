@@ -14,7 +14,7 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.PopUpPlayer.PopUpPlayer;
+			import Components.player.youtube.PopUpPlayer;
 			import Components.coverflow.itemsRenderers.MyFolderRenderer;
 			import Components.coverflow.itemsRenderers.MyMovieRenderer;
 			

@@ -322,7 +322,7 @@
 		
 		<s:Label id="labelTime" color="white" text="00:00/00:00"/>
 		
-		<youtube:ProgressComponent id="Progress" width="100%" click="onSeekToClick(event)" buttonMode="true"/>
+		<components:ProgressComponent id="Progress" width="100%" click="onSeekToClick(event)" buttonMode="true"/>
 		<s:Image id="Sound" source="@Embed('/assets/images/sound_icon.png')" />
 		
 		<s:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="100" liveDragging="true" buttonMode="true"/>

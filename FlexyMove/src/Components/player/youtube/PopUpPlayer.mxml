@@ -33,6 +33,6 @@
 		]]>
 	</fx:Script>
 	
-	<youtube:youTubePlayerView id="YoutubePlayer" playerType="{playerType}"/>
+	<youtube:playerView id="YoutubePlayer" playerType="{playerType}"/>
 	
 </s:Group>

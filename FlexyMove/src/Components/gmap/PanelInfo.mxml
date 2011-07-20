@@ -18,8 +18,8 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.PopUpPlayer.PopUpPlayer;
-			import Components.PopUpPlayer.PopupCoverflow;
+			import Components.player.youtube.PopUpPlayer;
+			import Components.coverflow.PopupCoverflow;
 			import Components.coverflow.CoverFlow;
 			
 			import com.flexymove.Managers.NavigatorManager;
