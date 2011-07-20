@@ -28,9 +28,6 @@
     <application path="FlexyMove.mxml">
       <airExcludes/>
     </application>
-    <application path="CoverFlowTest.mxml">
-      <airExcludes/>
-    </application>
   </applications>
   <modules/>
   <buildCSSFiles/>
