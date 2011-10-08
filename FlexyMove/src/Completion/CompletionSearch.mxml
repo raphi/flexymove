@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:hc="com.hillelcoren.components.*"
+	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
+	xmlns:local="*"
+	width="100%" height="100%" color="#000000"
+	verticalAlign="top" horizontalAlign="left" 
+	paddingLeft="100" paddingTop="10" paddingBottom="20" paddingRight="20">
+	
+	<mx:Script>
+		<![CDATA[
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.VO.VideoInfoVO;
+			import com.hillelcoren.components.AutoComplete;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.core.Application;
+			import mx.core.UIComponent;
+			import mx.events.MenuEvent;
+			import mx.utils.ObjectUtil;
+			
+			[Bindable]
+			public var searchListe:ArrayCollection;
+			
+			public function init():void
+			{
+				searchListe =  new ArrayCollection();
+				
+				var listTitle:ArrayCollection = new ArrayCollection();
+				var listChannel:ArrayCollection = new ArrayCollection();
+				var listPlace:ArrayCollection = new ArrayCollection();
+				var listPseudo:ArrayCollection = new ArrayCollection();
+				var videoList : ArrayList = MarkerManager.getInstance().getVideoList();
+				
+				for (var i : int = 0 ; i < videoList.length;i++)
+				{
+					var videoinfo : VideoInfoVO = VideoInfoVO(videoList.getItemAt(i));
+					var myPattern:RegExp = /, /g;
+					
+					var place : String = videoinfo.address.replace(myPattern, ",");
+					var addtab : Array = place.split(",");
+					
+					place = place.split(",")[place.split(",").length - 1];
+					var city : String="";
+					if (addtab.length >= 2)
+						city= addtab[addtab.length - 2];
+					if (!listTitle.contains(videoinfo.title))
+						listTitle.addItem(videoinfo.title);
+					
+					if (!listChannel.contains(videoinfo.channel))
+						listChannel.addItem(videoinfo.channel);
+					
+					if (!listPlace.contains(place))
+					{
+						listPlace.addItem(place);
+						//listPlace.addItem(city);
+					}
+					if (!listPseudo.contains(videoinfo.pseudo))
+						listPseudo.addItem(videoinfo.pseudo);
+					
+				}
+				searchListe.addItem(listTitle);
+				searchListe.addItem(listPseudo);
+				searchListe.addItem(listPlace);
+				searchListe.addItem(listChannel);
+				
+				
+				//Alert.show("size " + searchListe.getItemAt(0).length);
+			}			
+			
+			public function addElementToSearch(): void
+			{
+				/* implement it*/
+			}
+			
+			private function handleAutoCompleteChange():void
+			{
+				
+				var informations:ArrayCollection = autoComplete.selectedItems;
+				var rechercheType :String = LabelListe.selectedItem.data;
+				/*displ marker for search*/
+				MarkerManager.getInstance().uptdateMapWithSearchResul(informations,rechercheType);
+			}
+			
+			private function handleFieldChange():void
+			{
+				autoComplete.labelField = LabelListe.selectedItem.data;
+				autoComplete.dataProvider = ArrayCollection (searchListe.getItemAt(LabelListe.selectedIndex));
+				autoComplete.clear();
+				
+			}
+			private function handleItemClick( event:MenuEvent ):void
+			{
+				switch (String(event.item.@data))
+				{
+					case "browse":
+						autoComplete.showBrowser();
+						break;
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:XML format="e4x" id="menuData">
+		<root>
+			<menuitem data="browse" label="Browse..."/>
+		</root>
+	</mx:XML>
+	<mx:HBox width="40%" minWidth="200">
+		<mx:GridItem>
+			<mx:ComboBox id="LabelListe" change="handleFieldChange()">					
+				<mx:Object label="Titre" data="title"/>
+				<mx:Object label="Pseudo" data="pseudo"/>
+				<mx:Object label="Lieu" data="address"/>
+				<mx:Object label="Channel" data="channel"/>
+			</mx:ComboBox>			
+		</mx:GridItem>
+		<hc:AdvancedAutoComplete id="autoComplete" 
+								 dataProvider="{ArrayCollection(searchListe.getItemAt(0))}" 
+								 showRemoveIcon="true"
+								 matchType="anyPart" 
+								 actionsMenuDataProvider="{menuData}"
+								 showBrowseButton="false"
+								 prompt="Search Video (location or title)" 
+								 width="100%" 
+								 change="{handleAutoCompleteChange()}"
+								 allowNewValues="true" 
+								 itemClick="handleItemClick(event)"
+								 selectedItemStyleName="{AutoComplete.STYLE_MAC_MAIL}" 
+								 allowDuplicates="false" 
+								 allowMultipleSelection="true"
+								 allowEditingNewValues="false" 
+								 backspaceAction="focus"/>
+	</mx:HBox>
+	
+</mx:HBox>

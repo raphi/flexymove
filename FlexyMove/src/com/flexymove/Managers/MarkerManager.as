@@ -11,11 +11,14 @@ package com.flexymove.Managers
 	import com.google.maps.LatLng;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
+	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
 	
 	import flash.events.EventDispatcher;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
+	import mx.controls.Alert;
 	
 	/**
 	 * Singleton class.
@@ -93,14 +96,67 @@ package com.flexymove.Managers
 			if (videoVO)
 			{
 				videoInfosList.addItem(videoVO);
-				
+				createMarker(videoVO);
 				// FIXME : add this functionnality
-				var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
+				/*var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
 				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
 				
 				marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-				gmarkerManager.addMarker(marker, 0, 15);
+				gmarkerManager.addMarker(marker, 0, 15);*/
 			}
 		}
+		
+		private function createMarker(videoVO:VideoInfoVO):void
+		{
+		
+			var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
+			var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
+			
+			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
+			gmarkerManager.addMarker(marker, 0, 15);
+		}
+		public function uptdateMapWithSearchResul(searchCriterias : ArrayCollection, fieldToSearch :String):void
+		{
+			gmarkerManager.clearMarkers();
+			for (var i:int = 0; i<videoInfosList.length; i++)
+			{
+				var videoVO : VideoInfoVO = VideoInfoVO(videoInfosList.getItemAt(i));
+				if (searchCriterias.length == 0)
+				{
+					createMarker(videoVO);
+					continue;
+				}
+				var myPattern:RegExp = /, /g;
+				
+				var place : String = videoVO.address.replace(myPattern, ",");
+				place = place.split(",")[place.split(",").length - 1];
+
+				for (var j : int = 0 ; j <searchCriterias.length;j++)
+				{
+					if (fieldToSearch == "title" && videoVO.title == searchCriterias.getItemAt(j))
+					{
+						createMarker(videoVO);
+						break;
+					}
+					if (fieldToSearch == "pseudo" && videoVO.pseudo == searchCriterias.getItemAt(j))
+					{
+						createMarker(videoVO);
+						break;
+					}
+					if (fieldToSearch == "address" && place == searchCriterias.getItemAt(j))
+					{
+						createMarker(videoVO);
+						break;
+					}
+					if (fieldToSearch == "channel" && videoVO.channel == searchCriterias.getItemAt(j))
+					{
+						createMarker(videoVO);
+						break;
+					}
+				}
+			}
+			
+		}
+		
 	}
 }

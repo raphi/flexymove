@@ -6,7 +6,7 @@
 		 xmlns:maps="com.google.maps.*"
 		 xmlns:gmap="Components.gmap.*"
 		 creationComplete="creationCompleteHandler(event)"
-		 width="100%" height="100%">
+		 width="100%" height="100%" xmlns:Completion="Completion.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -40,6 +40,7 @@
 				map.enableControlByKeyboard();
 				map.addControl(new NavigationControl());
 				map.addControl(new MapTypeControl());
+				
 			}
 			
 			private function onMarkerClick(e:MapMouseEvent):void
@@ -58,6 +59,10 @@
 					panelInfoView.visible = false;
 					addVideoInfoView.visible = true;
 					addVideoInfoView.latLngMarkerAdded = event.latLng;
+					
+					
+					/*CHANGE*/
+					Search.init();
 				}
 			}
 			
@@ -74,12 +79,14 @@
 			{
 				cursorManager.setBusyCursor();
 				LCConnectManager.login();
+				
 			}
 			
 			private function onSynchronizationChangeHandler(event:SessionEvent):void
 			{
 				if (LCConnectManager.isSynchronized)
 					CursorManager.removeBusyCursor();
+				
 			}
 			
 		]]>
@@ -97,6 +104,7 @@
 		</rtc:ConnectSession>
 	</fx:Declarations>
 	
+	
 	<maps:Map id="map"
 			  width="100%" height="100%" 
 			  key="ABQIAAAApevjLsy0a4ChuZ1lcd50AhTsslF4Y8xkhf7W8wmKT7ADz-aLqhRgYJNmWAMy90YGUU-Zs8_XupF7fQ"
@@ -108,4 +116,5 @@
 	<!--<gmap:userInfo />-->
 	<gmap:PanelInfo id="panelInfoView" visible="false"/>
 	<gmap:AddVideoInfo id="addVideoInfoView" visible="false"/>
+	<Completion:CompletionSearch id="Search" visible="true"/>
 </s:Group>
