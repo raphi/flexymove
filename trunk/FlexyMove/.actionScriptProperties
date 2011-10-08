@@ -13,6 +13,7 @@
       <libraryPathEntry kind="3" linkType="1" path="libs/map_flex_1_20.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="libs/lccs.swc" sourcepath="${DOCUMENTS}/com.adobe.lccs/libs/player10.1/src" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="libs/DegrafaFlex4.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="C:/Users/Nicolas/Downloads/AutoComplete/AutoComplete/bin/AutoComplete-1.2-Fx4.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath>
       <sourceAttachmentPathEntry kind="3" linkType="1" path="libs/lccs.swc" sourcepath="${DOCUMENTS}/com.adobe.lccs/libs/player10.1/src" useDefaultLinkType="false"/>
@@ -34,10 +35,8 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="" airTimestamp="true" version="1">
-        <airExcludes>
-          <pathEntry path="argisAir.swf"/>
-        </airExcludes>
+      <airSettings airCertificatePath="C:/Users/Nicolas/Desktop/mycert.p12" airTimestamp="true" version="1">
+        <airExcludes/>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>
