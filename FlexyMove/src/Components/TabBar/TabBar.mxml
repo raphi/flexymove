@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   showEffect="{showEffect}" hideEffect="{hideEffect}"
+				   right="left" top="0"  width="100%" height="40"
+				   styleName="panelInfoStyle"
+				    xmlns:Completion="Completion.*">
+	<s:layout>
+		<s:VerticalLayout verticalAlign="middle"/>
+	</s:layout>
+	
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaTo="1" duration="500" />
+		<s:Fade id="hideEffect" alphaTo="0" duration="500" />
+		<s:DateTimeFormatter id="formatDate" dateStyle="medium"/>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.gmap.userInfo;
+			import Components.player.picture.PopUpPicture;
+			
+			import com.flexymove.Managers.MarkerManager;
+			
+			import mx.managers.PopUpManager;
+			public function init():void{
+				Search.init();
+			}
+			
+			
+			protected function displayeUserInformation():void
+			{
+				var popupUser:userInfo = new userInfo();
+				
+				PopUpManager.addPopUp(popupUser, this.parent, false);
+				PopUpManager.centerPopUp(popupUser);  
+				
+			}
+			public function displayMedia(): void
+			{
+				var dVideo : Boolean = displayVideos.selected;
+				var dPicture : Boolean = displayPictures.selected;
+				diaporamaButton.enabled = dPicture; 
+				MarkerManager.getInstance().displayVideoAndOrPicture(dPicture, dVideo);
+			}
+			public function displayDiaporama(): void
+			{
+				var popupPicture:PopUpPicture = new PopUpPicture();
+				popupPicture.diaporama = true;
+				PopUpManager.addPopUp(popupPicture, this.parent, false);
+				PopUpManager.centerPopUp(popupPicture); 
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+
+	<s:HGroup>
+		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
+		<Completion:CompletionSearch id="Search"/>
+		<s:Button click="init()" label="init"/>
+		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
+		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>
+		<s:Button id="diaporamaButton" click="displayDiaporama()" label="diaporama"/>
+	</s:HGroup>
+
+</s:BorderContainer>
