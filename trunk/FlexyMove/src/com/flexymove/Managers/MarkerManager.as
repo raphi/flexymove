@@ -7,12 +7,14 @@ package com.flexymove.Managers
 	import com.adobe.rtc.messaging.MessageItem;
 	import com.adobe.rtc.session.ConnectSession;
 	import com.adobe.rtc.sharedModel.CollectionNode;
+	import com.flexymove.Utils.Utils;
 	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
+	import com.hillelcoren.utils.ArrayCollectionUtils;
 	
 	import flash.events.EventDispatcher;
 	
@@ -29,7 +31,7 @@ package com.flexymove.Managers
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
 		private var _sharedVideoList:CollectionNode;
 		private var videoInfosList:ArrayList = new ArrayList();
-		
+		private var videoDisplayInfosList:ArrayList = new ArrayList();
 		private static var instance:MarkerManager;
 		
 		public static function getInstance():MarkerManager
@@ -72,6 +74,24 @@ package com.flexymove.Managers
 		{
 			return videoInfosList;
 		}
+		public function getVideoDisplayInfosList():ArrayList
+		{
+			return videoDisplayInfosList;
+		}
+		
+		public function getAllPictures():ArrayList
+		{
+			var pictureList :ArrayList = new ArrayList();
+			for (var i : int = 0; i < videoInfosList.length;i++)
+			{
+				var videoVO : VideoInfoVO = VideoInfoVO(videoInfosList.getItemAt(i));
+			
+				if(videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+					pictureList.addItem(videoInfosList.getItemIndex(i));
+				
+			}
+			return pictureList;
+		}
 		
 		/**
 		 * Add a marker on the map and synchronize it with the server
@@ -96,6 +116,7 @@ package com.flexymove.Managers
 			if (videoVO)
 			{
 				videoInfosList.addItem(videoVO);
+				videoDisplayInfosList.addItem(videoVO);
 				createMarker(videoVO);
 				// FIXME : add this functionnality
 				/*var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
@@ -115,17 +136,40 @@ package com.flexymove.Managers
 			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 			gmarkerManager.addMarker(marker, 0, 15);
 		}
+		
+		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
+		{
+			gmarkerManager.clearMarkers();
+		
+			for (var i:int = 0; i<videoDisplayInfosList.length; i++)
+			{
+				var videoVO : VideoInfoVO = VideoInfoVO(videoDisplayInfosList.getItemAt(i));
+				if(picture && videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+				{
+					createMarker(videoVO);
+				}
+				if(video && videoVO.playerType != "picture")
+				{
+					createMarker(videoVO);
+				}
+					
+			}
+		}
+		
 		public function uptdateMapWithSearchResul(searchCriterias : ArrayCollection, fieldToSearch :String):void
 		{
 			gmarkerManager.clearMarkers();
+			videoDisplayInfosList = new ArrayList();
 			for (var i:int = 0; i<videoInfosList.length; i++)
 			{
 				var videoVO : VideoInfoVO = VideoInfoVO(videoInfosList.getItemAt(i));
 				if (searchCriterias.length == 0)
 				{
 					createMarker(videoVO);
+					videoDisplayInfosList.addItem(videoVO);
 					continue;
 				}
+				
 				var myPattern:RegExp = /, /g;
 				
 				var place : String = videoVO.address.replace(myPattern, ",");
@@ -133,24 +177,29 @@ package com.flexymove.Managers
 
 				for (var j : int = 0 ; j <searchCriterias.length;j++)
 				{
+					
 					if (fieldToSearch == "title" && videoVO.title == searchCriterias.getItemAt(j))
 					{
 						createMarker(videoVO);
+						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
 					if (fieldToSearch == "pseudo" && videoVO.pseudo == searchCriterias.getItemAt(j))
 					{
 						createMarker(videoVO);
+						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
 					if (fieldToSearch == "address" && place == searchCriterias.getItemAt(j))
 					{
 						createMarker(videoVO);
+						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
 					if (fieldToSearch == "channel" && videoVO.channel == searchCriterias.getItemAt(j))
 					{
 						createMarker(videoVO);
+						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
 				}

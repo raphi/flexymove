@@ -6,7 +6,7 @@
 		 xmlns:maps="com.google.maps.*"
 		 xmlns:gmap="Components.gmap.*"
 		 creationComplete="creationCompleteHandler(event)"
-		 width="100%" height="100%" xmlns:Completion="Completion.*">
+		 width="100%" height="100%" xmlns:Completion="Completion.*" xmlns:TabBar="Components.TabBar.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -39,7 +39,7 @@
 				map.enableContinuousZoom();
 				map.enableControlByKeyboard();
 				map.addControl(new NavigationControl());
-				map.addControl(new MapTypeControl());
+				//map.addControl(new MapTypeControl());
 				
 			}
 			
@@ -60,9 +60,6 @@
 					addVideoInfoView.visible = true;
 					addVideoInfoView.latLngMarkerAdded = event.latLng;
 					
-					
-					/*CHANGE*/
-					Search.init();
 				}
 			}
 			
@@ -116,5 +113,5 @@
 	<!--<gmap:userInfo />-->
 	<gmap:PanelInfo id="panelInfoView" visible="false"/>
 	<gmap:AddVideoInfo id="addVideoInfoView" visible="false"/>
-	<Completion:CompletionSearch id="Search" visible="true"/>
+	<TabBar:TabBar/>
 </s:Group>

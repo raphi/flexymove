@@ -6,7 +6,7 @@
 	xmlns:local="*"
 	width="100%" height="100%" color="#000000"
 	verticalAlign="top" horizontalAlign="left" 
-	paddingLeft="100" paddingTop="10" paddingBottom="20" paddingRight="20">
+	paddingLeft="100" >
 	
 	<mx:Script>
 		<![CDATA[
@@ -109,7 +109,7 @@
 			<menuitem data="browse" label="Browse..."/>
 		</root>
 	</mx:XML>
-	<mx:HBox width="40%" minWidth="200">
+	<mx:HBox width="100%" minWidth="200">
 		<mx:GridItem>
 			<mx:ComboBox id="LabelListe" change="handleFieldChange()">					
 				<mx:Object label="Titre" data="title"/>

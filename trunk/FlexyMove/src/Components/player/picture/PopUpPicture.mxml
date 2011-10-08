@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:components="Components.player.youtube.components.*" 
+		 xmlns:youtube="Components.player.youtube.*"
+		 width="100%" height="100%"
+		 creationComplete="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Style>
+		global {
+			modal-transparency: 0.9;
+			modal-transparency-color: white;
+			modal-transparency-blur: 9;
+		}
+	</fx:Style>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.rtc.core.session_internal;
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Utils.Utils;
+			import com.flexymove.VO.VideoInfoVO;
+			
+			import flash.utils.setInterval;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.controls.Image;
+			import mx.core.IFlexDisplayObject;
+			import mx.effects.Resize;
+			import mx.events.CloseEvent;
+			import mx.events.ItemClickEvent;
+			import mx.events.ListEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+			
+			
+			private var img:Image = null;
+			public var diaporama = false;
+			private var position : int = 0;
+			[Bindable]
+			var pictureList:ArrayList = new ArrayList(); ;
+			private var interval:uint;
+			
+			[Bindable]
+			public var markerInfo:VideoInfoVO;		
+			private function init():void
+			{
+				if (!diaporama)
+					loadImage(markerInfo.idYoutubeVideo);
+				else
+				{
+					getPictureList(MarkerManager.getInstance().getVideoDisplayInfosList());
+					loadImageToDiaporama();
+					interval= setInterval(loadImageToDiaporama, 3000);
+				}
+				
+			}
+			
+			public function getPictureList(infoList : ArrayList): void
+			{
+				for (var i : int = 0 ; i < infoList.length;i++)
+				{
+					var videoVO : VideoInfoVO = VideoInfoVO(infoList.getItemAt(i));
+					if(videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+						pictureList.addItem(videoVO);
+				}
+			}
+			private function loadImageToDiaporama():void
+			{
+				if(img != null)
+					PopUpManager.removePopUp(img)
+				
+				if(position<pictureList.length)
+				{
+					
+					var videoVO : VideoInfoVO = VideoInfoVO(pictureList.getItemAt(position));
+						loadImage(videoVO.idYoutubeVideo);
+					position++;
+				}
+				else
+				{
+					clearInterval(interval);
+				}
+			}
+			
+			private function loadImage(source :String):void {
+				img = new Image();
+				
+				img.maintainAspectRatio = true;
+				img.addEventListener(Event.COMPLETE, image_complete);
+				img.addEventListener(ResizeEvent.RESIZE, image_resize);
+				img.addEventListener(MouseEvent.CLICK, image_click);
+				img.source = source;
+				img.setStyle("addedEffect", image_addedEffect);
+				img.setStyle("removedEffect", image_removedEffect);
+				PopUpManager.addPopUp(img, this, true);
+			}
+			
+			private function image_click(evt:MouseEvent):void {
+				
+				if (diaporama)
+					clearInterval(interval);
+				PopUpManager.removePopUp(evt.currentTarget as Image);
+			}
+			
+			private function image_resize(evt:ResizeEvent):void {
+				PopUpManager.centerPopUp(evt.currentTarget as Image);
+			}
+			
+			private function image_complete(evt:Event):void {
+				x -= (evt.currentTarget as Image).width / 2;
+				y -= (evt.currentTarget as Image).height / 2;
+				PopUpManager.centerPopUp(evt.currentTarget as Image);
+			}
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<mx:WipeDown id="image_addedEffect" startDelay="100" />
+		
+		<mx:Parallel id="image_removedEffect">
+			<mx:Zoom />
+			<mx:Fade />
+		</mx:Parallel>
+		
+	</fx:Declarations>
+	
+</s:Group>
