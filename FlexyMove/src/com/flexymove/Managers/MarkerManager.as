@@ -14,6 +14,8 @@ package com.flexymove.Managers
 	import com.google.maps.interfaces.IMap;
 	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
+	import com.google.maps.styles.FillStyle;
+	import com.google.maps.styles.StrokeStyle;
 	import com.hillelcoren.utils.ArrayCollectionUtils;
 	
 	import flash.events.EventDispatcher;
@@ -85,7 +87,7 @@ package com.flexymove.Managers
 			for (var i : int = 0; i < videoInfosList.length;i++)
 			{
 				var videoVO : VideoInfoVO = VideoInfoVO(videoInfosList.getItemAt(i));
-			
+				
 				if(videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
 					pictureList.addItem(videoInfosList.getItemIndex(i));
 				
@@ -130,17 +132,36 @@ package com.flexymove.Managers
 		private function createMarker(videoVO:VideoInfoVO):void
 		{
 		
-			var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
+			
+			var markerOption:MarkerOptions = new MarkerOptions({
+				strokeStyle: new StrokeStyle({color: 0x987654}),
+				fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+				radius: 12,
+				hasShadow: true,
+				draggable: true
+			});
+			if (videoVO.playerType == "picture")
+				markerOption = new MarkerOptions({
+					strokeStyle: new StrokeStyle({color: 0x987654}),
+					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+					radius: 12,
+					hasShadow: true,
+					draggable: true
+				});
+			//markerOption.strokeStyle = style; 
 			var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
 			
 			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
+			//SET visibilité view
 			gmarkerManager.addMarker(marker, 0, 15);
+			
+			
 		}
 		
 		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
 		{
 			gmarkerManager.clearMarkers();
-		
+			
 			for (var i:int = 0; i<videoDisplayInfosList.length; i++)
 			{
 				var videoVO : VideoInfoVO = VideoInfoVO(videoDisplayInfosList.getItemAt(i));
@@ -152,7 +173,7 @@ package com.flexymove.Managers
 				{
 					createMarker(videoVO);
 				}
-					
+				
 			}
 		}
 		
@@ -174,17 +195,17 @@ package com.flexymove.Managers
 				
 				var place : String = videoVO.address.replace(myPattern, ",");
 				place = place.split(",")[place.split(",").length - 1];
-
+				
 				for (var j : int = 0 ; j <searchCriterias.length;j++)
 				{
 					
-					if (fieldToSearch == "title" && videoVO.title == searchCriterias.getItemAt(j))
+					if (fieldToSearch == "title" && videoVO.title.indexOf(searchCriterias.getItemAt(j) as String,0) != -1)
 					{
 						createMarker(videoVO);
 						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
-					if (fieldToSearch == "pseudo" && videoVO.pseudo == searchCriterias.getItemAt(j))
+					if (fieldToSearch == "pseudo" && videoVO.pseudo.indexOf(searchCriterias.getItemAt(j) as String,0) != - 1)
 					{
 						createMarker(videoVO);
 						videoDisplayInfosList.addItem(videoVO);
@@ -196,7 +217,7 @@ package com.flexymove.Managers
 						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
-					if (fieldToSearch == "channel" && videoVO.channel == searchCriterias.getItemAt(j))
+					if (fieldToSearch == "channel" && videoVO.channel.indexOf(searchCriterias.getItemAt(j) as String,0) != -1)
 					{
 						createMarker(videoVO);
 						videoDisplayInfosList.addItem(videoVO);
