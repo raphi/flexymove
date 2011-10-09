@@ -19,6 +19,7 @@
 			import Components.gmap.core.SharedMarker;
 			
 			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Managers.UserManager;
 			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
@@ -39,6 +40,8 @@
 					_marker.videoInfo.description = descriptionInput.text;
 					_marker.videoInfo.title = titleInput.text;
 					_marker.videoInfo.date = new Date();
+					
+					_marker.videoInfo.pseudo = UserManager.getInstance().userInfo.name;
 					
 					
 					if (youtubeUrlInput.text.search("http://www.dailymotion.com/video/") != -1)

@@ -12,17 +12,14 @@ package com.flexymove.Managers
 	import com.google.maps.LatLng;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
-	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
 	import com.google.maps.styles.FillStyle;
 	import com.google.maps.styles.StrokeStyle;
-	import com.hillelcoren.utils.ArrayCollectionUtils;
 	
 	import flash.events.EventDispatcher;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
-	import mx.controls.Alert;
 	
 	/**
 	 * Singleton class.
@@ -140,6 +137,7 @@ package com.flexymove.Managers
 				hasShadow: true,
 				draggable: true
 			});
+			
 			if (videoVO.playerType == "picture")
 				markerOption = new MarkerOptions({
 					strokeStyle: new StrokeStyle({color: 0x987654}),
@@ -148,14 +146,13 @@ package com.flexymove.Managers
 					hasShadow: true,
 					draggable: true
 				});
+			
 			//markerOption.strokeStyle = style; 
 			var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
 			
 			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 			//SET visibilité view
 			gmarkerManager.addMarker(marker, 0, 15);
-			
-			
 		}
 		
 		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
@@ -177,7 +174,7 @@ package com.flexymove.Managers
 			}
 		}
 		
-		public function uptdateMapWithSearchResul(searchCriterias : ArrayCollection, fieldToSearch :String):void
+		public function uptdateMapWithSearchResult(searchCriterias : ArrayCollection, fieldToSearch :String):void
 		{
 			gmarkerManager.clearMarkers();
 			videoDisplayInfosList = new ArrayList();
