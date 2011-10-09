@@ -2,7 +2,7 @@
 <s:Group  xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		  xmlns:s="library://ns.adobe.com/flex/spark" 
 		  xmlns:mx="library://ns.adobe.com/flex/mx" 
-		  xmlns:components="Components.player.youtube.components.*"
+		  xmlns:components="Components.player.components.*"
 		  width="730" height="498" xmlns:youtube="Components.player.youtube.*"
 		  creationComplete="init()">
 	
@@ -24,10 +24,10 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.player.youtube.components.YouTubeError;
-			import Components.player.youtube.components.YouTubeEvent;
-			import Components.player.youtube.components.YouTubePlayingState;
-			import Components.player.youtube.components.YouTubeVideoQuality;
+			import Components.player.components.YouTubeError;
+			import Components.player.components.YouTubeEvent;
+			import Components.player.components.YouTubePlayingState;
+			import Components.player.components.YouTubeVideoQuality;
 			
 			import mx.collections.ArrayCollection;
 			import mx.events.CloseEvent;

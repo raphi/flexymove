@@ -2,10 +2,11 @@
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				   xmlns:s="library://ns.adobe.com/flex/spark"
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:Completion="Completion.*"
 				   showEffect="{showEffect}" hideEffect="{hideEffect}"
 				   right="left" top="0"  width="100%" height="40"
-				   styleName="panelInfoStyle"
-				    xmlns:Completion="Completion.*">
+				   styleName="panelInfoStyle">
+	
 	<s:layout>
 		<s:VerticalLayout verticalAlign="middle"/>
 	</s:layout>
@@ -18,12 +19,14 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.gmap.userInfo;
+			import Components.gmap.UserInfoView;
 			import Components.player.picture.PopUpPicture;
 			
 			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Managers.UserManager;
 			
 			import mx.managers.PopUpManager;
+			
 			public function init():void{
 				Search.init();
 			}
@@ -31,7 +34,7 @@
 			
 			protected function displayeUserInformation():void
 			{
-				var popupUser:userInfo = new userInfo();
+				var popupUser:UserInfoView = new UserInfoView();
 				
 				PopUpManager.addPopUp(popupUser, this.parent, false);
 				PopUpManager.centerPopUp(popupUser);  
@@ -56,14 +59,15 @@
 		]]>
 	</fx:Script>
 	
-
-	<s:HGroup>
+	
+	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+		<s:Label text="{UserManager.getInstance().userInfo.name}" click="displayeUserInformation()"/>
 		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
-		<Completion:CompletionSearch id="Search"/>
+		<Completion:CompletionSearch id="Search" width="50%"/>
 		<s:Button click="init()" label="init"/>
 		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
 		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>
-		<s:Button id="diaporamaButton" click="displayDiaporama()" label="diaporama"/>
+		<s:Button id="diaporamaButton" click="displayDiaporama()" label="Diaporama"/>			
 	</s:HGroup>
-
+	
 </s:BorderContainer>

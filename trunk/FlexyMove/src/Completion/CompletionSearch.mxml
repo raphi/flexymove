@@ -5,7 +5,7 @@
 	xmlns:classes="com.hillelcoren.components.autoComplete.classes.*"
 	xmlns:local="*"
 	width="100%" height="100%" color="#000000"
-	verticalAlign="top" horizontalAlign="left" 
+	verticalAlign="middle" horizontalAlign="left" 
 	paddingLeft="100" >
 	
 	<mx:Script>
@@ -16,11 +16,7 @@
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ArrayList;
-			import mx.controls.Alert;
-			import mx.core.Application;
-			import mx.core.UIComponent;
 			import mx.events.MenuEvent;
-			import mx.utils.ObjectUtil;
 			
 			[Bindable]
 			public var searchListe:ArrayCollection;
@@ -82,7 +78,7 @@
 				var informations:ArrayCollection = autoComplete.selectedItems;
 				var rechercheType :String = LabelListe.selectedItem.data;
 				/*displ marker for search*/
-				MarkerManager.getInstance().uptdateMapWithSearchResul(informations,rechercheType);
+				MarkerManager.getInstance().uptdateMapWithSearchResult(informations,rechercheType);
 			}
 			
 			private function handleFieldChange():void
@@ -106,10 +102,10 @@
 	</mx:Script>
 	<mx:XML format="e4x" id="menuData">
 		<root>
-			<menuitem data="browse" label="Browse..."/>
+			<menuitem data="browse" label="Parcourir..."/>
 		</root>
 	</mx:XML>
-	<mx:HBox width="100%" minWidth="200">
+	<mx:HBox width="100%" minWidth="200" verticalAlign="middle">
 		<mx:GridItem>
 			<mx:ComboBox id="LabelListe" change="handleFieldChange()">					
 				<mx:Object label="Titre" data="title"/>
@@ -124,7 +120,7 @@
 								 matchType="anyPart" 
 								 actionsMenuDataProvider="{menuData}"
 								 showBrowseButton="false"
-								 prompt="Search Video (location or title)" 
+								 prompt="Recherche" 
 								 width="100%" 
 								 change="{handleAutoCompleteChange()}"
 								 allowNewValues="true" 
