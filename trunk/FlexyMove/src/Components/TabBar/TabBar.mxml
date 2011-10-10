@@ -32,7 +32,8 @@
 			{
 				var popupUser:UserInfoView = new UserInfoView();
 				
-				PopUpManager.addPopUp(popupUser, this.parent, false);
+				popupUser.connexionButtonVisible = false;
+				PopUpManager.addPopUp(popupUser, this.parent, true);
 				PopUpManager.centerPopUp(popupUser);  
 				
 			}
@@ -57,8 +58,8 @@
 	
 	
 	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
-		<s:Label text="{UserManager.getInstance().userInfo.name}" click="displayeUserInformation()"/>
 		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
+		<s:Label width="145" text="{UserManager.getInstance().userInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
 		<Completion:CompletionSearch id="Search" width="50%"/>
 		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
 		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>
