@@ -41,7 +41,7 @@
 					_marker.videoInfo.title = titleInput.text;
 					_marker.videoInfo.date = new Date();
 					_marker.videoInfo.channel = channelInput.text;
-					_marker.videoInfo.pseudo = UserManager.getInstance().userInfo.name;
+					_marker.videoInfo.pseudo = UserManager.getInstance().currentUserInfo.name;
 					
 					
 					if (youtubeUrlInput.text.search("http://www.dailymotion.com/video/") != -1)
@@ -77,6 +77,13 @@
 			
 		]]>
 	</fx:Script>
+	
+	<s:backgroundFill>
+		<s:LinearGradient rotation="90">
+			<s:GradientEntry color="0xD0D0F0" alpha="0.7"/>
+			<s:GradientEntry color="0x444444" alpha="0.7"/>
+		</s:LinearGradient>
+	</s:backgroundFill>
 	
 	<s:Label width="100%" paddingTop="15" styleName="panelInfoTitle" text="Informations"/>
 	<s:Form width="275">

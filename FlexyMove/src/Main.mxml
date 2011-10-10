@@ -2,7 +2,6 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
-					   xmlns:coverflow="Components.coverflow.*"
 					   xmlns:gmap="Components.gmap.*"
 					   minHeight="600" minWidth="1000"
 					   title="FlexyMove"
@@ -10,20 +9,5 @@
 	
 	<fx:Style source="assets/css/design.css"/>
 	
-	<fx:Script>
-		<![CDATA[
-			import com.flexymove.Managers.NavigatorManager;
-		]]>
-	</fx:Script>
-	
-	<mx:ViewStack height="100%" width="100%"
-				  selectedIndex="{NavigatorManager.getInstance().currentView}" 
-				  contentBackgroundAlpha="0.5">
-		<s:NavigatorContent>
-			<gmap:MapView id="mapView"/>
-		</s:NavigatorContent>
-		<s:NavigatorContent>
-			<coverflow:CoverFlow id="coverflowView"/>
-		</s:NavigatorContent>
-	</mx:ViewStack>
+	<gmap:MapView id="mapView"/>
 </s:WindowedApplication>

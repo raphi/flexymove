@@ -146,6 +146,65 @@ package com.flexymove.Managers
 			}
 		}
 		
+		private function createMarker(videoVO:VideoInfoVO):void
+		{
+			var markerOption:MarkerOptions = new MarkerOptions({
+				strokeStyle: new StrokeStyle({color: 0x987654}),
+				fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+				radius: 12,
+				hasShadow: true,
+				draggable: true
+			});
+			
+			if (videoVO.playerType == "picture")
+				markerOption = new MarkerOptions({
+					strokeStyle: new StrokeStyle({color: 0x987654}),
+					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+					radius: 12,
+					hasShadow: true,
+					draggable: true
+				});
+			
+			//markerOption.strokeStyle = style; 
+			var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
+			
+			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
+			marker.addEventListener(MapMouseEvent.DRAG_END, onMarkerMoved);
+			// SET visibilité view
+			// FIXME handle level zoom
+			gmarkerManager.addMarker(marker, 0, 15);
+		}
+		
+		// This send to the server the same marker with refresh lat lng.
+		private function onMarkerMoved(event : MapMouseEvent):void
+		{
+			var marker : SharedMarker = event.target as SharedMarker;
+			
+			marker.videoInfo.lat = event.latLng.lat();
+			marker.videoInfo.lng = event.latLng.lng();
+			
+			_sharedVideoList.publishItem(new MessageItem("videoList", marker.videoInfo, marker.videoInfo.uid), true);
+		}
+		
+		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
+		{
+			gmarkerManager.clearMarkers();
+			
+			for (var i:int = 0; i<videoDisplayInfosList.length; i++)
+			{
+				var videoVO : VideoInfoVO = VideoInfoVO(videoDisplayInfosList.getItemAt(i));
+				if(picture && videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+				{
+					createMarker(videoVO);
+				}
+				if(video && videoVO.playerType != "picture")
+				{
+					createMarker(videoVO);
+				}
+				
+			}
+		}
+		
 		private function addInformationInSearchList(videoinfo : VideoInfoVO) : void
 		{
 			var myPattern:RegExp = /, /g;
@@ -170,52 +229,6 @@ package com.flexymove.Managers
 			}
 			if (!searchList.getItemAt(1).contains(videoinfo.pseudo))
 				searchList.getItemAt(1).addItem(videoinfo.pseudo);
-		}
-		
-		private function createMarker(videoVO:VideoInfoVO):void
-		{
-			var markerOption:MarkerOptions = new MarkerOptions({
-				strokeStyle: new StrokeStyle({color: 0x987654}),
-				fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
-				radius: 12,
-				hasShadow: true,
-				draggable: true
-			});
-			
-			if (videoVO.playerType == "picture")
-				markerOption = new MarkerOptions({
-					strokeStyle: new StrokeStyle({color: 0x987654}),
-					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
-					radius: 12,
-					hasShadow: true,
-					draggable: true
-				});
-			
-			//markerOption.strokeStyle = style; 
-			var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
-			
-			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-			//SET visibilité view
-			gmarkerManager.addMarker(marker, 0, 15);
-		}
-		
-		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
-		{
-			gmarkerManager.clearMarkers();
-			
-			for (var i:int = 0; i<videoDisplayInfosList.length; i++)
-			{
-				var videoVO : VideoInfoVO = VideoInfoVO(videoDisplayInfosList.getItemAt(i));
-				if(picture && videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
-				{
-					createMarker(videoVO);
-				}
-				if(video && videoVO.playerType != "picture")
-				{
-					createMarker(videoVO);
-				}
-				
-			}
 		}
 		
 		public function uptdateMapWithSearchResult(searchCriterias : ArrayCollection, fieldToSearch :String):void

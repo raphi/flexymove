@@ -56,10 +56,16 @@
 		]]>
 	</fx:Script>
 	
+	<s:backgroundFill>
+		<s:LinearGradient rotation="90">
+			<s:GradientEntry color="0xD0D0F0" alpha="0.6"/>
+			<s:GradientEntry color="0x444444" alpha="0.6"/>
+		</s:LinearGradient>
+	</s:backgroundFill>
 	
 	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
 		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
-		<s:Label width="145" text="{UserManager.getInstance().userInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
+		<s:Label width="145" text="{UserManager.getInstance().currentUserInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
 		<Completion:CompletionSearch id="Search" width="50%"/>
 		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
 		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>

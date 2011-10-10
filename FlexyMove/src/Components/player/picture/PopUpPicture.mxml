@@ -3,8 +3,10 @@
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:components="Components.player.youtube.components.*" 
 		 xmlns:youtube="Components.player.youtube.*"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 width="100%" height="100%"
-		 creationComplete="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
+		 creationComplete="init()">
+	
 	<fx:Style>
 		global {
 			modal-transparency: 0.9;
@@ -16,22 +18,12 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import com.adobe.rtc.core.session_internal;
 			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.Utils.Utils;
 			import com.flexymove.VO.VideoInfoVO;
 			
-			import flash.utils.setInterval;
-			
-			import mx.collections.ArrayCollection;
 			import mx.collections.ArrayList;
-			import mx.controls.Alert;
 			import mx.controls.Image;
-			import mx.core.IFlexDisplayObject;
-			import mx.effects.Resize;
-			import mx.events.CloseEvent;
-			import mx.events.ItemClickEvent;
-			import mx.events.ListEvent;
 			import mx.events.ResizeEvent;
 			import mx.managers.PopUpManager;
 			
@@ -40,7 +32,7 @@
 			public var diaporama : Boolean= false;
 			private var position : int = 0;
 			[Bindable]
-			var pictureList:ArrayList = new ArrayList(); ;
+			private var pictureList:ArrayList = new ArrayList();
 			private var interval:uint;
 			
 			[Bindable]
