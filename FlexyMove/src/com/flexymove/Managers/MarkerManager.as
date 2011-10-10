@@ -32,7 +32,7 @@ package com.flexymove.Managers
 		private var videoInfosList:ArrayList = new ArrayList();
 		private var videoDisplayInfosList:ArrayList = new ArrayList();
 		[Bindable]
-		public var searchListe:ArrayCollection = new ArrayCollection;
+		public var searchList:ArrayCollection = new ArrayCollection;
 		
 		private static var instance:MarkerManager;
 		
@@ -44,10 +44,11 @@ package com.flexymove.Managers
 		
 		public function MarkerManager()
 		{
-			searchListe.addItem(new ArrayCollection);
-			searchListe.addItem(new ArrayCollection);
-			searchListe.addItem(new ArrayCollection);
-			searchListe.addItem(new ArrayCollection);
+			// FIXME dirty
+			searchList.addItem(new ArrayCollection);
+			searchList.addItem(new ArrayCollection);
+			searchList.addItem(new ArrayCollection);
+			searchList.addItem(new ArrayCollection);
 		}
 		
 		/**
@@ -80,6 +81,7 @@ package com.flexymove.Managers
 		{
 			return videoInfosList;
 		}
+		
 		public function getVideoDisplayInfosList():ArrayList
 		{
 			return videoDisplayInfosList;
@@ -88,7 +90,7 @@ package com.flexymove.Managers
 		public function getAllPictures():ArrayList
 		{
 			var pictureList :ArrayList = new ArrayList();
-			for (var i : int = 0; i < videoInfosList.length;i++)
+			for (var i : int = 0; i < videoInfosList.length; i++)
 			{
 				var videoVO : VideoInfoVO = VideoInfoVO(videoInfosList.getItemAt(i));
 				
@@ -97,6 +99,22 @@ package com.flexymove.Managers
 				
 			}
 			return pictureList;
+		}
+		
+		public function getVideosFromChannel(channelName:String):ArrayList
+		{
+			var itemList: ArrayList = new ArrayList();
+			
+			for (var i : int = 0; i < videoInfosList.length; i++)
+			{
+				var videoVO : VideoInfoVO = VideoInfoVO(videoInfosList.getItemAt(i));
+				
+				if ((videoVO.playerType == "youtube" || videoVO.playerType == "dailymotion")
+					&& videoVO.channel == channelName)
+					itemList.addItem(videoVO);
+			}
+			
+			return itemList;
 		}
 		
 		/**
@@ -139,25 +157,23 @@ package com.flexymove.Managers
 			var city : String="";
 			if (addtab.length >= 2)
 				city= addtab[addtab.length - 2];
-			if (!searchListe.getItemAt(0).contains(videoinfo.title))
-				searchListe.getItemAt(0).addItem(videoinfo.title);
+			if (!searchList.getItemAt(0).contains(videoinfo.title))
+				searchList.getItemAt(0).addItem(videoinfo.title);
 			
-			if (!searchListe.getItemAt(3).contains(videoinfo.channel))
-				searchListe.getItemAt(3).addItem(videoinfo.channel);
+			if (!searchList.getItemAt(3).contains(videoinfo.channel))
+				searchList.getItemAt(3).addItem(videoinfo.channel);
 			
-			if (!searchListe.getItemAt(2).contains(place))
+			if (!searchList.getItemAt(2).contains(place))
 			{
-				searchListe.getItemAt(2).addItem(place);
+				searchList.getItemAt(2).addItem(place);
 				//listPlace.addItem(city);
 			}
-			if (!searchListe.getItemAt(1).contains(videoinfo.pseudo))
-				searchListe.getItemAt(1).addItem(videoinfo.pseudo);
+			if (!searchList.getItemAt(1).contains(videoinfo.pseudo))
+				searchList.getItemAt(1).addItem(videoinfo.pseudo);
 		}
 		
 		private function createMarker(videoVO:VideoInfoVO):void
 		{
-		
-			
 			var markerOption:MarkerOptions = new MarkerOptions({
 				strokeStyle: new StrokeStyle({color: 0x987654}),
 				fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),

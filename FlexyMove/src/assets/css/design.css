@@ -4,10 +4,11 @@
 
 s|BorderContainer.panelInfoStyle
 {
-	backgroundAlpha:		0.75;
+	backgroundAlpha:		0.6;
 	backgroundColor:		#000000;
 	contentBackgroundAlpha:	1.0;
 	dropShadowVisible:		true;
+	cornerRadius:			10;
 }
 
 s|Label.panelInfoTitle

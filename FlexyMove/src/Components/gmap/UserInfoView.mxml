@@ -19,7 +19,7 @@
 			[Bindable]
 			public var connexionButtonVisible : Boolean = true;
 			
-			private function connexion(event:MouseEvent):void
+			private function connexion(event:MouseEvent = null):void
 			{
 				CursorManager.setBusyCursor();
 				PopUpManager.removePopUp( this );
@@ -27,6 +27,13 @@
 				
 				UserManager.getInstance().userInfo.name = usernameInput.text;
 			}
+			
+			private function keyboardEnter(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER)
+					connexion();
+			}
+			
 		]]>
 	</fx:Script>
 	
@@ -43,10 +50,10 @@
 	<s:Group>
 		<s:Form>
 			<s:FormItem label="Utilisateur">
-				<s:TextInput id="usernameInput" maxChars="20"/>
+				<s:TextInput id="usernameInput" maxChars="20" keyDown="keyboardEnter(event)"/>
 			</s:FormItem>
 			<s:FormItem label="Mot de passe">
-				<s:TextInput displayAsPassword="true"/>
+				<s:TextInput displayAsPassword="true" keyDown="keyboardEnter(event)"/>
 			</s:FormItem>
 			<s:FormItem visible="{connexionButtonVisible}" includeInLayout="{connexionButtonVisible}">
 				<s:Button label="Connexion" click="connexion(event)"/>

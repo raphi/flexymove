@@ -4,8 +4,8 @@
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
 				   showEffect="{showEffect}" hideEffect="{hideEffect}"
 				   right="0" top="50" bottom="10" width="280" height="100%"
-				   styleName="panelInfoStyle"
-				   creationComplete="init()">
+				   styleName="panelInfoStyle">
+	
 	<s:layout>
 		<s:VerticalLayout horizontalAlign="center"/>
 	</s:layout>
@@ -18,14 +18,10 @@
 	
 	<fx:Script>
 		<![CDATA[
-			import Components.coverflow.CoverFlow;
 			import Components.coverflow.PopupCoverflow;
-			import Components.gmap.core.MarkerManager;
 			import Components.player.picture.PopUpPicture;
 			import Components.player.youtube.PopUpPlayer;
 			
-			import com.flexymove.Managers.MarkerManager;
-			import com.flexymove.Managers.NavigatorManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
 			import mx.controls.Alert;
@@ -33,27 +29,16 @@
 			
 			[Bindable]
 			public var markerInfo:VideoInfoVO;
-			private const YOUTUBE_IMG_URL:String = "http://img.youtube.com/vi/";
 			
-			private function init () : void
-			{
-				/* 				if (markerInfo != null)
-				{
-				if (markerInfo.playerType == "dailymotion")
-				YOUTUBE_IMG_URL = "http://www.dailymotion.com/thumbnail/135x135/video/" + markerInfo.idYoutubeVideo;
-				else
-				YOUTUBE_IMG_URL= "http://img.youtube.com/vi/" + markerInfo.idYoutubeVideo + '/0.jpg';
-				} */
-			}
+			private const YOUTUBE_IMG_URL:String = "http://img.youtube.com/vi/";
 			
 			private function channelFieldClickHandler(event:MouseEvent):void
 			{
-				//NavigatorManager.getInstance().currentView = NavigatorManager.CHANNEL_VIEW;
-				
-				
-				/*POPUP COVERFLOW*/
+				/* POPUP COVERFLOW */
 				var win : PopupCoverflow  = new PopupCoverflow();
-				win.height = 700 ;
+				
+				win.selectedChannel = markerInfo.channel;
+				win.height = 700;
 				win.width = 1024;
 				PopUpManager.addPopUp(win,this.parent,true);
 				PopUpManager.centerPopUp(win);
@@ -78,16 +63,6 @@
 					PopUpManager.addPopUp(popupPlayer, this.parent, false);
 					PopUpManager.centerPopUp(popupPlayer);
 				}
-			}
-			
-			// FIXME : NO NO NO has to be in the MANAGER
-			private function getUrlImage():String
-			{
-				if (markerInfo.playerType == "picture")
-				{
-					return markerInfo.idYoutubeVideo;
-				}
-				return YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg';
 			}
 			
 		]]>
