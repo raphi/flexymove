@@ -3,8 +3,9 @@
 		 xmlns:fx="http://ns.adobe.com/mxml/2009"
 		 xmlns:components="Components.player.components.*" 
 		 xmlns:youtube="Components.player.youtube.*"
+		 xmlns:coverflow="Components.coverflow.*"
 		 width="100%" height="100%"
-		 creationComplete="init()" xmlns:coverflow="Components.coverflow.*">
+		 creationComplete="init()">
 	
 	<fx:Script>
 		<![CDATA[
@@ -12,26 +13,22 @@
 			import mx.events.CloseEvent;
 			import mx.managers.PopUpManager;
 			
-			
+			[Bindable]
+			public var selectedChannel : String = "";
 			
 			private function init():void
 			{
-				
 				coverflow.addEventListener(CloseEvent.CLOSE, closeWindow);
-				
 			}
 			
 			private function closeWindow(e:CloseEvent):void 
 			{
 				PopUpManager.removePopUp(this as IFlexDisplayObject);
-				
 			}
 			
 		]]>
 	</fx:Script>
 	
-	<coverflow:CoverFlow id="coverflow" width="100%" height="100%"/>
-		
-		
+	<coverflow:CoverFlow id="coverflow" width="100%" height="100%" selectedChannel="{selectedChannel}"/>
 		
 </s:Group>
