@@ -37,7 +37,7 @@
 			
 			
 			private var img:Image = null;
-			public var diaporama = false;
+			public var diaporama : Boolean= false;
 			private var position : int = 0;
 			[Bindable]
 			var pictureList:ArrayList = new ArrayList(); ;

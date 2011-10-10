@@ -43,6 +43,7 @@
 				//map.addControl(new NavigationControl());
 				//map.addControl(new MapTypeControl());
 				
+				
 			}
 			
 			private function onMarkerClick(e:MapMouseEvent):void
@@ -61,7 +62,6 @@
 					panelInfoView.visible = false;
 					addVideoInfoView.visible = true;
 					addVideoInfoView.latLngMarkerAdded = event.latLng;
-					
 				}
 			}
 			

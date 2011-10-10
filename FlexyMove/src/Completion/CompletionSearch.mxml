@@ -12,65 +12,13 @@
 		<![CDATA[
 			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.VO.VideoInfoVO;
+			import com.google.maps.overlays.Marker;
 			import com.hillelcoren.components.AutoComplete;
 			
 			import mx.collections.ArrayCollection;
 			import mx.collections.ArrayList;
 			import mx.events.MenuEvent;
-			
-			[Bindable]
-			public var searchListe:ArrayCollection;
-			
-			public function init():void
-			{
-				searchListe =  new ArrayCollection();
-				
-				var listTitle:ArrayCollection = new ArrayCollection();
-				var listChannel:ArrayCollection = new ArrayCollection();
-				var listPlace:ArrayCollection = new ArrayCollection();
-				var listPseudo:ArrayCollection = new ArrayCollection();
-				var videoList : ArrayList = MarkerManager.getInstance().getVideoList();
-				
-				for (var i : int = 0 ; i < videoList.length;i++)
-				{
-					var videoinfo : VideoInfoVO = VideoInfoVO(videoList.getItemAt(i));
-					var myPattern:RegExp = /, /g;
-					
-					var place : String = videoinfo.address.replace(myPattern, ",");
-					var addtab : Array = place.split(",");
-					
-					place = place.split(",")[place.split(",").length - 1];
-					var city : String="";
-					if (addtab.length >= 2)
-						city= addtab[addtab.length - 2];
-					if (!listTitle.contains(videoinfo.title))
-						listTitle.addItem(videoinfo.title);
-					
-					if (!listChannel.contains(videoinfo.channel))
-						listChannel.addItem(videoinfo.channel);
-					
-					if (!listPlace.contains(place))
-					{
-						listPlace.addItem(place);
-						//listPlace.addItem(city);
-					}
-					if (!listPseudo.contains(videoinfo.pseudo))
-						listPseudo.addItem(videoinfo.pseudo);
-					
-				}
-				searchListe.addItem(listTitle);
-				searchListe.addItem(listPseudo);
-				searchListe.addItem(listPlace);
-				searchListe.addItem(listChannel);
-				
-				
-				//Alert.show("size " + searchListe.getItemAt(0).length);
-			}			
-			
-			public function addElementToSearch(): void
-			{
-				/* implement it*/
-			}
+
 			
 			private function handleAutoCompleteChange():void
 			{
@@ -84,7 +32,7 @@
 			private function handleFieldChange():void
 			{
 				autoComplete.labelField = LabelListe.selectedItem.data;
-				autoComplete.dataProvider = ArrayCollection (searchListe.getItemAt(LabelListe.selectedIndex));
+				autoComplete.dataProvider = ArrayCollection (MarkerManager.getInstance().searchListe.getItemAt(LabelListe.selectedIndex));
 				autoComplete.clear();
 				
 			}
@@ -115,7 +63,7 @@
 			</mx:ComboBox>			
 		</mx:GridItem>
 		<hc:AdvancedAutoComplete id="autoComplete" 
-								 dataProvider="{ArrayCollection(searchListe.getItemAt(0))}" 
+								 dataProvider="{ArrayCollection(MarkerManager.getInstance().searchListe.getItemAt(0))}" 
 								 showRemoveIcon="true"
 								 matchType="anyPart" 
 								 actionsMenuDataProvider="{menuData}"
