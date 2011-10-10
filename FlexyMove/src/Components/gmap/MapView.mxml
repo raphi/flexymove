@@ -71,7 +71,8 @@
 			
 			private function authenticationFailureHandler(event:AuthenticationEvent):void
 			{
-				Alert.show("Le service est momentanément indisponible", "Erreur");
+				Alert.show("Le service est momentanément indisponible." +
+					"\nVeuillez vérifier votre connexion Internet.", "Erreur");
 			}
 			
 			private function creationCompleteHandler(event:FlexEvent):void
