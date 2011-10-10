@@ -27,11 +27,7 @@
 			
 			import mx.managers.PopUpManager;
 			
-			public function init():void{
-				Search.init();
-			}
-			
-			
+
 			protected function displayeUserInformation():void
 			{
 				var popupUser:UserInfoView = new UserInfoView();
@@ -64,7 +60,6 @@
 		<s:Label text="{UserManager.getInstance().userInfo.name}" click="displayeUserInformation()"/>
 		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
 		<Completion:CompletionSearch id="Search" width="50%"/>
-		<s:Button click="init()" label="init"/>
 		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
 		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>
 		<s:Button id="diaporamaButton" click="displayDiaporama()" label="Diaporama"/>			

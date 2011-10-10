@@ -31,6 +31,9 @@ package com.flexymove.Managers
 		private var _sharedVideoList:CollectionNode;
 		private var videoInfosList:ArrayList = new ArrayList();
 		private var videoDisplayInfosList:ArrayList = new ArrayList();
+		[Bindable]
+		public var searchListe:ArrayCollection = new ArrayCollection;
+		
 		private static var instance:MarkerManager;
 		
 		public static function getInstance():MarkerManager
@@ -41,6 +44,10 @@ package com.flexymove.Managers
 		
 		public function MarkerManager()
 		{
+			searchListe.addItem(new ArrayCollection);
+			searchListe.addItem(new ArrayCollection);
+			searchListe.addItem(new ArrayCollection);
+			searchListe.addItem(new ArrayCollection);
 		}
 		
 		/**
@@ -117,13 +124,34 @@ package com.flexymove.Managers
 				videoInfosList.addItem(videoVO);
 				videoDisplayInfosList.addItem(videoVO);
 				createMarker(videoVO);
-				// FIXME : add this functionnality
-				/*var markerOption:MarkerOptions = new MarkerOptions({draggable: true})
-				var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
-				
-				marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-				gmarkerManager.addMarker(marker, 0, 15);*/
+				addInformationInSearchList(videoVO)
 			}
+		}
+		
+		private function addInformationInSearchList(videoinfo : VideoInfoVO) : void
+		{
+			var myPattern:RegExp = /, /g;
+			
+			var place : String = videoinfo.address.replace(myPattern, ",");
+			var addtab : Array = place.split(",");
+			
+			place = place.split(",")[place.split(",").length - 1];
+			var city : String="";
+			if (addtab.length >= 2)
+				city= addtab[addtab.length - 2];
+			if (!searchListe.getItemAt(0).contains(videoinfo.title))
+				searchListe.getItemAt(0).addItem(videoinfo.title);
+			
+			if (!searchListe.getItemAt(3).contains(videoinfo.channel))
+				searchListe.getItemAt(3).addItem(videoinfo.channel);
+			
+			if (!searchListe.getItemAt(2).contains(place))
+			{
+				searchListe.getItemAt(2).addItem(place);
+				//listPlace.addItem(city);
+			}
+			if (!searchListe.getItemAt(1).contains(videoinfo.pseudo))
+				searchListe.getItemAt(1).addItem(videoinfo.pseudo);
 		}
 		
 		private function createMarker(videoVO:VideoInfoVO):void

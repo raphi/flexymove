@@ -26,9 +26,6 @@
     <application path="Main.mxml">
       <airExcludes/>
     </application>
-    <application path="FlexyMove.mxml">
-      <airExcludes/>
-    </application>
   </applications>
   <modules/>
   <buildCSSFiles/>
