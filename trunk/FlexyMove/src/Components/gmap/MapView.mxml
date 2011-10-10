@@ -17,6 +17,7 @@
 			import com.adobe.rtc.events.AuthenticationEvent;
 			import com.adobe.rtc.events.SessionEvent;
 			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Managers.UserManager;
 			import com.google.maps.LatLng;
 			import com.google.maps.MapEvent;
 			import com.google.maps.MapMouseEvent;
@@ -32,6 +33,9 @@
 			
 			public function onMapReady(event:MapEvent):void 
 			{
+				// Get all users
+				UserManager.getInstance().initializeUserList(LCConnectManager);
+				
 				markerManager.init(map, LCConnectManager);
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 				
@@ -42,8 +46,6 @@
 				map.enableControlByKeyboard();
 				//map.addControl(new NavigationControl());
 				//map.addControl(new MapTypeControl());
-				
-				
 			}
 			
 			private function onMarkerClick(e:MapMouseEvent):void

@@ -68,6 +68,13 @@
 		]]>
 	</fx:Script>
 	
+	<s:backgroundFill>
+		<s:LinearGradient rotation="90">
+			<s:GradientEntry color="0xD0D0F0" alpha="0.7"/>
+			<s:GradientEntry color="0x444444" alpha="0.7"/>
+		</s:LinearGradient>
+	</s:backgroundFill>
+	
 	<s:Spacer height="5"/>
 	<s:Image width="135" height="135" click="imageDoubleClickHandler(event)" scaleMode="letterbox"
 			 smooth="true" smoothingQuality="high"
