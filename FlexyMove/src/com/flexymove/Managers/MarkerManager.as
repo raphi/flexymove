@@ -253,13 +253,13 @@ package com.flexymove.Managers
 				for (var j : int = 0 ; j <searchCriterias.length;j++)
 				{
 					
-					if (fieldToSearch == "title" && videoVO.title.indexOf(searchCriterias.getItemAt(j) as String,0) != -1)
+					if (fieldToSearch == "title" && videoVO.title.toLowerCase().indexOf(searchCriterias.getItemAt(j).toLowerCase() as String,0) != -1)
 					{
 						createMarker(videoVO);
 						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
-					if (fieldToSearch == "pseudo" && videoVO.pseudo.indexOf(searchCriterias.getItemAt(j) as String,0) != - 1)
+					if (fieldToSearch == "pseudo" && videoVO.pseudo.toLowerCase().indexOf(searchCriterias.getItemAt(j).toLowerCase() as String,0) != - 1)
 					{
 						createMarker(videoVO);
 						videoDisplayInfosList.addItem(videoVO);
@@ -271,7 +271,7 @@ package com.flexymove.Managers
 						videoDisplayInfosList.addItem(videoVO);
 						break;
 					}
-					if (fieldToSearch == "channel" && videoVO.channel.indexOf(searchCriterias.getItemAt(j) as String,0) != -1)
+					if (fieldToSearch == "channel" && videoVO.channel.toLowerCase().indexOf(searchCriterias.getItemAt(j).toLowerCase() as String,0) != -1)
 					{
 						createMarker(videoVO);
 						videoDisplayInfosList.addItem(videoVO);
