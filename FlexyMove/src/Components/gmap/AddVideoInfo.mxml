@@ -23,6 +23,8 @@
 			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
+			import mx.collections.ArrayCollection;
+			
 			public var latLngMarkerAdded:LatLng = null;
 			
 			private var marker:SharedMarker;
@@ -40,7 +42,7 @@
 					_marker.videoInfo.description = descriptionInput.text;
 					_marker.videoInfo.title = titleInput.text;
 					_marker.videoInfo.date = new Date();
-					_marker.videoInfo.channel = channelInput.text;
+					_marker.videoInfo.channel = channelInput.selectedItem;
 					_marker.videoInfo.pseudo = UserManager.getInstance().currentUserInfo.name;
 					
 					
@@ -56,8 +58,6 @@
 					}
 					
 					marker = _marker;
-					
-					//map.addOverlay(marker); WHAT FOR??
 				}
 			}
 			
@@ -94,7 +94,8 @@
 			<s:TextInput id="youtubeUrlInput" width="160" color="#000000" fontWeight="normal"/>
 		</s:FormItem>
 		<s:FormItem label="Channel :" styleName="infoLabelFormItem">
-			<s:TextInput id="channelInput" width="160" color="#000000" fontWeight="normal"/>
+			<s:ComboBox id="channelInput" width="160" dataProvider="{MarkerManager.getInstance().searchList.getItemAt(3) as ArrayCollection}"
+						color="#000000" fontWeight="normal"/>
 		</s:FormItem>
 	</s:Form>
 	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Description"/>

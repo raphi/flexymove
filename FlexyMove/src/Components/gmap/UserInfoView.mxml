@@ -3,8 +3,7 @@
 				   xmlns:s="library://ns.adobe.com/flex/spark" 
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
 				   showEffect="{showEffect}" hideEffect="{hideEffect}"
-				   styleName="panelInfoStyle"
-				   creationComplete="init(event)">
+				   styleName="panelInfoStyle">
 	
 	<fx:Declarations>
 		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="1000" />
@@ -16,56 +15,18 @@
 			import com.flexymove.Managers.UserManager;
 			import com.flexymove.VO.UserInfoVO;
 			
-			import mx.controls.Alert;
-			import mx.events.FlexEvent;
-			import mx.managers.CursorManager;
 			import mx.managers.PopUpManager;
 			
 			[Bindable]
-			public var connexionButtonVisible : Boolean = true;
-			[Bindable]
-			private var userLogin : UserInfoVO = new UserInfoVO();
+			private var currentUser : UserInfoVO = UserManager.getInstance().currentUserInfo;
 			
-			private function init(event:FlexEvent):void
+			private function closePopup(event:MouseEvent):void
 			{
-				CursorManager.setBusyCursor();
-				UserManager.getInstance().addEventListener( 'getLoginsSuccessful', onGetLogins );
-			}
-			
-			private function onGetLogins(e:Event):void
-			{
-				CursorManager.removeBusyCursor();
-				connectionButton.visible = true;
-			}
-			
-			private function connexion(event:MouseEvent = null):void
-			{
-				if (UserManager.getInstance().userIsValid( userLogin ))
-				{
-					PopUpManager.removePopUp( this );
-					dispatchEvent( new Event( 'loginSuccessful' ));
-					UserManager.getInstance().currentUserInfo = userLogin;
-				}
-				else
-				{
-					Alert.show("Votre nom d'utilisateur ou mot de passe est incorrect.", "Erreur de connexion");
-				}
-			}
-			
-			private function keyboardEnter(event:KeyboardEvent):void
-			{
-				if (event.keyCode == Keyboard.ENTER)
-					connexion();
-			}
-			
-			private function createNewUser(event:MouseEvent):void
-			{
-				UserManager.getInstance().createNewUser( userLogin );
+				PopUpManager.removePopUp( this );
 			}
 			
 		]]>
 	</fx:Script>
-	
 	
 	<s:backgroundFill>
 		<s:LinearGradient rotation="90">
@@ -74,21 +35,23 @@
 		</s:LinearGradient>
 	</s:backgroundFill>
 	
-	<s:Group>
+	<s:HGroup>
 		<s:Form>
 			<s:FormItem label="Utilisateur">
-				<s:TextInput id="usernameInput" text="@{userLogin.name}" maxChars="20" keyDown="keyboardEnter(event)"/>
+				<s:TextInput id="usernameInput" text="@{currentUser.name}" maxChars="20"/>
 			</s:FormItem>
 			<s:FormItem label="Mot de passe">
-				<s:TextInput id="passwordInput" text="@{userLogin.password}" displayAsPassword="true" keyDown="keyboardEnter(event)"/>
+				<s:TextInput id="passwordInput" text="@{currentUser.password}" displayAsPassword="true"/>
 			</s:FormItem>
-			<s:HGroup width="100%" horizontalAlign="center">
-				<mx:LinkButton label="Créer un nouveau compte" click="createNewUser(event)"/>
+			<s:FormItem label="Adresse email">
+				<s:TextInput />
+			</s:FormItem>
+			<s:HGroup>
+				<s:Button label="Enregistrer les modifications" enabled="false"/>
+				<s:Button label="Fermer" click="closePopup(event)"/>
 			</s:HGroup>
-			<s:FormItem visible="{connexionButtonVisible}" includeInLayout="{connexionButtonVisible}">
-				<s:Button id="connectionButton" label="Connexion" click="connexion(event)" visible="false"/>
-			</s:FormItem>
 		</s:Form>
-		<!--<s:Image source="/assets/images/utilisateur.png" width="100" height="150"/>-->
-	</s:Group>
+		
+		<s:Image source="/assets/images/utilisateur.png" width="100" height="150"/>
+	</s:HGroup>
 </s:BorderContainer>

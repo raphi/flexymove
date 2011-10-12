@@ -1,7 +1,10 @@
 package com.flexymove.VO
 {
+	import mx.core.IUID;
+	import mx.utils.UIDUtil;
+
 	[Bindable]
-	public class UserInfoVO
+	public class UserInfoVO implements IUID
 	{
 		public var name : String;
 		public var password : String;
@@ -9,6 +12,7 @@ package com.flexymove.VO
 		
 		public function UserInfoVO()
 		{
+			_uid = UIDUtil.createUID();
 		}
 		
 		public function get uid():String

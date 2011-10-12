@@ -81,7 +81,7 @@
 			{
 				LCConnectManager.login();
 				
-				var popup : IFlexDisplayObject = PopUpManager.createPopUp(this, UserInfoView, true);
+				var popup : IFlexDisplayObject = PopUpManager.createPopUp(this, LoginView, true);
 				
 				popup.addEventListener( 'loginSuccessful', 
 					function (e:Event):void {
