@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		title="Map"
+		xmlns:mx="library://ns.adobe.com/flex/mx" 
+		xmlns:rtc="http://ns.adobe.com/rtc"
+		xmlns:maps="com.google.maps.*"
+		xmlns:gmap="Components.gmap.*"
+		creationComplete="creationCompleteHandler(event)"
+		width="100%" 
+		height="100%" 
+		xmlns:Completion="Completion.*"
+		xmlns:TabBar="Components.TabBar.*">
+	
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.gmap.core.SharedMarker;
+			
+			import com.adobe.rtc.events.AuthenticationEvent;
+			import com.adobe.rtc.events.SessionEvent;
+			import com.flexymove.Managers.MarkerManager;
+			import com.google.maps.LatLng;
+			import com.google.maps.MapEvent;
+			import com.google.maps.MapMouseEvent;
+			import com.google.maps.MapType;
+			import com.google.maps.controls.MapTypeControl;
+			import com.google.maps.controls.NavigationControl;
+			
+			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			
+			import spark.components.View;
+			import spark.components.ViewNavigator;
+			import spark.transitions.CrossFadeViewTransition;
+			import spark.transitions.FlipViewTransition;
+			import spark.transitions.FlipViewTransitionMode;
+			import spark.transitions.SlideViewTransition;
+			import spark.transitions.SlideViewTransitionMode;
+			import spark.transitions.ViewTransitionDirection;
+			import spark.transitions.ZoomViewTransition;
+			import spark.transitions.ZoomViewTransitionMode;
+			
+			import views.InfoView;
+			import views.MapView;
+			
+			private var markerManager:MarkerManager = MarkerManager.getInstance();
+			
+			public function onMapReady(event:MapEvent):void 
+			{
+				
+				markerManager.init(map, LCConnectManager);
+				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
+				
+				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
+				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
+				map.enableScrollWheelZoom();
+				map.enableContinuousZoom();
+				map.enableControlByKeyboard();
+				map.addControl(new NavigationControl());
+				
+			}
+			
+			private function onMarkerClick(e:MapMouseEvent):void
+			{
+				var marker:SharedMarker = e.feature as SharedMarker;
+				
+				MarkerManager.getInstance().curentVideoInfo = marker.videoInfo;
+				navigator.pushView(InfoView);
+		
+			}
+			
+			private function mapClicked(event:MapMouseEvent):void
+			{
+				if (LCConnectManager.isSynchronized)
+				{
+					
+				}
+			}
+			
+			private function authenticationSuccessHandler(event:AuthenticationEvent):void
+			{
+			}
+			
+			private function authenticationFailureHandler(event:AuthenticationEvent):void
+			{
+				//Alert.show("Login fail", "Login error");
+			}
+			
+			private function creationCompleteHandler(event:FlexEvent):void
+			{
+				cursorManager.setBusyCursor();
+				LCConnectManager.login();
+				
+			}
+			
+			private function onSynchronizationChangeHandler(event:SessionEvent):void
+			{
+				if (LCConnectManager.isSynchronized)
+					CursorManager.removeBusyCursor();
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<rtc:ConnectSession id="LCConnectManager" roomURL="https://collaboration.adobelivecycle.com/flexymove/sharedvideos" 
+							synchronizationChange="onSynchronizationChangeHandler(event)">
+			<rtc:authenticator>
+				<rtc:AdobeHSAuthenticator userName="flexymove@googlegroups.com" password="flexymovepowa" 
+										  authenticationFailure="authenticationFailureHandler(event)"
+										  authenticationSuccess="authenticationSuccessHandler(event)">
+				</rtc:AdobeHSAuthenticator>
+			</rtc:authenticator>
+		</rtc:ConnectSession>
+	</fx:Declarations>
+	
+	
+	<maps:Map id="map"
+			  width="100%" height="100%" 
+			  key="ABQIAAAApevjLsy0a4ChuZ1lcd50AhTsslF4Y8xkhf7W8wmKT7ADz-aLqhRgYJNmWAMy90YGUU-Zs8_XupF7fQ"
+			  url="http://asme.fr"
+			  mapevent_mapready="onMapReady(event)"
+			  sensor="false">
+	</maps:Map>
+
+	
+</s:View>

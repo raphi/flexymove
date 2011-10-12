@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:coverflow="Components.coverflow.*"
+		 width="100%" height="100%" >
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	
+	<fx:Metadata>
+		[Event("change", type="mx.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.player.youtube.PopUpPlayer;
+			import Components.coverflow.itemsRenderers.MyFolderRenderer;
+			import Components.coverflow.itemsRenderers.MyMovieRenderer;
+			
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Managers.NavigatorManager;
+			import com.flexymove.VO.VideoInfoVO;
+			
+			import mx.collections.ArrayList;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			public const HORIZONTALDISTANCE:Number = 81;		// 0 TO 200
+			public const SELECTEDITEMPROXIMITY:Number = 30;		// 0 TO 200	
+			public const DEPTHDISTANCE:Number = 68; 			// 1 TO 200
+			public const ELEMENTROTATION:Number = -45; 			// -90 TO 0 -35
+			public const FOCALLENGTH:Number = 1000;				// 1 TO 1000
+			public const PERSPECTIVEPROJECTIONX:Number = 250;	// -1000 TO 1000
+			public const PERSPECTIVEPROJECTIONY:Number = 124;	// -1000 TO 1000
+			
+			[Bindable]
+			public var fileList:ArrayList = MarkerManager.getInstance().getVideoList(); // FIXME : this is dirty, should be dynamic
+			public var popup : PopUpPlayer = null;// CHANGE THAT
+
+			/** Return a Class Factory adapted to the item :
+			 *  - Movie
+			 * 	- Picture
+			 *  - Folder
+			 *  - Music */
+			private function itemRender(item:VideoInfoVO):ClassFactory 
+			{
+				var cla:Class = null;
+				
+				if (!item is VideoInfoVO)
+					cla = MyFolderRenderer;
+				else
+					cla = MyMovieRenderer;
+				
+				return new ClassFactory(cla);
+			}
+			
+			// FIXME should be the same channel, not to be set like that
+			public function onClick():void
+			{
+				var item:VideoInfoVO = list.selectedItem as VideoInfoVO;
+				channel.text = item.channel;
+				videoTitle.text = item.title;
+			}
+			
+			private function getListVideosInChanelFromLiveCycle(channelName:String):ArrayList
+			{
+				var itemList: ArrayList = new ArrayList();
+				
+				//FIXME : implement a filter to sort the LiveCycle video list
+				
+				return itemList;
+			}
+			
+			private function onDisplayButtonDoubleClick(e:MouseEvent):void
+			{
+				var selected:VideoInfoVO = (list.selectedItem as VideoInfoVO);
+				
+				if (!list.selectedItem is VideoInfoVO)
+				{
+					//Get List Chanel and reload list
+					fileList = new ArrayList();
+					fileList = getListVideosInChanelFromLiveCycle(selected.channel);
+				}
+				else
+				{	// Popup Video
+					var win : PopUpPlayer = new PopUpPlayer();
+					win.idYoutubeVideo = selected.idYoutubeVideo;
+					win.playerType = selected.playerType
+					
+					PopUpManager.addPopUp(win,this,true);
+					PopUpManager.centerPopUp(win);
+				}
+			}
+			
+			// FIXME : to be deleted
+			private function buttonClickHandler(event:MouseEvent):void
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+				
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:VGroup>
+		<s:Label id="channel" click="buttonClickHandler(event)" color="#000000" fontSize="42"
+				 fontWeight="bold" textAlign="center"/>
+		<s:Label id="videoTitle" click="buttonClickHandler(event)" color="#000000" fontSize="35"/>
+	</s:VGroup>
+	<s:List id="list" bottom="0" width="100%" height="85%" borderVisible="false"
+			click="{onClick()}" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
+			doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
+			itemRendererFunction="itemRender" selectedIndex="0">
+		
+		<s:layout>
+			<coverflow:CoverflowLayout id="coverflow" 
+									   selectedIndex="{ list.selectedIndex }"
+									   horizontalDistance="{HORIZONTALDISTANCE}"
+									   selectedItemProximity="{SELECTEDITEMPROXIMITY}"
+									   depthDistance="{DEPTHDISTANCE}" 
+									   elementRotation="{ELEMENTROTATION}" 
+									   focalLength="{FOCALLENGTH}"
+									   perspectiveProjectionX="{PERSPECTIVEPROJECTIONX}" 
+									   perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
+		</s:layout>
+	</s:List>
+</s:Group>

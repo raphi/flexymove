@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="search">
+	
+	
+	<s:titleContent>
+		<s:TextInput id="searchtext" width="100%" change="search()"/>
+	</s:titleContent>
+	
+	<s:actionContent>
+		<s:Button label="Diaporama" id="searchButton" click="diaporama()"/>
+	</s:actionContent>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Utils.Utils;
+			import com.flexymove.VO.VideoInfoVO;
+			
+			import mx.collections.ArrayList;
+			
+			[Bindable]
+			public var videoList : ArrayList = MarkerManager.getInstance().getVideoList();
+			private function changeView():void
+			{
+				MarkerManager.getInstance().curentVideoInfo = list.selectedItem;
+				
+				navigator.pushView(InfoView);
+			}
+			
+			private function diaporama():void
+			{
+				if (containsPictures())
+					navigator.pushView(PictureView,videoList);
+			}
+			
+			public function containsPictures():Boolean
+			{
+				for (var i : int = 0; i < videoList.length;i++)
+				{
+					var videoVO : VideoInfoVO = VideoInfoVO(videoList.getItemAt(i));
+					
+					if(videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+						return true;
+				}
+				return false;
+			}
+			private function search(): void
+			{
+				videoList = MarkerManager.getInstance().getVideoDisplayInfosList();
+				if (searchtext.text == "")
+					return;
+				else
+				{
+					var videoListtmp : ArrayList = new ArrayList;
+					for(var i : int = 0; i < videoList.length; i++)
+					{
+						var mediaInfo : VideoInfoVO = VideoInfoVO(videoList.getItemAt(i));
+						
+						if (mediaInfo.title.toLowerCase().indexOf(searchtext.text.toLowerCase())!=-1)
+						{
+							videoListtmp.addItem(mediaInfo);
+							continue;
+						}
+						if (mediaInfo.address.toLowerCase().indexOf(searchtext.text.toLowerCase())!=-1)
+						{
+							videoListtmp.addItem(mediaInfo);
+							continue;
+						}
+					}
+					videoList = videoListtmp;
+				}
+			}
+		]]>
+	</fx:Script>
+	<s:List id="list" top="0" bottom="0" left="0" right="0"
+			change="changeView()"
+			dataProvider="{videoList}"
+			labelField="title"
+			>
+		<s:itemRenderer> 
+			<fx:Component>
+				<s:IconItemRenderer label="{data.title}" 
+									messageField="channel" iconFunction="pictures"  iconWidth="48" iconHeight="48">
+					<fx:Script>
+						<![CDATA[
+							private const YOUTUBE_IMG_URL:String = "http://img.youtube.com/vi/";
+							
+							public function pictures (item:Object):String
+							{
+								return data.playerType == 'youtube' ?
+									YOUTUBE_IMG_URL + data.idYoutubeVideo + '/0.jpg'
+									:( data.playerType == 'dailymotion' ?
+										'http://www.dailymotion.com/thumbnail/135x135/video/' + data.idYoutubeVideo : data.idYoutubeVideo);
+							}
+						]]>
+					</fx:Script>
+				</s:IconItemRenderer>
+			</fx:Component> 
+		</s:itemRenderer>
+		
+	</s:List>
+	
+</s:View>

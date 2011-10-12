@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		backgroundColor="#000000" creationComplete="init()">
+	<fx:Script>
+		<![CDATA[
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Utils.Utils;
+			import com.flexymove.VO.VideoInfoVO;
+			
+			import mx.collections.ArrayList;
+			
+			private var position : int = 0;
+			[Bindable]
+			private var pictureList:ArrayList = new ArrayList(); ;
+			private var interval:uint;
+			private function init():void
+			{
+				if (data != null)
+				{
+					getPictureList(ArrayList (data));
+					loadImageToDiaporama();
+					interval= setInterval(loadImageToDiaporama, 3000);
+				}
+			}
+			
+			public function getPictureList(infoList : ArrayList): void
+			{
+				for (var i : int = 0 ; i < infoList.length;i++)
+				{
+					var videoVO : VideoInfoVO = VideoInfoVO(infoList.getItemAt(i));
+					if(videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+						pictureList.addItem(videoVO);
+				}
+			}
+			
+			private function loadImageToDiaporama():void
+			{
+								
+				if(position<pictureList.length)
+				{
+					
+					var videoVO : VideoInfoVO = VideoInfoVO(pictureList.getItemAt(position));
+					image.source = videoVO.idYoutubeVideo;
+					position++;
+				}
+				else
+				{
+					clearInterval(interval);
+					navigator.popView();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:Image id="image" width="100%" height="100%" source="{MarkerManager.getInstance().curentVideoInfo.idYoutubeVideo}" click="{clearInterval(interval);navigator.popView()}"/>
+</s:View>

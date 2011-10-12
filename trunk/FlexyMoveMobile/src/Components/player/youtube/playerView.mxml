@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group  xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		  xmlns:s="library://ns.adobe.com/flex/spark" 
+		  xmlns:mx="library://ns.adobe.com/flex/mx" 
+		  xmlns:components="Components.player.youtube.components.*"
+		  width="730" height="498" xmlns:youtube="Components.player.youtube.*"
+		  creationComplete="init()">
+	
+	<fx:Style>
+		#PlayerControlVideo 
+		{
+			background-image: Embed("/assets/images/Controle.png");
+		}
+	</fx:Style>
+	
+	<fx:Metadata>
+		[Event("change", type="mx.events.Event")]
+	</fx:Metadata>
+	
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaTo="1" duration="300"/>
+		<s:Fade id="hideEffect" alphaTo="0" duration="300"/>
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.player.youtube.components.YouTubeError;
+			import Components.player.youtube.components.YouTubeEvent;
+			import Components.player.youtube.components.YouTubePlayingState;
+			import Components.player.youtube.components.YouTubeVideoQuality;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.CloseEvent;
+			
+			[Bindable]
+			private var trackingActions:ArrayCollection = new ArrayCollection(new Array());
+			public var idYoutubeVideo : String = "";
+			public var isFullScreen :Boolean = false;
+			[Bindable]
+			public var playerType : String = "youtube" ; //youtube; dailymotion this is very dirty TO BE DELETED
+			//----------------------------------
+			//  YouTube Event Handling
+			//----------------------------------
+			
+			private function init() : void
+			{
+				this.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHandler);
+				this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
+			}
+			
+			private function keyHandler(event:KeyboardEvent):void 
+			{
+				try
+				{
+					if( event.keyCode == 27 && youTubePlayer.stage.displayState == StageDisplayState.FULL_SCREEN_INTERACTIVE )
+					{
+						// set normal display
+						this.stage.displayState = StageDisplayState.NORMAL;
+						youTubePlayer.height = saveHeight;
+						youTubePlayer.width= saveWidth; 
+						this.parent.x = saveX;
+						this.parent.y = saveY;
+						FullScreen.source =  "/assets/images/fullscreen_icon.png"
+						this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
+						PlayerControlVideo.bottom = 0;
+						PlayerControlVideo.percentWidth = 100;
+						isFullScreen = false;
+					}
+				} 
+				catch(error:Error) 
+				{
+					
+				}
+				
+			}
+			
+			private function roolHoverOnYoutube (e:Event):void
+			{
+				var areaStartWidth:int = youTubePlayer.width;
+				var areaStartHeight:int = youTubePlayer.height;
+				
+				if (!isFullScreen && this.contentMouseX >= youTubePlayer.x && this.contentMouseX <= (youTubePlayer.x + areaStartWidth) && 
+					this.contentMouseY >= youTubePlayer.y && this.contentMouseY <= (youTubePlayer.y + areaStartHeight))
+				{
+					if (closePlayerButton.visible == false)
+						closePlayerButton.visible = true;
+					PlayerControlVideo.visible = true;
+				}
+				else
+				{
+					if (closePlayerButton.visible == true)
+						closePlayerButton.visible = false;
+					PlayerControlVideo.visible = false;
+				}
+			}
+			
+			private function handlePlayerLoaded(event:YouTubeEvent):void
+			{
+				trackingActions.addItem({label:"YouTube Playinger API loaded"});
+				youTubePlayer.cueVideoById(idYoutubeVideo,0,YouTubeVideoQuality.DEFAULT);
+				
+				if (playerType == "youtube")
+					handlePlay(); 
+			}
+			
+			private function handlePlayingState(event:YouTubeEvent):void
+			{
+				var message:String = "";
+				switch(event.playerState)
+				{
+					case YouTubePlayingState.BUFFERING:
+						message = "Video is Buffering";
+						break;
+					case YouTubePlayingState.UNSTARTED:
+						message = "Player is unstarted";
+						break;
+					case YouTubePlayingState.PLAYING:
+						message = "Video is playing";
+						break;
+					case YouTubePlayingState.PAUSE:
+						message = "Video pause is active";
+						break;
+					case YouTubePlayingState.VIDEO_CUED:
+						message = "Video is cued - Playing new Video?!"
+						break;
+					case YouTubePlayingState.VIDEO_ENDED:
+						message = "Video is finished";
+						break;
+					
+					default:
+						message = "uh what happens?? " + event.playerState;
+						break;
+				}
+				
+				trackingActions.addItem({label:"YouTube PlayingState: " + message});
+			}
+			
+			private function handleVideoQuality(event:YouTubeEvent):void
+			{
+				var message:String = "";
+				switch(event.playbackQuality)
+				{
+					case YouTubeVideoQuality.DEFAULT:
+						message = "default - YouTube choose";
+						break;
+					case YouTubeVideoQuality.SMALL:
+						message = "SMALL - less than 640px by 360px";
+						break;
+					case YouTubeVideoQuality.MEDIUM:
+						message = "MEDIUM - 640px by 360px";
+						break;
+					case YouTubeVideoQuality.LARGE:
+						message = "LARGE - 854px by 480px";
+						break;
+					case YouTubeVideoQuality.HD720:
+						message = "HD - 1280px by 720px"
+						break;
+					
+					default:
+						message = "uh what happens?? " + event.playbackQuality;
+						break;
+				}
+				trackingActions.addItem({label:"Video Quality changed: " + message});
+			}
+			
+			private function handleYouTubeError(event:YouTubeEvent):void
+			{
+				var message:String = "";
+				
+				switch(event.errorCode)
+				{
+					case YouTubeError.VIDEO_NOT_FOUND:
+						message = "Vidéo manquante: " + event.errorCode;
+						break;
+					case YouTubeError.VIDEO_NOT_ALLOWED:
+						message = "Vidéo non authorisée: " + event.errorCode;
+						break;
+					case YouTubeError.EMBEDDING_NOT_ALLOWED:
+						message = "YouTube ne permet pas la lecture externe de cette vidéo: " + event.errorCode;
+						break;
+					
+					default:
+						message = "Erreur inconnue:" + event.errorCode;
+						break;
+				}
+				
+				// FIXME : reactiv this error message
+				//Alert.show(message, "YouTube Erreur", Alert.OK);
+				trackingActions.addItem({label:"Video Error: " + message});
+			}
+			
+			//----------------------------------
+			//  YouTube Player Control
+			//----------------------------------
+			private function handlePlay(event:MouseEvent = null):void
+			{
+				if (PlayBouton.styleName == "Pause")
+				{
+					PlayBouton.styleName = "Play";
+					PlayBouton.source="/assets/images/Play_icon.png"
+					handlePause(event);
+					return;
+				}
+				PlayBouton.styleName = "Pause";
+				PlayBouton.source="/assets/images/Pause_icon.png"
+				youTubePlayer.playVideo();
+				this.addEventListener(Event.ENTER_FRAME, handlePlayingTime);
+			}
+			
+			/*save Parameter*/
+			private var saveX :int = 0;
+			private var saveY :int = 0;
+			private var saveHeight :int = 0;
+			private var saveWidth :int = 0;
+			private function fullScreen(event:MouseEvent):void
+			{
+				//Fix Probleme With Controle BAr
+				if( youTubePlayer.stage.displayState == StageDisplayState.NORMAL )
+				{
+					// set full screen display
+					this.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+					saveX = this.parent.x;
+					saveY = this.parent.y;
+					saveHeight = youTubePlayer.height;
+					saveWidth = youTubePlayer.width;
+					youTubePlayer.height = Capabilities.screenResolutionY;
+					youTubePlayer.width= Capabilities.screenResolutionX; 
+					this.parent.x = 0;
+					this.parent.y = 0;
+					closePlayerButton.visible = false;
+					this.removeEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
+					FullScreen.source = "/assets/images/nofullscreen_icon.png"
+					this.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyHandler);
+					PlayerControlVideo.visible = false;
+					isFullScreen = true;
+				}
+				else
+				{
+					// set normal display
+					PlayerControlVideo.bottom = 0;
+					PlayerControlVideo.percentWidth = 100;
+					this.stage.displayState = StageDisplayState.NORMAL;
+					youTubePlayer.height = saveHeight;
+					youTubePlayer.width= saveWidth; 
+					this.parent.x = saveX;
+					this.parent.y = saveY;
+					FullScreen.source =  "/assets/images/fullscreen_icon.png"
+					this.addEventListener(Event.ENTER_FRAME, roolHoverOnYoutube);
+					isFullScreen = false;
+				}
+			}
+			
+			private function onSeekToClick(event: MouseEvent) : void
+			{
+				var pos : Number = event.localX ;
+				pos = (pos * 100 ) / Progress.insetRect.width;
+				
+				pos = youTubePlayer.getDuration() * pos / 100;
+				youTubePlayer.seekTo(pos);
+				
+				Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
+			}
+			
+			private function handlePause(event:MouseEvent):void
+			{
+				youTubePlayer.pauseVideo();
+				this.removeEventListener(Event.ENTER_FRAME, handlePlayingTime);
+			}
+			
+			private function handleStop(event:MouseEvent):void
+			{
+				youTubePlayer.stopVideo();
+				this.removeEventListener(Event.ENTER_FRAME, handlePlayingTime);
+			}
+			
+			private function handlePlayingTime(e:Event):void
+			{
+				/**Progress */
+				var currenttimeMn : int = youTubePlayer.getCurrentTime() / 60;
+				var currenttimeS : int =  youTubePlayer.getCurrentTime() - currenttimeMn * 60;
+				var currenttime : String = ((currenttimeMn <10 ) ? "0" + currenttimeMn : currenttimeMn) + ":" +
+					((currenttimeS <10 ) ? "0" + currenttimeS : currenttimeS );
+				
+				var durationMn : int = youTubePlayer.getDuration() / 60;
+				var durationS : int =  youTubePlayer.getDuration() - durationMn * 60;
+				var duration : String = ((durationMn <10 ) ? "0" + durationMn : durationMn) + ":" +
+					((durationS <10 ) ? "0" + durationS : durationS );
+				
+				
+				labelTime.text = currenttime + " / " + duration;
+				
+				Progress.setProgressPlaying(youTubePlayer.getCurrentTime(),youTubePlayer.getDuration());
+				Progress.setProgressBuffering(youTubePlayer.getVideoBytesLoaded(),youTubePlayer.getVideoBytesTotal());
+			}
+			
+			private function onCloseButton(event:MouseEvent):void
+			{
+				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<components:AirYouTube id="youTubePlayer" width="100%" height="100%"
+						   volume="{sliderVolume.value}"
+						   youtubeError="{handleYouTubeError(event);}"
+						   youtubePlayerLoaded="{handlePlayerLoaded(event);}"
+						   youtubeStatus="{handlePlayingState(event);}"
+						   youtubeVideoQuality="{handleVideoQuality(event);}"
+						   playerType="{playerType}"/>
+	
+	<s:BorderContainer id="PlayerControlVideo" 
+					   showEffect="{showEffect}" hideEffect="{hideEffect}"
+					   bottom="0" width="100%" height="25">
+		<s:layout>
+			<s:HorizontalLayout id="PlayerLayout" paddingLeft="5" paddingRight="5" verticalAlign="middle" horizontalAlign="center"/>
+		</s:layout>
+		
+		<s:Image id="PlayBouton" click="{handlePlay(event);}" 
+				 buttonMode="true"
+				 source="@Embed('/assets/images/Play_icon.png')" styleName="Play"/>
+		
+		<s:Label id="labelTime" color="white" text="00:00/00:00"/>
+		
+		<components:ProgressComponent id="Progress" width="100%" click="onSeekToClick(event)" buttonMode="true"/>
+		<s:Image id="Sound" source="@Embed('/assets/images/sound_icon.png')" />
+		
+		<s:HSlider id="sliderVolume" width="50" minimum="0" maximum="100" value="100" liveDragging="true" buttonMode="true"/>
+		<s:Image id="FullScreen" click="{fullScreen(event);}" 
+				 buttonMode="true"
+				 source="@Embed('/assets/images/fullscreen_icon.png')"/>
+		
+	</s:BorderContainer>
+	
+	<s:Image x="5" y="5" width="25" height="25" 
+			 source="@Embed('/assets/images/closeIcon2.png')"
+			 buttonMode="true"
+			 visible="false"
+			 id="closePlayerButton"
+			 showEffect="{showEffect}" hideEffect="{hideEffect}"
+			 click="onCloseButton(event)"/>
+</s:Group>
+

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:gmap="Components.gmap.*"
+		backgroundColor="0x223344" initialize="init()" xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:titleContent>
+		<s:Label id="searchtext" width="100%" color="0xffffff"
+				 text="{com.flexymove.Managers.MarkerManager.getInstance().curentVideoInfo.title}"/>
+	</s:titleContent>
+	
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import Components.coverflow.CoverFlow;
+			import Components.coverflow.PopupCoverflow;
+			import Components.player.youtube.PopUpPlayer;
+			
+			import com.degrafa.paint.VideoFill;
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Managers.NavigatorManager;
+			import com.flexymove.VO.VideoInfoVO;
+			
+			import mx.core.UIComponent;
+			import mx.managers.PopUpManager;
+			
+			import spark.transitions.CrossFadeViewTransition;
+			import spark.transitions.ZoomViewTransition;
+			import spark.transitions.ZoomViewTransitionMode;
+			
+			[Bindable]
+			public var markerInfo:VideoInfoVO = com.flexymove.Managers.MarkerManager.getInstance().curentVideoInfo;
+			[Bindable]
+			private var positionMedia : int = MarkerManager.getInstance().getVideoList().getItemIndex(markerInfo);
+			private var previousX:Number = 0;
+			private var currentX:Number = 0;
+			private var previousY:Number = 0;
+			private var currentY:Number = 0;
+			private const YOUTUBE_IMG_URL:String = "http://img.youtube.com/vi/";
+			
+			
+			public function init() : void
+			{
+				Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
+				addEventListener(MouseEvent.MOUSE_DOWN,onImgTouchBegin);
+				addEventListener(MouseEvent.MOUSE_UP,onImgTouchEnd);
+				/* 				addEventListener(TouchEvent.TOUCH_BEGIN, onImgTouchBegin);
+				addEventListener(TouchEvent.TOUCH_END, onImgTouchEnd); */
+			}
+			
+			private function onImgTouchBegin(event:MouseEvent):void
+			{
+				previousX = event.stageX;
+				currentX = event.stageX;
+				previousY = event.stageY;
+				currentY = event.stageY;
+			}
+			
+			private function onImgTouchEnd(event:MouseEvent):void
+			{
+				//for changing the picture
+				currentX = event.stageX;
+				
+				var changeInX:Number = Math.round(currentX - previousX);
+				
+				if(changeInX < 0)
+				{
+					changeInX = - changeInX;
+				}
+				
+				if(changeInX > 100)
+				{
+					if(currentX < previousX)
+					{
+						if((positionMedia - 1) >= 0)
+						{
+							MarkerManager.getInstance().curentVideoInfo = VideoInfoVO (MarkerManager.getInstance().getVideoList().getItemAt(--positionMedia));
+							markerInfo = MarkerManager.getInstance().curentVideoInfo;
+						}
+					}
+					else if(currentX > previousX)
+					{
+						if((positionMedia + 1) < MarkerManager.getInstance().getVideoList().length)
+						{
+							MarkerManager.getInstance().curentVideoInfo = VideoInfoVO (MarkerManager.getInstance().getVideoList().getItemAt(++positionMedia));
+							markerInfo = MarkerManager.getInstance().curentVideoInfo;
+						}
+					}
+				}
+				
+				//for displaying picture properties
+				currentY = event.stageY;
+				var changeInY:Number = Math.round(currentY - previousY);
+				if(changeInY < 0)
+				{
+					changeInY = -changeInY;
+				}
+				if(changeInY > 100)
+				{
+					if(currentY < previousY)
+					{
+						
+					}
+					else if(currentY >previousY)
+					{
+						
+					}
+				}
+			}
+			
+			
+			
+			private function channelFieldClickHandler(event:MouseEvent):void
+			{
+				//add view Liste
+				navigator.pushView(ChannelView,markerInfo.channel);
+			}
+			
+			private function imageDoubleClickHandler(event:MouseEvent):void
+			{
+				var fadeTrans:CrossFadeViewTransition = new CrossFadeViewTransition();
+				if(markerInfo.playerType == "picture")
+				{
+					navigator.pushView(PictureView,null,null,fadeTrans);
+				}
+				else
+				{
+					navigator.pushView(PlayerView,null,null,fadeTrans);
+				} 
+			}
+			
+			// FIXME : NO NO NO has to be in the MANAGER
+			private function getUrlImage():String
+			{
+				if (markerInfo.playerType == "picture")
+				{
+					return markerInfo.idYoutubeVideo;
+				}
+				return YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg';
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:navigationContent>
+		<s:Button label="Back" click="{navigator.popView()}"/>
+	</s:navigationContent>
+	<s:actionContent>
+		<s:Button label="{markerInfo.channel}" click="channelFieldClickHandler(event)" />
+	</s:actionContent>
+	
+	<s:Spacer height="30"/>
+	
+	<s:Label id="titreField" styleName="textInfo" text="{markerInfo.title}" color="#FFFFFF"/>
+	
+	<s:Label id="pseudoField" styleName="textInfo" text="{markerInfo.pseudo}" color="#FFFFFF"/>
+	
+	
+	<s:Spacer height="5"/>
+	<s:Image id="img" width="150" height="150" click="imageDoubleClickHandler(event)" scaleMode="letterbox"
+			 smooth="true" smoothingQuality="high"
+			 source="{markerInfo.playerType == 'youtube' ?
+			 YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg'
+			 :( markerInfo.playerType == 'dailymotion' ?
+			 'http://www.dailymotion.com/thumbnail/135x135/video/' + markerInfo.idYoutubeVideo : markerInfo.idYoutubeVideo)}"/>
+	
+	<s:Scroller id="scroller" left="0" top="0" right="0" bottom="0"
+				minViewportInset="1" measuredSizeIncludesScrollBars="false" hasFocusableChildren="false" height="200">
+		<!--- @copy spark.components.supportClasses.SkinnableTextBase#textDisplay -->
+		<s:RichEditableText id="textDisplay"
+							heightInLines="10"
+							widthInChars="20" 
+							text="{markerInfo.description}" fontSize="15" editable="false" height="200" color="#FFFFFF"/>
+	</s:Scroller>
+</s:View>
