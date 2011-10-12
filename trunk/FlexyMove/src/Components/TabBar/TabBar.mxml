@@ -32,7 +32,6 @@
 			{
 				var popupUser:UserInfoView = new UserInfoView();
 				
-				popupUser.connexionButtonVisible = false;
 				PopUpManager.addPopUp(popupUser, this.parent, true);
 				PopUpManager.centerPopUp(popupUser);  
 				

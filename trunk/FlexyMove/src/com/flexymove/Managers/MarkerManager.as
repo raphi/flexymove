@@ -142,7 +142,7 @@ package com.flexymove.Managers
 				videoInfosList.addItem(videoVO);
 				videoDisplayInfosList.addItem(videoVO);
 				createMarker(videoVO);
-				addInformationInSearchList(videoVO)
+				addInformationInSearchList(videoVO);
 			}
 		}
 		
@@ -182,6 +182,9 @@ package com.flexymove.Managers
 			
 			marker.videoInfo.lat = event.latLng.lat();
 			marker.videoInfo.lng = event.latLng.lng();
+			
+			// Avoid doublons, the marker will be recreated with onCollectionChange
+			gmarkerManager.removeMarker( marker );
 			
 			_sharedVideoList.publishItem(new MessageItem("videoList", marker.videoInfo, marker.videoInfo.uid), true);
 		}

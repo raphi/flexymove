@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   showEffect="{showEffect}" hideEffect="{hideEffect}"
+				   styleName="panelInfoStyle"
+				   creationComplete="init(event)">
+	
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="1000" />
+		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="1000" />
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import com.flexymove.Managers.UserManager;
+			import com.flexymove.VO.UserInfoVO;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.CursorManager;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var connexionButtonVisible : Boolean = true;
+			[Bindable]
+			private var userLogin : UserInfoVO = new UserInfoVO();
+			
+			private function init(event:FlexEvent):void
+			{
+				CursorManager.setBusyCursor();
+				UserManager.getInstance().addEventListener( 'getLoginsSuccessful', onGetLogins );
+			}
+			
+			private function onGetLogins(e:Event):void
+			{
+				CursorManager.removeBusyCursor();
+				connectionButton.visible = true;
+			}
+			
+			private function connexion(event:MouseEvent = null):void
+			{
+				if (UserManager.getInstance().userIsValid( userLogin ))
+				{
+					PopUpManager.removePopUp( this );
+					dispatchEvent( new Event( 'loginSuccessful' ));
+					UserManager.getInstance().currentUserInfo = userLogin;
+				}
+				else
+				{
+					Alert.show("Votre nom d'utilisateur ou mot de passe est incorrect.", "Erreur de connexion");
+				}
+			}
+			
+			private function keyboardEnter(event:KeyboardEvent):void
+			{
+				if (event.keyCode == Keyboard.ENTER)
+					connexion();
+			}
+			
+			private function createNewUser(event:MouseEvent):void
+			{
+				UserManager.getInstance().createNewUser( userLogin );
+				
+				createUserButton.visible = false;
+				createUserButton.includeInLayout = false;
+				
+				Alert.show('Votre compte ' + userLogin.name + ' a été correctement créé.', 'Création de compte');
+			}
+			
+		]]>
+	</fx:Script>
+	
+	
+	<s:backgroundFill>
+		<s:LinearGradient rotation="90">
+			<s:GradientEntry color="0xD0D0F0" alpha="0.6"/>
+			<s:GradientEntry color="0x444444" alpha="0.6"/>
+		</s:LinearGradient>
+	</s:backgroundFill>
+	
+	<s:Group>
+		<s:Form>
+			<s:FormItem label="Utilisateur">
+				<s:TextInput id="usernameInput" text="@{userLogin.name}" maxChars="20" keyDown="keyboardEnter(event)"/>
+			</s:FormItem>
+			<s:FormItem label="Mot de passe">
+				<s:TextInput id="passwordInput" text="@{userLogin.password}" displayAsPassword="true" keyDown="keyboardEnter(event)"/>
+			</s:FormItem>
+			<s:HGroup width="100%" horizontalAlign="center">
+				<mx:LinkButton id="createUserButton" label="Créer un nouveau compte" click="createNewUser(event)"/>
+			</s:HGroup>
+			<s:FormItem visible="{connexionButtonVisible}" includeInLayout="{connexionButtonVisible}">
+				<s:Button id="connectionButton" label="Connexion" click="connexion(event)" visible="false"/>
+			</s:FormItem>
+		</s:Form>
+		<!--<s:Image source="/assets/images/utilisateur.png" width="100" height="150"/>-->
+	</s:Group>
+</s:BorderContainer>
