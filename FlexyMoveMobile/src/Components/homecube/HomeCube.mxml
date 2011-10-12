@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 xmlns:mxeffects="com.adobe.ac.mxeffects.*"
+		 xmlns:maps="Components.maps.*" 
+		 xmlns:profile="Components.profile.*" 
+		 xmlns:youtube="Components.player.youtube.*"
+		 xmlns:gmap="Components.gmap.*"
+		 creationComplete="init()"
+		 width="100%" height="100%">
+	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import Movelib.MoveLib;
+			import Movelib.events.MovementEvent;
+			
+			import mx.controls.Alert;
+			
+			[Bindable]
+			private var oldView:Object = mapView;
+			[Bindable]
+			private var newView:Object = profileView;
+			
+			private function init():void
+			{
+				addEventListener(MovementEvent.SWIPE_LEFT, leftCubeRotation);
+				addEventListener(MovementEvent.SWIPE_RIGHT, rightCubeRotation);
+				
+				MoveLib.registerObject(this);
+				Movelib.MoveLib.start();
+			}
+			
+			private function leftCubeRotation(e:MovementEvent):void
+			{
+				rotationEffect.direction = 'LEFT';
+				switch (currentState)
+				{
+					case "MapState":	currentState = "ProfileState";	break;
+					case "ProfileState":currentState = "YouTubeState"; break;
+					case "YouTubeState":currentState = "MapState"; break;
+					default: break;
+				}
+			}
+			
+			private function rightCubeRotation(e:MovementEvent):void
+			{
+				rotationEffect.direction = 'RIGHT';
+				switch (currentState)
+				{
+					case "MapState":	currentState = "YouTubeState";	break;
+					case "ProfileState":currentState = "MapState"; break;
+					case "YouTubeState":currentState = "ProfileState"; break;
+					default: break;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="MapState"/>
+		<s:State name="ProfileState"/>
+		<s:State name="YouTubeState"/>
+	</s:states>
+	
+	<s:transitions>
+		<s:Transition toState="MapState" 
+					  effect="{rotationEffect}" />
+		<s:Transition toState="ProfileState" 
+					  effect="{rotationEffect}" />	
+		<s:Transition toState="YouTubeState" 
+					  effect="{rotationEffect}" />	
+	</s:transitions>
+	
+	<fx:Declarations>
+		<s:Sequence>
+			<mxeffects:CubeRotate id="rotationEffect" 
+								  target="{oldView}"
+								  siblings="{ [ newView ] }"
+								  direction="LEFT"
+								  duration="1000" />
+			<s:RemoveAction target="{oldView}"/>
+			<s:AddAction target="{newView}" />
+		</s:Sequence>
+	</fx:Declarations>
+	
+	<gmap:test id="mapView"
+			   change="oldView=mapView; newView=profileView; currentState='ProfileState'"
+			   includeInLayout.ProfileState="false" includeInLayout.YouTubeState="false"/>
+	
+	<profile:ProfileView id="profileView"
+						 visible="false"
+						 change="oldView=profileView; newView=youtubeView;currentState='YouTubeState'"
+						 includeInLayout.MapState="false" includeInLayout.YouTubeState="false"/>
+	
+	<youtube:playerView id="youtubeView"
+							   visible="false"
+							   change="oldView=youtubeView; newView=mapView;currentState='MapState'"
+							   includeInLayout.MapState="false" includeInLayout.ProfileState="false"/>
+	
+	<!--	<local:CoverFlow id="coverFlowView"
+	visible="false"
+	change="oldView=coverFlowView; newView=mapView;currentState='MapState'"
+	includeInLayout.MapState="false" includeInLayout.ProfileState="false"/>-->
+</s:Group>
