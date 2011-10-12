@@ -4,6 +4,8 @@
 		 xmlns:components="Components.player.youtube.components.*" 
 		 xmlns:youtube="Components.player.youtube.*"
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 horizontalCenter="0"
+		 verticalCenter="0"
 		 width="100%" height="100%"
 		 creationComplete="init()">
 	
@@ -87,7 +89,8 @@
 				img.source = source;
 				img.setStyle("addedEffect", image_addedEffect);
 				img.setStyle("removedEffect", image_removedEffect);
-				PopUpManager.addPopUp(img, this, true);
+				
+				PopUpManager.addPopUp(img, this.parent, true);
 			}
 			
 			private function image_click(evt:MouseEvent):void {
@@ -102,8 +105,8 @@
 			}
 			
 			private function image_complete(evt:Event):void {
-				x -= (evt.currentTarget as Image).width / 2;
-				y -= (evt.currentTarget as Image).height / 2;
+				//x -= (evt.currentTarget as Image).width / 2;
+				//y -= (evt.currentTarget as Image).height / 2;
 				PopUpManager.centerPopUp(evt.currentTarget as Image);
 			}
 		]]>
