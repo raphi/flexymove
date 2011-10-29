@@ -2,6 +2,16 @@
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="ChannelView" creationComplete="init()">
 	
+	<fx:Style>
+		.myFontStyle { 
+			fontSize: 15;
+			fontStyle:italic;
+			color: #987654;
+		}
+		
+	</fx:Style>
+	
+	
 	<s:navigationContent>
 		<s:Button label="Back" click="{navigator.popView()}"/>
 	</s:navigationContent>
@@ -101,7 +111,8 @@
 			labelField="title">
 		<s:itemRenderer> 
 			<fx:Component>
-				<s:IconItemRenderer label="{data.title}" 
+				<s:IconItemRenderer label="{data.title}"
+									messageStyleName="myFontStyle" alternatingItemColors="{new Array(['0xE6E6FA'])}"
 									messageField="channel" iconFunction="pictures"  iconWidth="48" iconHeight="48">
 					<fx:Script>
 						<![CDATA[

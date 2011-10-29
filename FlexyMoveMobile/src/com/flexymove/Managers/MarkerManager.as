@@ -10,6 +10,7 @@ package com.flexymove.Managers
 	import com.flexymove.Utils.Utils;
 	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
+	import com.google.maps.Map;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
 	import com.google.maps.overlays.Marker;
@@ -33,6 +34,8 @@ package com.flexymove.Managers
 		private var _sharedVideoList:CollectionNode;
 		private var videoInfosList:ArrayList = new ArrayList();
 		private var videoDisplayInfosList:ArrayList = new ArrayList();
+		public var alreadyload :Boolean = false;
+		public var map:Map;
 		private static var instance:MarkerManager;
 		[Bindable]
 		public var curentVideoInfo : VideoInfoVO = null;
@@ -52,8 +55,15 @@ package com.flexymove.Managers
 		 */
 		public function init(map:IMap, connectSession:ConnectSession):void
 		{
+	
 			gmarkerManager = new Components.gmap.core.MarkerManager(map);
+			if (alreadyload)
+			{
+				displayVideoAndOrPicture(true,true);
+				return;
+			}
 			initializeSharedList(connectSession);
+			alreadyload =true;
 		}
 		
 		/**

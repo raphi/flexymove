@@ -49,7 +49,7 @@
 			
 			public function onMapReady(event:MapEvent):void 
 			{
-				
+
 				markerManager.init(map, LCConnectManager);
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 				
@@ -58,7 +58,7 @@
 				map.enableScrollWheelZoom();
 				map.enableContinuousZoom();
 				map.enableControlByKeyboard();
-				map.addControl(new NavigationControl());
+				
 				
 			}
 			
@@ -67,6 +67,7 @@
 				var marker:SharedMarker = e.feature as SharedMarker;
 				
 				MarkerManager.getInstance().curentVideoInfo = marker.videoInfo;
+				if (navigator != null)
 				navigator.pushView(InfoView);
 		
 			}
@@ -85,7 +86,7 @@
 			
 			private function authenticationFailureHandler(event:AuthenticationEvent):void
 			{
-				//Alert.show("Login fail", "Login error");
+				
 			}
 			
 			private function creationCompleteHandler(event:FlexEvent):void
