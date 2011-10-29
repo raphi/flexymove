@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 		xmlns:s="library://ns.adobe.com/flex/spark" title="search">
-	
+
+	<fx:Style>
+		.myFontStyle { 
+			fontSize: 15;
+			fontStyle:italic;
+			color: #987654;
+		}
+		
+	</fx:Style>
 	
 	<s:titleContent>
 		<s:TextInput id="searchtext" width="100%" change="search()"/>
@@ -18,7 +26,6 @@
 			import com.flexymove.VO.VideoInfoVO;
 			
 			import mx.collections.ArrayList;
-			
 			[Bindable]
 			public var videoList : ArrayList = MarkerManager.getInstance().getVideoList();
 			private function changeView():void
@@ -80,7 +87,7 @@
 			>
 		<s:itemRenderer> 
 			<fx:Component>
-				<s:IconItemRenderer label="{data.title}" 
+				<s:IconItemRenderer label="{data.title}" messageStyleName="myFontStyle" alternatingItemColors="{new Array(['0xE6E6FA'])}"
 									messageField="channel" iconFunction="pictures"  iconWidth="48" iconHeight="48">
 					<fx:Script>
 						<![CDATA[

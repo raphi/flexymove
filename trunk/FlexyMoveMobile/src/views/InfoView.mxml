@@ -74,7 +74,7 @@
 				
 				if(changeInX > 100)
 				{
-					if(currentX < previousX)
+					if(currentX > previousX)
 					{
 						if((positionMedia - 1) >= 0)
 						{
@@ -82,7 +82,7 @@
 							markerInfo = MarkerManager.getInstance().curentVideoInfo;
 						}
 					}
-					else if(currentX > previousX)
+					else if(currentX < previousX)
 					{
 						if((positionMedia + 1) < MarkerManager.getInstance().getVideoList().length)
 						{
@@ -158,23 +158,30 @@
 	
 	<s:Label id="titreField" styleName="textInfo" text="{markerInfo.title}" color="#FFFFFF"/>
 	
-	<s:Label id="pseudoField" styleName="textInfo" text="{markerInfo.pseudo}" color="#FFFFFF"/>
+	<s:Label id="pseudoField" styleName="textInfo" 
+			 text="{'autheur: ' + markerInfo.pseudo}" 
+			 color="#FFFFFF" 
+			 fontStyle="italic"
+			 fontSize="18"/>
 	
-	
-	<s:Spacer height="5"/>
-	<s:Image id="img" width="150" height="150" click="imageDoubleClickHandler(event)" scaleMode="letterbox"
+		<s:Image id="img" width="250" height="300" click="imageDoubleClickHandler(event)" scaleMode="letterbox"
 			 smooth="true" smoothingQuality="high"
 			 source="{markerInfo.playerType == 'youtube' ?
 			 YOUTUBE_IMG_URL + markerInfo.idYoutubeVideo + '/0.jpg'
 			 :( markerInfo.playerType == 'dailymotion' ?
 			 'http://www.dailymotion.com/thumbnail/135x135/video/' + markerInfo.idYoutubeVideo : markerInfo.idYoutubeVideo)}"/>
 	
-	<s:Scroller id="scroller" left="0" top="0" right="0" bottom="0"
+	<s:Scroller id="scroller" 
 				minViewportInset="1" measuredSizeIncludesScrollBars="false" hasFocusableChildren="false" height="200">
 		<!--- @copy spark.components.supportClasses.SkinnableTextBase#textDisplay -->
 		<s:RichEditableText id="textDisplay"
 							heightInLines="10"
-							widthInChars="20" 
-							text="{markerInfo.description}" fontSize="15" editable="false" height="200" color="#FFFFFF"/>
+							widthInChars="20"
+							width="450"
+							text="{markerInfo.description}" 
+							fontSize="15" 
+							editable="false" 
+							height="200" 
+							color="#FFFFFF"/>
 	</s:Scroller>
 </s:View>
