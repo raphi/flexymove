@@ -3,6 +3,7 @@
 	<name>FlexyMove</name>
 	<comment></comment>
 	<projects>
+		<project>MoveLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

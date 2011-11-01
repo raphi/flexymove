@@ -22,6 +22,7 @@
 			import com.google.maps.MapEvent;
 			import com.google.maps.MapMouseEvent;
 			import com.google.maps.MapType;
+			import com.google.maps.MapZoomEvent;
 			
 			import mx.controls.Alert;
 			import mx.core.IFlexDisplayObject;
@@ -38,14 +39,19 @@
 				
 				markerManager.init(map, LCConnectManager);
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-				
-				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
+				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.NORMAL_MAP_TYPE);
 				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
+				map.addEventListener(MapZoomEvent.ZOOM_CHANGED, onZoomChanged);
 				map.enableScrollWheelZoom();
 				map.enableContinuousZoom();
 				map.enableControlByKeyboard();
 				//map.addControl(new NavigationControl());
 				//map.addControl(new MapTypeControl());
+			}
+			
+			private function onZoomChanged(e:MapZoomEvent):void
+			{
+				markerManager.Clusterize(e.zoomLevel);
 			}
 			
 			private function onMarkerClick(e:MapMouseEvent):void
