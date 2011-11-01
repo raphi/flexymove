@@ -7,11 +7,14 @@ package com.flexymove.Managers
 	import com.adobe.rtc.messaging.MessageItem;
 	import com.adobe.rtc.session.ConnectSession;
 	import com.adobe.rtc.sharedModel.CollectionNode;
+	import com.flexymove.Utils.GMapUtils;
 	import com.flexymove.Utils.Utils;
 	import com.flexymove.VO.VideoInfoVO;
 	import com.google.maps.LatLng;
+	import com.google.maps.MapEvent;
 	import com.google.maps.MapMouseEvent;
 	import com.google.maps.interfaces.IMap;
+	import com.google.maps.overlays.Marker;
 	import com.google.maps.overlays.MarkerOptions;
 	import com.google.maps.styles.FillStyle;
 	import com.google.maps.styles.StrokeStyle;
@@ -20,6 +23,7 @@ package com.flexymove.Managers
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
+	import mx.controls.Alert;
 	
 	/**
 	 * Singleton class.
@@ -29,8 +33,11 @@ package com.flexymove.Managers
 	{
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
 		private var _sharedVideoList:CollectionNode;
+
 		private var videoInfosList:ArrayList = new ArrayList();
 		private var videoDisplayInfosList:ArrayList = new ArrayList();
+		private var _markers:ArrayCollection = new ArrayCollection();
+		private var _lastZoom:int = 1;
 		[Bindable]
 		public var searchList:ArrayCollection = new ArrayCollection;
 		
@@ -167,9 +174,11 @@ package com.flexymove.Managers
 			
 			//markerOption.strokeStyle = style; 
 			var marker:SharedMarker = new SharedMarker(new LatLng(videoVO.lat, videoVO.lng), videoVO, markerOption);
+			_markers.addItem(marker);
 			
 			marker.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
 			marker.addEventListener(MapMouseEvent.DRAG_END, onMarkerMoved);
+			
 			// SET visibilité view
 			// FIXME handle level zoom
 			gmarkerManager.addMarker(marker, 0, 15);
@@ -191,6 +200,7 @@ package com.flexymove.Managers
 		
 		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
 		{
+			_markers.removeAll();
 			gmarkerManager.clearMarkers();
 			
 			for (var i:int = 0; i<videoDisplayInfosList.length; i++)
@@ -236,6 +246,7 @@ package com.flexymove.Managers
 		
 		public function uptdateMapWithSearchResult(searchCriterias : ArrayCollection, fieldToSearch :String):void
 		{
+			_markers.removeAll();
 			gmarkerManager.clearMarkers();
 			videoDisplayInfosList = new ArrayList();
 			for (var i:int = 0; i<videoInfosList.length; i++)
@@ -282,7 +293,26 @@ package com.flexymove.Managers
 					}
 				}
 			}
-			
+			Clusterize(_lastZoom);
+		}
+		
+		public function Clusterize(zoom:int):void
+		{
+			_lastZoom = zoom;
+			var clusterer:Clusterer = null;
+			clusterer = new Clusterer(_markers.toArray(), zoom);
+			var clusters:Array = clusterer.clusters;
+			gmarkerManager.clearMarkers();
+			for each(var cluster:Array in clusters)
+			{
+				var marker:SharedMarker = null;
+				for each(var m:SharedMarker in cluster)
+				{
+					if ((marker == null) || (m.videoInfo.nbViews > marker.videoInfo.nbViews))
+						marker = m;
+				}
+				gmarkerManager.addMarker(m, 0, Infinity);
+			}
 		}
 		
 	}
