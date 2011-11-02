@@ -198,6 +198,11 @@ package com.flexymove.Managers
 			_sharedVideoList.publishItem(new MessageItem("videoList", marker.videoInfo, marker.videoInfo.uid), true);
 		}
 		
+		public function updateVideoInfo(videoInfo:VideoInfoVO):void
+		{
+			_sharedVideoList.publishItem(new MessageItem("videoList", videoInfo, videoInfo.uid), true);
+		}
+		
 		public function displayVideoAndOrPicture(picture : Boolean , video : Boolean): void
 		{
 			_markers.removeAll();
@@ -311,7 +316,7 @@ package com.flexymove.Managers
 					if ((marker == null) || (m.videoInfo.nbViews > marker.videoInfo.nbViews))
 						marker = m;
 				}
-				gmarkerManager.addMarker(m, 0, Infinity);
+				gmarkerManager.addMarker(marker, 0, Infinity);
 			}
 		}
 		
