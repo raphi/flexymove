@@ -19,7 +19,9 @@ package com.flexymove.Managers
 	import com.google.maps.styles.FillStyle;
 	import com.google.maps.styles.StrokeStyle;
 	
+	import flash.desktop.Icon;
 	import flash.events.EventDispatcher;
+	import flash.geom.Point;
 	
 	import mx.collections.ArrayCollection;
 	import mx.collections.ArrayList;
@@ -33,7 +35,7 @@ package com.flexymove.Managers
 	{
 		private var gmarkerManager:Components.gmap.core.MarkerManager;
 		private var _sharedVideoList:CollectionNode;
-
+		
 		private var videoInfosList:ArrayList = new ArrayList();
 		private var videoDisplayInfosList:ArrayList = new ArrayList();
 		private var _markers:ArrayCollection = new ArrayCollection();
@@ -181,7 +183,7 @@ package com.flexymove.Managers
 			
 			// SET visibilité view
 			// FIXME handle level zoom
-			gmarkerManager.addMarker(marker, 0, 15);
+			gmarkerManager.addMarker(marker, 0, Infinity);
 		}
 		
 		// This send to the server the same marker with refresh lat lng.
@@ -305,7 +307,7 @@ package com.flexymove.Managers
 		{
 			_lastZoom = zoom;
 			var clusterer:Clusterer = null;
-			clusterer = new Clusterer(_markers.toArray(), zoom);
+			clusterer = new Clusterer(_markers.toArray(), zoom - 1);
 			var clusters:Array = clusterer.clusters;
 			gmarkerManager.clearMarkers();
 			for each(var cluster:Array in clusters)
@@ -316,6 +318,48 @@ package com.flexymove.Managers
 					if ((marker == null) || (m.videoInfo.nbViews > marker.videoInfo.nbViews))
 						marker = m;
 				}
+				
+				var markerOption :MarkerOptions
+				if(cluster.length == 1)
+				{
+					if (marker.videoInfo.playerType == "picture")
+						markerOption = new MarkerOptions({
+							strokeStyle: new StrokeStyle({color: 0x987654}),
+							fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+							radius: 12,
+							hasShadow: true,
+							draggable: true
+						});
+					else
+						markerOption = new MarkerOptions({
+							strokeStyle: new StrokeStyle({color: 0x987654}),
+							fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+							radius: 12,
+							hasShadow: true,
+							draggable: true
+						});
+				}	
+				else
+					if (marker.videoInfo.playerType == "picture")
+						markerOption = new MarkerOptions({
+							strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
+							fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+							radius: 17,
+							tooltip: cluster.length + " médias",
+							hasShadow: true,
+							draggable: true
+						});
+					else
+					markerOption = new MarkerOptions({
+						strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
+						fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+						radius: 17,
+						tooltip: cluster.length + " médias",
+						hasShadow: true,
+						draggable: true
+					});
+				
+				marker.setOptions(markerOption);
 				gmarkerManager.addMarker(marker, 0, Infinity);
 			}
 		}
