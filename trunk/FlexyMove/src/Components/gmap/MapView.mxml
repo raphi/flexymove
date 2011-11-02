@@ -39,7 +39,7 @@
 				
 				markerManager.init(map, LCConnectManager);
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.NORMAL_MAP_TYPE);
+				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
 				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
 				map.addEventListener(MapZoomEvent.ZOOM_CHANGED, onZoomChanged);
 				map.enableScrollWheelZoom();
