@@ -22,6 +22,7 @@
 			import Components.player.picture.PopUpPicture;
 			import Components.player.youtube.PopUpPlayer;
 			
+			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.VO.VideoInfoVO;
 			
 			import mx.controls.Alert;
@@ -46,13 +47,14 @@
 			
 			private function imageDoubleClickHandler(event:MouseEvent):void
 			{
-				
+				markerInfo.nbViews++;
+				MarkerManager.getInstance().updateVideoInfo(markerInfo);
 				if(markerInfo.playerType == "picture")
 				{
 					var popupPicture:PopUpPicture = new PopUpPicture();
 					popupPicture.markerInfo = markerInfo;
 					PopUpManager.addPopUp(popupPicture, this.parent, false);
-					PopUpManager.centerPopUp(popupPicture);  
+					PopUpManager.centerPopUp(popupPicture);
 				}
 				else
 				{
@@ -102,7 +104,7 @@
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Vues :"/>
-			<s:Label id="viewsField" styleName="textInfo" text=""/>
+			<s:Label id="viewsField" styleName="textInfo" text="{markerInfo.nbViews}"/>
 			<s:Label styleName="textInfo" text=" fois"/>
 		</s:HGroup>
 	</s:VGroup>
