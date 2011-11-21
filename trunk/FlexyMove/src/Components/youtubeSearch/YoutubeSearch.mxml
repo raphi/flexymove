@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300"
+		 creationComplete="init()"
+		 xmlns:youtube="ca.newcommerce.youtube.*">
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import ca.newcommerce.youtube.data.AuthorData;
+			import ca.newcommerce.youtube.data.VideoData;
+			import ca.newcommerce.youtube.events.CommentFeedEvent;
+			import ca.newcommerce.youtube.events.VideoDataEvent;
+			import ca.newcommerce.youtube.events.VideoFeedEvent;
+			import ca.newcommerce.youtube.events.YouTubeEvent;
+			import ca.newcommerce.youtube.feeds.VideoFeed;
+			import ca.newcommerce.youtube.webservice.YouTubeFeedClient;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.SWFLoader;
+			import mx.core.UIComponent;
+			import mx.events.DataGridEvent;
+			import mx.events.ItemClickEvent;
+			
+			protected var youTube:YouTubeFeedClient;
+			protected var loader:Loader = new Loader();
+			public static var SELECT_DATA:String = "SELECT_DATA";
+			public var videoData :VideoData = null;
+			[Bindable]
+			protected var ac:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			protected var player:Object;
+			
+			[Bindable]
+			[Embed("assets/images/control_play_blue.png")]
+			private var playIcon:Class;
+			
+			[Bindable]
+			[Embed("assets/images/control_pause_blue.png")]
+			private var pauseIcon:Class;
+			
+			[Bindable]
+			[Embed("assets/images/control_stop_blue.png")]
+			private var stopIcon:Class;
+			
+			protected function init():void
+			{
+				youTube = YouTubeFeedClient.getInstance();
+				youTube.addEventListener(VideoFeedEvent.VIDEO_DATA_RECEIVED, onVideoDataReceived);
+				// Specifically allow the chromless player .swf access to our .swf.
+				//Security.allowDomain("http://www.youtube.com");
+				this.loadVideoPlayer();
+			}
+			
+			protected function search():void
+			{
+				youTube.getVideos(searchText.text);
+			}
+			
+			protected function onVideoDataReceived(event:VideoFeedEvent):void
+			{
+				ac.removeAll();
+				var vf:VideoFeed = event.feed as VideoFeed;
+				if (event.feed.totalResults > 0) 
+				{
+					var arr:Array = new Array();
+					if (event.feed != null && event.feed.count > 0) {
+						for (var i:int = 0; i<vf.count; i++) 
+						{
+							var vd:VideoData = vf.getAt(i) as VideoData;
+							ac.addItem(vd);
+							trace("Data published " + vd.published + " updated " + vd.updated + " id " + vd.actualId + " mobile URL: " +  vd.mobileUrl + " Links: " + vd.links.first().href + " first author " + vd.authors.first().name);
+						}
+						
+					}
+				}
+				else {
+					Alert.show("No matching videos found.");
+				}
+			}
+			
+			protected function onSWFLoaderIoError(event:IOErrorEvent):void {
+				trace('SWFLoader - IoError: ' + event.text);
+			}
+			
+			protected function loadVideoPlayer():void
+			{
+				// Load the YouTube Video Player SWF here and then we'll embed it to show how that API is used. It can then be used to respond 
+				// to different events. See this URL for more info: http://code.google.com/apis/youtube/flash_api_reference.html#Examples
+				loader.contentLoaderInfo.addEventListener(Event.INIT, onLoaderInit);
+				loader.load(new URLRequest("http://www.youtube.com/apiplayer?version=3"));
+			}
+			
+			protected function onLoaderInit(event:Event):void {
+				loader.content.addEventListener("onReady", onPlayerReady);
+				loader.content.addEventListener("onError", onPlayerError);
+				loader.content.addEventListener("onStateChange", onPlayerStateChange);
+				loader.content.addEventListener("onPlaybackQualityChange", 
+					onVideoPlaybackQualityChange);
+			}
+			
+			protected function onPlayerReady(event:Event):void {
+				// Event.data contains the event parameter, which is the Player API ID 
+				trace("player ready:", Object(event).data);
+				
+				player = loader.content;
+				player.setSize(240, 210);
+				swfLoader.addEventListener(flash.events.IOErrorEvent.IO_ERROR , onSWFLoaderIoError);
+				swfLoader.autoLoad = true;
+				swfLoader.scaleContent = true;
+				swfLoader.maintainAspectRatio = true;
+				swfLoader.load(player);
+			}
+			
+			protected function onVideoSelected():void
+			{
+				this.buttonBar.visible=true;
+				var vd:VideoData = dg.selectedItem as VideoData;
+				if (vd != null)
+				{
+					player.cueVideoById(vd.actualId);
+					txtTitle.text = vd.title;
+					txtAuthor.text = "by: " + vd.authors.first().name;
+				}
+			}
+			
+			protected function onPlayerError(event:Event):void {
+				trace("Player error:", Object(event).data);
+			}
+			
+			protected function onPlayerStateChange(event:Event):void {
+				trace("Player state changed:", Object(event).data);
+			}
+			
+			protected function onVideoPlaybackQualityChange(event:Event):void {
+				trace("Video quality playback change:", Object(event).data);
+			}
+			
+			protected function buttonBarClickHandler(event:ItemClickEvent):void
+			{
+				if (event.index == 0)
+				{
+					player.playVideo();
+				}
+				else if (event.index == 1)
+				{
+					player.pauseVideo();
+				}
+				else if (event.index == 2)
+				{
+					player.stopVideo();
+				}
+			}
+			
+			protected function add():void
+			{
+				if(dg.selectedItem != -1)
+				{
+					videoData =VideoData( dg.selectedItem);
+					dispatchEvent(new Event(SELECT_DATA))
+				}
+			}
+			protected function close():void
+			{
+				
+					dispatchEvent(new Event(SELECT_DATA))
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:ArrayCollection id="buttonArray">
+			<fx:Object label="Play" icon="{playIcon}" />
+			<fx:Object label="Pause" icon="{pauseIcon}" />
+			<fx:Object label="Stop" icon="{stopIcon}" />
+		</s:ArrayCollection >
+		<s:Fade id="fadeIn" alphaFrom=".1" alphaTo="1.0" duration="1000"/>
+	</fx:Declarations>
+	
+	<mx:HBox top="10" left="10" verticalAlign="middle">
+		<mx:Label text="Videos:" color="0xFFFFFF"/>
+		<mx:TextInput id="searchText" enter="this.search()"/>
+		<mx:Button label="Go!" click="this.search()"/>
+		<mx:Button label="Annuler" click="close()"/>
+	</mx:HBox>
+	<mx:Text id="txtTitle" color="0xFFFFFF" left="420" top="7"/>
+	
+	
+	<mx:SWFLoader id="swfLoader" left="430" top="25"/>
+	
+	<mx:Text id="txtAuthor" color="0xFFFFFF" top="18" left="430"/>
+	
+	<mx:ToggleButtonBar id="buttonBar" dataProvider="{buttonArray}" itemClick="buttonBarClickHandler(event)" left="430" top="230" visible="false" 
+						showEffect="{fadeIn}"/>    
+	
+	<mx:HBox id="hbox" y="50" left="10">
+		<mx:DataGrid  id="dg" width="410" height="200" doubleClickEnabled="true" 
+					  doubleClick="add()" dataProvider="{ac}" itemClick="this.onVideoSelected()">
+			<mx:columns>
+				<mx:DataGridColumn dataField="title" headerText="title" width="140"/>
+				<mx:DataGridColumn dataField="content" headerText="Content" width="140"/>
+			</mx:columns>
+		</mx:DataGrid>
+	</mx:HBox>
+	
+	
+</s:Group>

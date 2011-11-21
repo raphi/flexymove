@@ -18,19 +18,25 @@
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
 			
+			import ca.newcommerce.youtube.data.VideoData;
+			
 			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.Managers.UserManager;
 			import com.flexymove.Utils.Utils;
 			import com.google.maps.LatLng;
 			
 			import mx.collections.ArrayCollection;
-			
+			[Bindable]
+			public var videoData : VideoData;
+			[Bindable]
 			public var latLngMarkerAdded:LatLng = null;
 			
 			private var marker:SharedMarker;
 			
 			private function addVideoButtonClickHandler(event:MouseEvent):void
 			{
+				if (latLngMarkerAdded == null)
+					return;
 				var youTubeURL:String = Utils.getIDFromUrl(youtubeUrlInput.text);
 				if (youTubeURL != null)
 				{
@@ -44,7 +50,7 @@
 					_marker.videoInfo.date = new Date();
 					_marker.videoInfo.channel = channelInput.selectedItem;
 					_marker.videoInfo.pseudo = UserManager.getInstance().currentUserInfo.name;
-					
+					_marker.videoInfo.nbViews = videoData == null? 0 : videoData.viewCount; 
 					
 					if (youtubeUrlInput.text.search("http://www.dailymotion.com/video/") != -1)
 						_marker.videoInfo.playerType = "dailymotion";
@@ -73,6 +79,7 @@
 				titleInput.text = "";
 				descriptionInput.text = "";
 				youtubeUrlInput.text = "";
+				videoData = null;
 			}
 			
 		]]>
@@ -88,10 +95,13 @@
 	<s:Label width="100%" paddingTop="15" styleName="panelInfoTitle" text="Informations"/>
 	<s:Form width="275">
 		<s:FormItem label="Titre :" styleName="infoLabelFormItem">
-			<s:TextInput id="titleInput" width="160" color="#000000" fontWeight="normal"/>
+			<s:TextInput id="titleInput" width="160" 
+						 text="{videoData != null ? videoData.title : ''}"
+						 color="#000000" fontWeight="normal"/>
 		</s:FormItem>
 		<s:FormItem label="Url Media :" styleName="infoLabelFormItem">
-			<s:TextInput id="youtubeUrlInput" width="160" color="#000000" fontWeight="normal"/>
+			<s:TextInput id="youtubeUrlInput" width="160" color="#000000" 
+						 fontWeight="normal" text="{videoData != null ? videoData.links.getAt(0).href : ''}"/>
 		</s:FormItem>
 		<s:FormItem label="Channel :" styleName="infoLabelFormItem">
 			<s:ComboBox id="channelInput" width="160" dataProvider="{MarkerManager.getInstance().searchList.getItemAt(3) as ArrayCollection}"
@@ -99,6 +109,8 @@
 		</s:FormItem>
 	</s:Form>
 	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Description"/>
-	<s:TextArea id="descriptionInput"/>
+	<s:TextArea id="descriptionInput" 
+				text="{videoData != null ? videoData.content : ''}"/>
 	<s:Button id="addVideoButton" label="Publier le media" click="addVideoButtonClickHandler(event)"/>
+	<s:Label  text="{latLngMarkerAdded == null ? 'Cliquer sur la map pour positionner le media' : 'Media positionné'}" />
 </s:BorderContainer>
