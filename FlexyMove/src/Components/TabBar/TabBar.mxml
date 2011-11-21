@@ -19,23 +19,34 @@
 	
 	<fx:Script>
 		<![CDATA[
+			import Components.gallery.GalleryPhoto;
 			import Components.gmap.UserInfoView;
 			import Components.player.picture.PopUpPicture;
+			import Components.youtubeSearch.YoutubeSearch;
+			
+			import ca.newcommerce.youtube.data.VideoData;
 			
 			import com.flexymove.Managers.MarkerManager;
 			import com.flexymove.Managers.UserManager;
 			
 			import mx.managers.PopUpManager;
 			
-
+			public var videoData : VideoData;
+			public static var SELECT_DATA:String = "SELECT_DATA";
 			protected function displayeUserInformation():void
 			{
 				var popupUser:UserInfoView = new UserInfoView();
 				
 				PopUpManager.addPopUp(popupUser, this.parent, true);
 				PopUpManager.centerPopUp(popupUser);  
-				
 			}
+			public function addData(event:Event):void
+			{
+				 videoData = VideoData ( event.target.videoData);
+				PopUpManager.removePopUp(YoutubeSearch(event.target));
+				dispatchEvent(new Event(SELECT_DATA))
+			}
+			
 			public function displayMedia(): void
 			{
 				var dVideo : Boolean = displayVideos.selected;
@@ -45,12 +56,21 @@
 			}
 			public function displayDiaporama(): void
 			{
-				var popupPicture:PopUpPicture = new PopUpPicture();
-				popupPicture.diaporama = true;
+				var popupPicture:GalleryPhoto = new GalleryPhoto();
+				//popupPicture.diaporama = true;
 				PopUpManager.addPopUp(popupPicture, this.parent, false);
 				PopUpManager.centerPopUp(popupPicture); 
 			}
 			
+			
+			protected function searchYoutube():void
+			{
+				var youtubeSearch:YoutubeSearch = new YoutubeSearch();
+				PopUpManager.addPopUp(youtubeSearch, this.parent, true);
+				PopUpManager.centerPopUp(youtubeSearch);  
+				youtubeSearch.addEventListener(YoutubeSearch.SELECT_DATA, addData);	
+				
+			}
 			
 		]]>
 	</fx:Script>
@@ -63,8 +83,9 @@
 	</s:backgroundFill>
 	
 	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
+		<s:Label  text="{UserManager.getInstance().currentUserInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
 		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
-		<s:Label width="145" text="{UserManager.getInstance().currentUserInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
+		<s:Image source="/assets/images/Youtube.png" click="searchYoutube()" width="50" height="40"/>
 		<Completion:CompletionSearch id="Search" width="50%"/>
 		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
 		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>

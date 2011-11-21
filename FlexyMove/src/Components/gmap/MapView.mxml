@@ -14,6 +14,8 @@
 		<![CDATA[
 			import Components.gmap.core.SharedMarker;
 			
+			import ca.newcommerce.youtube.data.VideoData;
+			
 			import com.adobe.rtc.events.AuthenticationEvent;
 			import com.adobe.rtc.events.SessionEvent;
 			import com.flexymove.Managers.MarkerManager;
@@ -67,6 +69,7 @@
 			{
 				if (LCConnectManager.isSynchronized)
 				{
+					
 					panelInfoView.visible = false;
 					addVideoInfoView.visible = true;
 					addVideoInfoView.latLngMarkerAdded = event.latLng;
@@ -96,6 +99,18 @@
 					});
 				
 				PopUpManager.centerPopUp( popup );
+				tabBar.addEventListener(TabBar.SELECT_DATA,addData);
+			}
+			
+			public function addData(event:Event):void
+			{
+				var videoData:VideoData = VideoData ( event.target.videoData);
+				if(videoData == null)
+					return;
+				
+				panelInfoView.visible = false;
+				addVideoInfoView.visible = true;
+				addVideoInfoView.videoData = videoData;
 			}
 			
 			private function onSynchronizationChangeHandler(event:SessionEvent):void

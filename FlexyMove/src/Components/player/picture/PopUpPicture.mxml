@@ -7,7 +7,7 @@
 		 horizontalCenter="0"
 		 verticalCenter="0"
 		 width="100%" height="100%"
-		 creationComplete="init()">
+		 creationComplete="init()" xmlns:gallery="Components.gallery.*">
 	
 	<fx:Style>
 		global {
@@ -16,6 +16,7 @@
 			modal-transparency-blur: 9;
 		}
 	</fx:Style>
+	
 	
 	
 	<fx:Script>
@@ -28,6 +29,8 @@
 			import mx.controls.Image;
 			import mx.events.ResizeEvent;
 			import mx.managers.PopUpManager;
+			
+			import spark.components.VGroup;
 			
 			
 			private var img:Image = null;
@@ -48,7 +51,7 @@
 					getPictureList(MarkerManager.getInstance().getVideoDisplayInfosList());
 					loadImageToDiaporama();
 					interval= setInterval(loadImageToDiaporama, 3000);
-				}
+				} 
 				
 			}
 			
@@ -70,7 +73,7 @@
 				{
 					
 					var videoVO : VideoInfoVO = VideoInfoVO(pictureList.getItemAt(position));
-						loadImage(videoVO.idYoutubeVideo);
+					loadImage(videoVO.idYoutubeVideo);
 					position++;
 				}
 				else
@@ -80,8 +83,11 @@
 			}
 			
 			private function loadImage(source :String):void {
-				img = new Image();
-				
+				img = new Image();/* 
+				img.percentHeight = 80;
+				img.percentWidth = 80; */
+				img.width= 500;
+				img.height = 500;
 				img.maintainAspectRatio = true;
 				img.addEventListener(Event.COMPLETE, image_complete);
 				img.addEventListener(ResizeEvent.RESIZE, image_resize);
@@ -89,6 +95,7 @@
 				img.source = source;
 				img.setStyle("addedEffect", image_addedEffect);
 				img.setStyle("removedEffect", image_removedEffect);
+	
 				
 				PopUpManager.addPopUp(img, this.parent, true);
 			}
@@ -109,6 +116,7 @@
 				//y -= (evt.currentTarget as Image).height / 2;
 				PopUpManager.centerPopUp(evt.currentTarget as Image);
 			}
+			
 		]]>
 	</fx:Script>
 	
@@ -119,7 +127,5 @@
 			<mx:Zoom />
 			<mx:Fade />
 		</mx:Parallel>
-		
 	</fx:Declarations>
-	
 </s:Group>

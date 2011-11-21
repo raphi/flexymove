@@ -95,23 +95,30 @@
 	<s:VGroup>
 		<s:Label id="channel" click="buttonClickHandler(event)" color="#000000" fontSize="42"
 				 fontWeight="bold" textAlign="center"/>
-		<s:Label id="videoTitle" click="buttonClickHandler(event)" color="#000000" fontSize="35"/>
+		<s:Label id="videoTitle" click="buttonClickHandler(event)" color="#000000" fontSize="35" textAlign="center"/>
 	</s:VGroup>
-	<s:List id="list" bottom="0" width="100%" height="85%" borderVisible="false"
-			click="onClick()" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
-			doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
-			itemRendererFunction="itemRender" selectedIndex="0">
-		
-		<s:layout>
-			<coverflow:CoverflowLayout id="coverflow" 
-									   selectedIndex="{ list.selectedIndex }"
-									   horizontalDistance="{HORIZONTALDISTANCE}"
-									   selectedItemProximity="{SELECTEDITEMPROXIMITY}"
-									   depthDistance="{DEPTHDISTANCE}" 
-									   elementRotation="{ELEMENTROTATION}" 
-									   focalLength="{FOCALLENGTH}"
-									   perspectiveProjectionX="{PERSPECTIVEPROJECTIONX}" 
-									   perspectiveProjectionY="{PERSPECTIVEPROJECTIONY}"/>
-		</s:layout>
-	</s:List>
+
+	
+	<mx:TileList  id="list" bottom="0" width="90%" height="75%" borderVisible="false"
+				  rowHeight="180" columnWidth="180" columnCount="4"
+				  click="onClick()" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
+				  doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
+				  selectedIndex="0">
+		<mx:itemRenderer>
+			<fx:Component>
+				<mx:VBox horizontalAlign="center" verticalAlign="middle">
+					<s:Group>
+						<s:BitmapImage id="film"
+									   source="{data.playerType == 'youtube' ?
+									   'http://img.youtube.com/vi/' + data.idYoutubeVideo + '/0.jpg'
+									   :( data.playerType == 'dailymotion' ?
+									   'http://www.dailymotion.com/thumbnail/135x135/video/' + data.idYoutubeVideo : data.idYoutubeVideo)}"
+									   verticalCenter="0" horizontalCenter="0"  width="140" maxHeight="140" />
+					</s:Group>
+					
+				</mx:VBox>
+			</fx:Component>
+		</mx:itemRenderer>
+
+	</mx:TileList >
 </s:Group>

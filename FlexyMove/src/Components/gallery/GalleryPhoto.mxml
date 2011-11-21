@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" 
+		 width="60%" height="700"
+		 creationComplete="init()" xmlns:Components="Components.*" >
+	
+	<fx:Script>
+		<![CDATA[
+			import com.flexymove.Managers.MarkerManager;
+			import com.flexymove.Utils.Utils;
+			import com.flexymove.VO.VideoInfoVO;
+			
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+
+			public var index : int = 0;
+			[Bindable]
+			private var pictureList:ArrayList = new ArrayList();
+			public var interval:uint;
+			
+			protected function init():void
+			{
+				getPictureList(MarkerManager.getInstance().getVideoDisplayInfosList())
+				horizontalList.selectedIndex = index;
+				interval= setInterval(changePicture, 3000);
+			}
+			
+			public function getPictureList(infoList : ArrayList): void
+			{
+				for (var i : int = 0 ; i < infoList.length;i++)
+				{
+					var videoVO : VideoInfoVO = VideoInfoVO(infoList.getItemAt(i));
+					if(videoVO.playerType == "picture" && Utils.urlIsPicture(videoVO.idYoutubeVideo))
+						pictureList.addItem(videoVO);
+				}
+			}
+			
+			public function changePicture():void
+			{
+				if (index < (pictureList.length - 1))
+				{
+					index++;
+				}
+				else
+				{
+					index = 0;
+				}
+				horizontalList.selectedIndex = index;
+				horizontalList.scrollToIndex(index);
+
+			}
+			public var state:String = "play"
+			public function pause():void
+			{
+				if(state == "play")
+				{
+					clearInterval(interval);
+					state = "pause";
+					controle.source="assets/images/play_gallery.png";
+				}
+				else
+				{
+					interval= setInterval(changePicture, 3000);
+					state = "play";
+					controle.source="assets/images/pause_gallery.png";
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<Components:DraggablePanel title="{horizontalList.selectedItem.title}"
+			  height="100%"
+			  width="100%"
+			  horizontalAlign="center" backgroundAlpha="0.4">
+		<mx:Image id="img"
+				  source="{horizontalList.selectedItem.idYoutubeVideo}"
+				  maintainAspectRatio="true"
+				  horizontalAlign="center"
+				  width="{horizontalList.width}"
+				  height="100%"/>
+		<mx:ControlBar horizontalAlign="center">
+			<mx:HorizontalList id="horizontalList"
+							   dataProvider="{pictureList}"
+							   change="{index = horizontalList.selectedIndex}"
+							   columnCount="4"
+							   columnWidth="125"
+							   rowCount="1"
+							   rowHeight="100"
+							   horizontalScrollPolicy="on">
+				<mx:itemRenderer>
+					<fx:Component>
+						<mx:VBox horizontalAlign="center" verticalAlign="middle">
+							<mx:Image height="90" width="120" source="{data.idYoutubeVideo}" />
+						</mx:VBox>
+					</fx:Component>
+				</mx:itemRenderer>
+			</mx:HorizontalList>
+		</mx:ControlBar>
+		<s:HGroup>
+			<s:Image id="controle" source="assets/images/pause_gallery.png" click="pause()"/>
+		</s:HGroup>
+	</Components:DraggablePanel>
+	
+</s:Group>

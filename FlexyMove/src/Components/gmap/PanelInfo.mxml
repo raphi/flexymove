@@ -19,6 +19,7 @@
 	<fx:Script>
 		<![CDATA[
 			import Components.coverflow.PopupCoverflow;
+			import Components.gallery.GalleryPhoto;
 			import Components.player.picture.PopUpPicture;
 			import Components.player.youtube.PopUpPlayer;
 			
@@ -53,8 +54,10 @@
 				{
 					var popupPicture:PopUpPicture = new PopUpPicture();
 					popupPicture.markerInfo = markerInfo;
+					
 					PopUpManager.addPopUp(popupPicture, this.parent, false);
 					PopUpManager.centerPopUp(popupPicture);
+
 				}
 				else
 				{
