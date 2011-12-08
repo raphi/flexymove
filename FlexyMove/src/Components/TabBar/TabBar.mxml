@@ -2,7 +2,7 @@
 <s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
 				   xmlns:s="library://ns.adobe.com/flex/spark"
 				   xmlns:mx="library://ns.adobe.com/flex/mx"
-				   xmlns:Completion="Completion.*"
+				   xmlns:Completion="Components.Completion.*"
 				   showEffect="{showEffect}" hideEffect="{hideEffect}"
 				   right="left" top="0"  width="100%" height="40"
 				   styleName="panelInfoStyle">
@@ -21,7 +21,6 @@
 		<![CDATA[
 			import Components.gallery.GalleryPhoto;
 			import Components.gmap.UserInfoView;
-			import Components.player.picture.PopUpPicture;
 			import Components.youtubeSearch.YoutubeSearch;
 			
 			import ca.newcommerce.youtube.data.VideoData;
@@ -40,6 +39,7 @@
 				PopUpManager.addPopUp(popupUser, this.parent, true);
 				PopUpManager.centerPopUp(popupUser);  
 			}
+			
 			public function addData(event:Event):void
 			{
 				 videoData = VideoData ( event.target.videoData);
@@ -54,14 +54,13 @@
 				diaporamaButton.enabled = dPicture; 
 				MarkerManager.getInstance().displayVideoAndOrPicture(dPicture, dVideo);
 			}
+			
 			public function displayDiaporama(): void
 			{
 				var popupPicture:GalleryPhoto = new GalleryPhoto();
-				//popupPicture.diaporama = true;
-				PopUpManager.addPopUp(popupPicture, this.parent, false);
+				PopUpManager.addPopUp(popupPicture, this.parent, true);
 				PopUpManager.centerPopUp(popupPicture); 
 			}
-			
 			
 			protected function searchYoutube():void
 			{
@@ -83,9 +82,11 @@
 	</s:backgroundFill>
 	
 	<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle">
-		<s:Label  text="{UserManager.getInstance().currentUserInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
-		<s:Image source="/assets/images/utilisateur.png" click="displayeUserInformation()" />
-		<s:Image source="/assets/images/Youtube.png" click="searchYoutube()" width="50" height="40"/>
+		<s:Label text="{UserManager.getInstance().currentUserInfo.name}" click="displayeUserInformation()" color="white" fontWeight="bold" useHandCursor="true"/>
+		<s:Image width="30" height="30" click="displayeUserInformation()" smooth="true"
+				 smoothingQuality="high" source="/assets/images/utilisateur.png" useHandCursor="true" buttonMode="true"/>
+		<s:Image width="30" height="30" click="searchYoutube()" smooth="true" smoothingQuality="high" useHandCursor="true" buttonMode="true"
+				 source="/assets/images/Youtube.png"/>
 		<Completion:CompletionSearch id="Search" width="50%"/>
 		<s:CheckBox label="Vidéos" selected="true" id="displayVideos" color="white" click="displayMedia()"/>
 		<s:CheckBox label="Photos" selected="true" id="displayPictures" color="white" click="displayMedia()"/>

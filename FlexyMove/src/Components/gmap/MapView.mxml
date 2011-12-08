@@ -5,10 +5,10 @@
 		 xmlns:rtc="http://ns.adobe.com/rtc"
 		 xmlns:maps="com.google.maps.*"
 		 xmlns:gmap="Components.gmap.*"
-		 xmlns:Completion="Completion.*" 
+		 xmlns:Completion="Components.Completion.*" 
 		 xmlns:TabBar="Components.TabBar.*"
 		 creationComplete="creationCompleteHandler(event)"
-		 width="100%" height="100%" >
+		 width="100%" height="100%">
 	
 	<fx:Script>
 		<![CDATA[
