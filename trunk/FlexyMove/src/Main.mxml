@@ -3,8 +3,9 @@
 					   xmlns:s="library://ns.adobe.com/flex/spark" 
 					   xmlns:mx="library://ns.adobe.com/flex/mx" 
 					   xmlns:gmap="Components.gmap.*"
-					   minHeight="600" minWidth="1000"
+					   height="100%" width="100%"
 					   title="FlexyMove"
+					   initialize="this.maximize()"
 					   showStatusBar="false">
 	
 	<fx:Style source="assets/css/design.css"/>

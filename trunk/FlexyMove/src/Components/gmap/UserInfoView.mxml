@@ -28,6 +28,10 @@
 		]]>
 	</fx:Script>
 	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center" paddingBottom="10"/>
+	</s:layout>
+	
 	<s:backgroundFill>
 		<s:LinearGradient rotation="90">
 			<s:GradientEntry color="0xD0D0F0" alpha="0.6"/>
@@ -35,7 +39,7 @@
 		</s:LinearGradient>
 	</s:backgroundFill>
 	
-	<s:HGroup>
+	<s:HGroup paddingRight="15">
 		<s:Form>
 			<s:FormItem label="Utilisateur">
 				<s:TextInput id="usernameInput" text="@{currentUser.name}" maxChars="20"/>
@@ -46,12 +50,15 @@
 			<s:FormItem label="Adresse email">
 				<s:TextInput />
 			</s:FormItem>
-			<s:HGroup>
-				<s:Button label="Enregistrer les modifications" enabled="false"/>
-				<s:Button label="Fermer" click="closePopup(event)"/>
-			</s:HGroup>
+			
 		</s:Form>
 		
-		<s:Image source="/assets/images/utilisateur.png" width="100" height="150"/>
+		<s:Image width="100" height="150" smooth="true" smoothingQuality="high"
+				 source="/assets/images/utilisateur.png"/>
 	</s:HGroup>
+	<s:HGroup>
+		<s:Button label="Enregistrer les modifications" enabled="false"/>
+		<s:Button label="Fermer" click="closePopup(event)"/>
+	</s:HGroup>
+	
 </s:BorderContainer>

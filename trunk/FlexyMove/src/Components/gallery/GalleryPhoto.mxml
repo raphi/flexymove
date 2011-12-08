@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
-		 xmlns:s="library://ns.adobe.com/flex/spark" 
-		 xmlns:mx="library://ns.adobe.com/flex/mx" 
-		 width="60%" height="700"
-		 creationComplete="init()" xmlns:Components="Components.*" >
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   height="700" width="1200" backgroundAlpha="0.7" backgroundColor="0xD0D0F0"
+			   creationComplete="init()" hideEffect="{hideEffect}" showEffect="{showEffect}"
+			   title="{ horizontalList.selectedItem.title }"
+			   color="#FFFFFF" cornerRadius="10"
+			   close="PopUpManager.removePopUp(this)">
+	
+	<s:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</s:layout>
 	
 	<fx:Script>
 		<![CDATA[
@@ -12,22 +19,21 @@
 			import com.flexymove.VO.VideoInfoVO;
 			
 			import mx.collections.ArrayList;
-			import mx.controls.Alert;
-			import mx.events.FlexEvent;
-
-			public var index : int = 0;
+			import mx.managers.PopUpManager;
+			
 			[Bindable]
 			private var pictureList:ArrayList = new ArrayList();
 			public var interval:uint;
+			[Bindable]
+			public var index : int = 0;
 			
-			protected function init():void
+			private function init():void
 			{
 				getPictureList(MarkerManager.getInstance().getVideoDisplayInfosList())
-				horizontalList.selectedIndex = index;
-				interval= setInterval(changePicture, 3000);
+				interval = setInterval(changePicture, 3000);
 			}
 			
-			public function getPictureList(infoList : ArrayList): void
+			private function getPictureList(infoList : ArrayList): void
 			{
 				for (var i : int = 0 ; i < infoList.length;i++)
 				{
@@ -37,7 +43,7 @@
 				}
 			}
 			
-			public function changePicture():void
+			private function changePicture():void
 			{
 				if (index < (pictureList.length - 1))
 				{
@@ -47,12 +53,13 @@
 				{
 					index = 0;
 				}
-				horizontalList.selectedIndex = index;
-				horizontalList.scrollToIndex(index);
 
+				horizontalList.ensureIndexIsVisible( index );
 			}
-			public var state:String = "play"
-			public function pause():void
+			
+			private var state:String = "play"
+				
+			private function pause():void
 			{
 				if(state == "play")
 				{
@@ -72,37 +79,37 @@
 		]]>
 	</fx:Script>
 	
-	<Components:DraggablePanel title="{horizontalList.selectedItem.title}"
-			  height="100%"
-			  width="100%"
-			  horizontalAlign="center" backgroundAlpha="0.4">
-		<mx:Image id="img"
-				  source="{horizontalList.selectedItem.idYoutubeVideo}"
-				  maintainAspectRatio="true"
-				  horizontalAlign="center"
-				  width="{horizontalList.width}"
-				  height="100%"/>
-		<mx:ControlBar horizontalAlign="center">
-			<mx:HorizontalList id="horizontalList"
-							   dataProvider="{pictureList}"
-							   change="{index = horizontalList.selectedIndex}"
-							   columnCount="4"
-							   columnWidth="125"
-							   rowCount="1"
-							   rowHeight="100"
-							   horizontalScrollPolicy="on">
-				<mx:itemRenderer>
-					<fx:Component>
-						<mx:VBox horizontalAlign="center" verticalAlign="middle">
-							<mx:Image height="90" width="120" source="{data.idYoutubeVideo}" />
-						</mx:VBox>
-					</fx:Component>
-				</mx:itemRenderer>
-			</mx:HorizontalList>
-		</mx:ControlBar>
-		<s:HGroup>
-			<s:Image id="controle" source="assets/images/pause_gallery.png" click="pause()"/>
-		</s:HGroup>
-	</Components:DraggablePanel>
+	<s:states>
+		<s:State name="state1"/>
+		<s:State name="state2"/>
+	</s:states>
 	
-</s:Group>
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="500" />
+		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="500" />
+		<s:CrossFade id="crossfader" targets="{[img]}"/>
+	</fx:Declarations>
+	
+	<s:transitions>
+		<s:Transition id="transition" effect="{crossfader}" autoReverse="true"/>
+	</s:transitions>
+	
+	<s:Image id="img" width="100%" height="100%"
+			 source="{horizontalList.selectedItem.idYoutubeVideo}"
+			 scaleMode="letterbox" smoothingQuality="high"
+			 show="currentState = (currentState == 'state1') ? 'state2':'state1';"
+			 smooth="true"/>
+	
+	<s:List id="horizontalList" 
+			dataProvider="{pictureList}"
+			horizontalScrollPolicy="auto"
+			selectedIndex="{ index }" itemRenderer="Components.gallery.VignetteRenderer"
+			width="100%">
+		<s:layout>
+			<s:HorizontalLayout/>
+		</s:layout>
+	</s:List>
+	
+	<s:Image id="controle" source="assets/images/pause_gallery.png" click="pause()"/>
+	
+</s:TitleWindow>
