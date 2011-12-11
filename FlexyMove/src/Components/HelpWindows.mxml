@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				   xmlns:s="library://ns.adobe.com/flex/spark"
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   xmlns:Completion="Components.Completion.*"
+				   showEffect="{showEffect}" hideEffect="{hideEffect}"
+				   right="left" bottom="0"  width="315" height="50"
+				   styleName="panelInfoStyle">
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:Fade id="showEffect" alphaFrom="0" alphaTo="1" duration="500" />
+		<s:Fade id="hideEffect" alphaFrom="1" alphaTo="0" duration="500" />
+	</fx:Declarations>
+	<s:HGroup left="5" height="100%" width="100%" top="5">
+		
+		<s:Image 
+			width="40"
+			height="40"
+			source="@Embed(source='/FlexyMove/src/assets/images/yellowMarker.png')" />
+		<s:Label width="50" text="Photo" color="#FFFFFF" />
+		
+		
+		<s:Image 
+			width="40"
+			height="40"
+			source="@Embed(source='/FlexyMove/src/assets/images/blueMarker.png')"  />
+		<s:Label width="50" text="Vidéo" color="#FFFFFF" top="10"/>
+		<s:Image
+			width="40"
+			height="40"
+			source="@Embed(source='/FlexyMove/src/assets/images/whiteMarker.png')"  />
+		<s:Label width="50" text="Groupe de médias" color="#FFFFFF" top="10"/>
+	</s:HGroup>
+	
+</s:BorderContainer>

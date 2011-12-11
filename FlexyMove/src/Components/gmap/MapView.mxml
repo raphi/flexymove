@@ -8,7 +8,7 @@
 		 xmlns:Completion="Components.Completion.*" 
 		 xmlns:TabBar="Components.TabBar.*"
 		 creationComplete="creationCompleteHandler(event)"
-		 width="100%" height="100%">
+		 width="100%" height="100%" xmlns:Components="Components.*">
 	
 	<fx:Script>
 		<![CDATA[
@@ -148,4 +148,5 @@
 	<gmap:PanelInfo id="panelInfoView" visible="false"/>
 	<gmap:AddVideoInfo id="addVideoInfoView" visible="false"/>
 	<TabBar:TabBar id="tabBar"/>
+	<Components:HelpWindows id ="legende"/>
 </s:Group>
