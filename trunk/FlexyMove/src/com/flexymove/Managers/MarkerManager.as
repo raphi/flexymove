@@ -343,20 +343,20 @@ package com.flexymove.Managers
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
 							strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
-							fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
-							radius: 17,
+							fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.8}),
+							radius: 20,
 							tooltip: cluster.length + " médias",
 							hasShadow: true,
-							draggable: true
+							draggable: false
 						});
 					else
 					markerOption = new MarkerOptions({
 						strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
-						fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
-						radius: 17,
+						fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.8}),
+						radius: 20,
 						tooltip: cluster.length + " médias",
 						hasShadow: true,
-						draggable: true
+						draggable: false
 					});
 				
 				marker.setOptions(markerOption);

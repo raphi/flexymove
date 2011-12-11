@@ -66,7 +66,6 @@
 			public function onClick():void
 			{
 				var item:VideoInfoVO = list.selectedItem as VideoInfoVO;
-				channel.text = item.channel;
 				videoTitle.text = item.title;
 			}
 			
@@ -82,20 +81,13 @@
 				PopUpManager.addPopUp(win,this,true);
 				PopUpManager.centerPopUp(win);
 			}
-			
-			// FIXME : to be deleted
-			private function buttonClickHandler(event:MouseEvent):void
-			{
-				dispatchEvent(new CloseEvent(CloseEvent.CLOSE));
-			}
+	
 			
 		]]>
 	</fx:Script>
 	
 	<s:VGroup>
-		<s:Label id="channel" click="buttonClickHandler(event)" color="#000000" fontSize="42"
-				 fontWeight="bold" textAlign="center"/>
-		<s:Label id="videoTitle" click="buttonClickHandler(event)" color="#000000" fontSize="35" textAlign="center"/>
+		<s:Label paddingTop="20" id="videoTitle" fontStyle="italic" color="#223344" fontSize="35" textAlign="center"/>
 	</s:VGroup>
 
 	
