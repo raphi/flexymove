@@ -91,12 +91,12 @@
 	</s:VGroup>
 
 	
-	<mx:TileList  id="list" bottom="0" width="90%" height="75%" borderVisible="false"
+	<coverflow:RoundedSelectionTileList  id="list" bottom="0" width="90%" height="75%" borderVisible="false"
 				  rowHeight="180" columnWidth="180" columnCount="4"
 				  click="onClick()" contentBackgroundAlpha="0.0" dataProvider="{fileList}"
-				  doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true"
+				  doubleClick="onDisplayButtonDoubleClick(event)" doubleClickEnabled="true" 
 				  selectedIndex="0">
-		<mx:itemRenderer>
+		<coverflow:itemRenderer>
 			<fx:Component>
 				<mx:VBox horizontalAlign="center" verticalAlign="middle">
 					<s:Group>
@@ -110,7 +110,7 @@
 					
 				</mx:VBox>
 			</fx:Component>
-		</mx:itemRenderer>
+		</coverflow:itemRenderer>
 
-	</mx:TileList >
+	</coverflow:RoundedSelectionTileList>
 </s:Group>
