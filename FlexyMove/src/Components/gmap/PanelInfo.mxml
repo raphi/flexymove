@@ -119,5 +119,4 @@
 		<s:Label styleName="infoLabel" text="Pseudo :"/>
 		<s:Label id="pseudoField" styleName="textInfo" text="{markerInfo.pseudo}"/>
 	</s:HGroup>
-	<s:Button label="Suivre ce channel"/>
 </s:BorderContainer>
