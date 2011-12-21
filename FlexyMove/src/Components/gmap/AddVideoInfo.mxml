@@ -80,6 +80,7 @@
 				descriptionInput.text = "";
 				youtubeUrlInput.text = "";
 				videoData = null;
+				latLngMarkerAdded = null;
 			}
 			
 		]]>
@@ -111,6 +112,8 @@
 	<s:Label width="100%" paddingTop="10" styleName="panelInfoTitle" text="Description"/>
 	<s:TextArea id="descriptionInput" 
 				text="{videoData != null ? videoData.content : ''}"/>
-	<s:Button id="addVideoButton" label="Publier le média" click="addVideoButtonClickHandler(event)"/>
-	<s:Label  text="{latLngMarkerAdded == null ? 'Cliquer sur la map pour positionner le média' : 'Média positionné'}" />
+
+	<s:Button id="addVideoButton" label="Publier le media" click="addVideoButtonClickHandler(event)" enabled="{latLngMarkerAdded != null }"/>
+	<s:Label  text="{latLngMarkerAdded == null ? 'Cliquer sur la map pour positionner le média' : ''}" color="0xFFFFFF" fontSize="13"/>
+
 </s:BorderContainer>
