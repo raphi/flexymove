@@ -153,6 +153,18 @@ package com.flexymove.Managers
 				createMarker(videoVO);
 				addInformationInSearchList(videoVO);
 			}
+			var  i :int = 0;
+			for each (var marker:SharedMarker in _markers )
+			{
+				if (marker.videoInfo.idYoutubeVideo == videoVO.idYoutubeVideo &&
+					marker.videoInfo.lat != videoVO.lat)
+				{
+					gmarkerManager.removeMarker(marker);
+					_markers.removeItemAt(i);
+					continue;
+				}
+				i++;
+			}
 		}
 		
 		private function createMarker(videoVO:VideoInfoVO):void
@@ -307,7 +319,7 @@ package com.flexymove.Managers
 		{
 			_lastZoom = zoom;
 			var clusterer:Clusterer = null;
-			clusterer = new Clusterer(_markers.toArray(), zoom - 1);
+			clusterer = new Clusterer(_markers.toArray(), zoom - 0.5);
 			var clusters:Array = clusterer.clusters;
 			gmarkerManager.clearMarkers();
 			for each(var cluster:Array in clusters)
@@ -341,15 +353,15 @@ package com.flexymove.Managers
 				}	
 				else
 				{
-					if (marker.videoInfo.playerType == "picture")
-						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0xEFECCA,thickness: 4, alpha: 0.8}),
-							fillStyle: new FillStyle({color: 0xB9121B, alpha: 0.8}),
-							radius: 20,
-							tooltip: cluster.length + " médias",
-							hasShadow: true,
-							draggable: false
-						});
+					
+					markerOption = new MarkerOptions({
+						strokeStyle: new StrokeStyle({color: 0xEFECCA,thickness: 4, alpha: 0.8}),
+						fillStyle: new FillStyle({color: 0xB9121B, alpha: 0.8}),
+						radius: 20,
+						tooltip: cluster.length + " médias",
+						hasShadow: true,
+						draggable: false
+					});
 				}
 				
 				marker.setOptions(markerOption);
