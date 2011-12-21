@@ -20,7 +20,7 @@ package com.flexymove.VO
 		public var lng:Number = 0;
 		public var playerType : String= "youtube";
 		private var _uid:String;
-		
+		public var nbViews:int = 0;		
 		public function VideoInfoVO(pseudo:String="", lat:Number=0, lng:Number=0)
 		{
 			this.pseudo = pseudo;
