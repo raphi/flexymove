@@ -158,8 +158,8 @@ package com.flexymove.Managers
 		private function createMarker(videoVO:VideoInfoVO):void
 		{
 			var markerOption:MarkerOptions = new MarkerOptions({
-				strokeStyle: new StrokeStyle({color: 0x000000}),
-				fillStyle: new FillStyle({color: 0x223344, alpha: 0.9}),
+				strokeStyle: new StrokeStyle({color: 0xEFECCA, alpha: 0.8}),
+				fillStyle: new FillStyle({color: 0x4C1B1B, alpha: 0.8}),
 				radius: 12,
 				hasShadow: true,
 				draggable: true
@@ -167,8 +167,8 @@ package com.flexymove.Managers
 			
 			if (videoVO.playerType == "picture")
 				markerOption = new MarkerOptions({
-					strokeStyle: new StrokeStyle({color: 0x000000}),
-					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.9}),
+					strokeStyle: new StrokeStyle({color: 0xEFECCA, alpha: 0.8}),
+					fillStyle: new FillStyle({color: 0x002F2F, alpha: 0.8}),
 					radius: 12,
 					hasShadow: true,
 					draggable: true
@@ -324,40 +324,33 @@ package com.flexymove.Managers
 				{
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x000000}),
-							fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA, alpha: 0.8}),
+							fillStyle: new FillStyle({color: 0x002F2F, alpha: 0.8}),
 							radius: 12,
 							hasShadow: true,
 							draggable: true
 						});
 					else
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x000000}),
-							fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA, alpha: 0.8}),
+							fillStyle: new FillStyle({color: 0x4C1B1B, alpha: 0.8}),
 							radius: 12,
 							hasShadow: true,
 							draggable: true
 						});
 				}	
 				else
+				{
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x000000,thickness: 4}),
-							fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.9}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA,thickness: 4, alpha: 0.8}),
+							fillStyle: new FillStyle({color: 0xB9121B, alpha: 0.8}),
 							radius: 20,
 							tooltip: cluster.length + " médias",
 							hasShadow: true,
 							draggable: false
 						});
-					else
-					markerOption = new MarkerOptions({
-						strokeStyle: new StrokeStyle({color: 0x000000,thickness: 4}),
-						fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.9}),
-						radius: 20,
-						tooltip: cluster.length + " médias",
-						hasShadow: true,
-						draggable: false
-					});
+				}
 				
 				marker.setOptions(markerOption);
 				gmarkerManager.addMarker(marker, 0, Infinity);
