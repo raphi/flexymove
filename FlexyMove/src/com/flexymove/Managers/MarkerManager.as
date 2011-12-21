@@ -158,8 +158,8 @@ package com.flexymove.Managers
 		private function createMarker(videoVO:VideoInfoVO):void
 		{
 			var markerOption:MarkerOptions = new MarkerOptions({
-				strokeStyle: new StrokeStyle({color: 0x987654}),
-				fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+				strokeStyle: new StrokeStyle({color: 0x000000}),
+				fillStyle: new FillStyle({color: 0x223344, alpha: 0.9}),
 				radius: 12,
 				hasShadow: true,
 				draggable: true
@@ -167,8 +167,8 @@ package com.flexymove.Managers
 			
 			if (videoVO.playerType == "picture")
 				markerOption = new MarkerOptions({
-					strokeStyle: new StrokeStyle({color: 0x987654}),
-					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+					strokeStyle: new StrokeStyle({color: 0x000000}),
+					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.9}),
 					radius: 12,
 					hasShadow: true,
 					draggable: true
@@ -324,7 +324,7 @@ package com.flexymove.Managers
 				{
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654}),
+							strokeStyle: new StrokeStyle({color: 0x000000}),
 							fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
 							radius: 12,
 							hasShadow: true,
@@ -332,7 +332,7 @@ package com.flexymove.Managers
 						});
 					else
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654}),
+							strokeStyle: new StrokeStyle({color: 0x000000}),
 							fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
 							radius: 12,
 							hasShadow: true,
@@ -342,8 +342,8 @@ package com.flexymove.Managers
 				else
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
-							fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0x000000,thickness: 4}),
+							fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.9}),
 							radius: 20,
 							tooltip: cluster.length + " médias",
 							hasShadow: true,
@@ -351,8 +351,8 @@ package com.flexymove.Managers
 						});
 					else
 					markerOption = new MarkerOptions({
-						strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
-						fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.8}),
+						strokeStyle: new StrokeStyle({color: 0x000000,thickness: 4}),
+						fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.9}),
 						radius: 20,
 						tooltip: cluster.length + " médias",
 						hasShadow: true,

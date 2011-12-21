@@ -103,7 +103,7 @@
 					 buttonMode="true"
 					 click="channelFieldClickHandler(event)" 
 					 styleName="textInfo"
-					 text="{markerInfo.channel}" textDecoration="underline"/>
+					 text="{markerInfo.channel}" fontStyle="italic" color="#780000" fontSize="15" textDecoration="underline"/>
 		</s:HGroup>
 		<s:HGroup>
 			<s:Label styleName="infoLabel" text="Vues :"/>
