@@ -25,6 +25,7 @@
 			import com.google.maps.MapEvent;
 			import com.google.maps.MapMouseEvent;
 			import com.google.maps.MapType;
+			import com.google.maps.MapZoomEvent;
 			import com.google.maps.controls.MapTypeControl;
 			import com.google.maps.controls.NavigationControl;
 			
@@ -52,12 +53,13 @@
 
 				markerManager.init(map, LCConnectManager);
 				markerManager.addEventListener(MapMouseEvent.CLICK, onMarkerClick);
-				
+				map.addEventListener(MapZoomEvent.ZOOM_CHANGED, onZoomChanged);
 				map.setCenter(new LatLng(48.833, 2.333), 5, MapType.SATELLITE_MAP_TYPE);
 				map.addEventListener(MapMouseEvent.CLICK, mapClicked);
 				map.enableScrollWheelZoom();
 				map.enableContinuousZoom();
 				map.enableControlByKeyboard();
+				map.addControl(new NavigationControl());
 				
 				
 			}
@@ -91,15 +93,20 @@
 			
 			private function creationCompleteHandler(event:FlexEvent):void
 			{
-				cursorManager.setBusyCursor();
+				//cursorManager.setBusyCursor();
 				LCConnectManager.login();
 				
 			}
 			
+			private function onZoomChanged(e:MapZoomEvent):void
+			{
+				markerManager.Clusterize(e.zoomLevel);
+			}
+			
 			private function onSynchronizationChangeHandler(event:SessionEvent):void
 			{
-				if (LCConnectManager.isSynchronized)
-					CursorManager.removeBusyCursor();
+/* 				if (LCConnectManager.isSynchronized)
+					CursorManager.removeBusyCursor(); */
 				
 			}
 			
