@@ -149,7 +149,7 @@ package com.flexymove.Managers
 			if (videoVO)
 			{
 				if (videoVO.channel == null || videoVO.channel == "")
-					videoVO.channel = "Nautre";
+					videoVO.channel = "Nature";
 				videoInfosList.addItem(videoVO);
 				videoDisplayInfosList.addItem(videoVO);
 				createMarker(videoVO);
