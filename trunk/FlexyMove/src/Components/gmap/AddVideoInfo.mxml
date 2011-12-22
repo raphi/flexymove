@@ -48,7 +48,7 @@
 					_marker.videoInfo.description = descriptionInput.text;
 					_marker.videoInfo.title = titleInput.text;
 					_marker.videoInfo.date = new Date();
-					_marker.videoInfo.channel = channelInput.selectedItem;
+					_marker.videoInfo.channel = channelInput.selectedItem == null || channelInput.selectedItem == "" ? "Nature":channelInput.selectedItem;
 					_marker.videoInfo.pseudo = UserManager.getInstance().currentUserInfo.name;
 					_marker.videoInfo.nbViews = videoData == null? 0 : videoData.viewCount; 
 					
