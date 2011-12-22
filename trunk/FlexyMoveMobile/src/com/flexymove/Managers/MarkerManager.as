@@ -160,25 +160,38 @@ package com.flexymove.Managers
 				createMarker(videoVO);
 				addInformationInSearchList(videoVO);
 			}
+			
+			var  i :int = 0;
+			for each (var marker:SharedMarker in _markers )
+			{
+				if (marker.videoInfo.idYoutubeVideo == videoVO.idYoutubeVideo &&
+					marker.videoInfo.lat != videoVO.lat)
+				{
+					gmarkerManager.removeMarker(marker);
+					_markers.removeItemAt(i);
+					continue;
+				}
+				i++;
+			}
 		}
 		
 		private function createMarker(videoVO:VideoInfoVO):void
 		{
 			var markerOption:MarkerOptions = new MarkerOptions({
-				strokeStyle: new StrokeStyle({color: 0x987654}),
-				fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+				strokeStyle: new StrokeStyle({color: 0xEFECCA}),
+				fillStyle: new FillStyle({color: 0x4C1B1B, alpha: 0.8}),
 				radius: 12,
 				hasShadow: true,
-				draggable: false
+				draggable: true
 			});
 			
 			if (videoVO.playerType == "picture")
 				markerOption = new MarkerOptions({
-					strokeStyle: new StrokeStyle({color: 0x987654}),
-					fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+					strokeStyle: new StrokeStyle({color: 0xEFECCA}),
+					fillStyle: new FillStyle({color: 0xFFBD4F, alpha: 0.8}),
 					radius: 12,
 					hasShadow: true,
-					draggable: false
+					draggable: true
 				});
 			
 			//markerOption.strokeStyle = style; 
@@ -331,39 +344,39 @@ package com.flexymove.Managers
 				{
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654}),
-							fillStyle: new FillStyle({color: 0xEDE382, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA}),
+							fillStyle: new FillStyle({color: 0xFFBD4F, alpha: 0.8}),
 							radius: 12,
 							hasShadow: true,
-							draggable: false
+							draggable: true
 						});
 					else
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654}),
-							fillStyle: new FillStyle({color: 0x223344, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA}),
+							fillStyle: new FillStyle({color: 0x4C1B1B, alpha: 0.8}),
 							radius: 12,
 							hasShadow: true,
-							draggable: false
+							draggable: true
 						});
 				}	
 				else
 					if (marker.videoInfo.playerType == "picture")
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
-							fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA,thickness: 4}),
+							fillStyle: new FillStyle({color: 0xB9121B, alpha: 0.8}),
 							radius: 20,
 							tooltip: cluster.length + " médias",
 							hasShadow: true,
-							draggable: false
+							draggable: true
 						});
 					else
 						markerOption = new MarkerOptions({
-							strokeStyle: new StrokeStyle({color: 0x987654,thickness: 4}),
-							fillStyle: new FillStyle({color: 0xEFECCA, alpha: 0.8}),
+							strokeStyle: new StrokeStyle({color: 0xEFECCA,thickness: 4}),
+							fillStyle: new FillStyle({color: 0xB9121B, alpha: 0.8}),
 							radius: 20,
 							tooltip: cluster.length + " médias",
 							hasShadow: true,
-							draggable: false
+							draggable: true
 						});
 				
 				marker.setOptions(markerOption);
